@@ -4,7 +4,9 @@ import "./globals.css";
 import { FC, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "next-themes";
+import { BackToTopBtn } from "@/components/BackToTopBtn";
 
 const fontSans = FontSans({
   subsets: ["cyrillic-ext"],
@@ -25,8 +27,9 @@ const RootLayout: FC<LayoutProps> = ({ children }) => {
   return (
     <html lang="en">
       <body
+        id="top"
         className={cn(
-          "min-h-screen bg-background text-foreground font-sans antialiased xl:container",
+          "min-h-screen bg-background text-foreground font-sans antialiased xl:container flex flex-col justify-between",
           fontSans.variable
         )}
       >
@@ -38,10 +41,8 @@ const RootLayout: FC<LayoutProps> = ({ children }) => {
         >
           <Navbar />
           {children}
-          <footer>
-            {" "}
-            <p className="text-2xl">footer</p>
-          </footer>
+          <BackToTopBtn />
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

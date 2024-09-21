@@ -67,3 +67,33 @@ export interface NavScreenBtnProps {
   icon: ReactNode;
   className?: string;
 }
+
+export interface FooterLink {
+  text: string;
+  href: string;
+}
+
+export interface FooterLinkSection {
+  title: string;
+  data: FooterLink[];
+}
+
+export interface SocialMediaLinks {
+  href: string;
+  Icon: IconType;
+}
+
+export interface AppImage {
+  href: string;
+  src: string;
+}
+
+export interface SliderSrc {
+  src: string;
+}
+
+export interface categoryLink {
+  href: string;
+  src: string;
+  title:string
+}

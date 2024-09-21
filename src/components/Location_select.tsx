@@ -4,7 +4,7 @@ import { DropdownConfig } from "./DropDownConfig";
 import { Option } from "@/interfaces";
 
 export function Location_select() {
-  const location_of_pakistan = [
+  const location_of_pakistan:Option[] = [
     {
       value: "all",
       label: "Over All, Pakistan",

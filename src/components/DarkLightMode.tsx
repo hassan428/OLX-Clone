@@ -12,7 +12,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { NavScreenBtn } from "@/components/NavScreenBtn";
 
 export function DarkLightModeBtn() {
   const { setTheme } = useTheme();

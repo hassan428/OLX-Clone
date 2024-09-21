@@ -1,0 +1,108 @@
+import React from "react";
+import { AppImage, FooterLinkSection, SocialMediaLinks } from "@/interfaces";
+import { FaFacebook, FaGithub, FaInstagram, FaTwitter } from "react-icons/fa";
+import Link from "next/link";
+import Image from "next/image";
+import { FooterDropDown } from "@/components/FooterDropDown";
+import { FooterLink } from "@/components/FooterLink";
+
+const footerdata: FooterLinkSection[] = [
+  {
+    title: "Popular Categories",
+    data: [
+      { text: "Cars", href: "cars" },
+      { text: "Flats for rent", href: "flatsforrent" },
+      { text: "Mobile Phones", href: "mobilephones" },
+      { text: "Jobs", href: "jobs" },
+    ],
+  },
+  {
+    title: "Trending Searches",
+    data: [
+      { text: "Bikes", href: "bikes" },
+      { text: "Watches", href: "watches" },
+      { text: "books", href: "books" },
+      { text: "Dogs", href: "dogs" },
+    ],
+  },
+  {
+    title: "About Us",
+    data: [
+      { text: "LOX Blog", href: "blog" },
+      { text: "Contact Us", href: "contact" },
+    ],
+  },
+  {
+    title: "LOX",
+    data: [
+      { text: "Help", href: "help" },
+      { text: "Terms of use", href: "terms" },
+      { text: "Privacy Policy", href: "privacypolicy" },
+    ],
+  },
+];
+
+const socialMediaLinks: SocialMediaLinks[] = [
+  { href: "https://github.com/hassan428/OLX-Clone", Icon: FaGithub },
+  { href: "facebookurl", Icon: FaFacebook },
+  { href: "twiiterurl", Icon: FaTwitter },
+  { href: "instagramurl", Icon: FaInstagram },
+];
+
+const appImage: AppImage[] = [
+  { src: "playstore.svg", href: "https://play.google.com/" },
+  { src: "appstore.svg", href: "https://www.apple.com/app-store/" },
+  { src: "appgallery.svg", href: "https://appgallery.huawei.com/" },
+];
+
+export const Footer = () => {
+  return (
+    <div className="bg-border border-t border-black space-y-5">
+      <div className="md:flex w-full justify-between items-center ">
+        <div className="md:flex w-full items-center gap-5 lg:gap-10 md:p-3 ">
+          {footerdata.map((data, i) => (
+            <div key={i}>
+              <div className="md:hidden">
+                <FooterDropDown {...data} />
+              </div>
+              <div className="max-md:hidden ">
+                <FooterLink {...data} />
+              </div>
+            </div>
+          ))}
+        </div>
+        <div>
+          <div className="md:block w-full flex justify-between items-center border-y md:border-0 border-border p-3 cursor-pointer">
+            <h1 className="text-base font-bold uppercase">Follow us</h1>
+            <div className="flex gap-2 items-center">
+              {socialMediaLinks.map(({ Icon, href }, i) => (
+                <Link key={i} href={href} target="_blank">
+                  <Icon size={20} />
+                </Link>
+              ))}
+            </div>
+          </div>
+          <div className="flex gap-3 p-3 items-center max-w-full flex-wrap justify-center">
+            {appImage.map(({ src, href }, i) => (
+              <Link href={href} key={i} target="_blank">
+                <Image
+                  src={`/assets/images/${src}`}
+                  alt={src}
+                  width={150}
+                  height={150}
+                  className="object-cover w-20 lg:w-28 h-auto"
+                />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="p-3 text-sm bg-green-500 text-center">
+        <strong>
+          Free Classifieds in Pakistan . © {new Date().getFullYear()} LOX
+        </strong>
+      </div>
+    </div>
+  );
+};

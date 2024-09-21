@@ -16,7 +16,7 @@ export const Logo = () => {
   return (
     mounted && (
       <Image
-        src={`/assets/images/lox${resolvedTheme}.png`}
+        src={`/assets/images/logo/lox${resolvedTheme}.png`}
         alt="lox"
         width={100}
         height={100}
