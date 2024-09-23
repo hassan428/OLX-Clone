@@ -92,8 +92,23 @@ export interface SliderSrc {
   src: string;
 }
 
-export interface categoryLink {
+export interface CategoryLink {
   href: string;
   src: string;
-  title:string
+  title: string;
+}
+
+export interface ProductCardProps {
+  price: string;
+  src: string;
+  title: string;
+  location: string;
+  time: string;
+  id: string;
+}
+
+export interface RenderProductCardProps {
+  cardData: ProductCardProps[];
+  heading: string;
+  href: string;
 }

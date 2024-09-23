@@ -28,7 +28,7 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="m-3 space-y-2 max-w-full">
+    <nav className="bg-background p-3 space-y-2 max-w-full sm:sticky top-0 z-50">
       <nav className="flex md:justify-start justify-between items-center md:gap-8 ">
         <div className="xmd:hidden">
           <NavDrawer />

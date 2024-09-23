@@ -1,14 +1,14 @@
 import React from "react";
 import { CategoryText, CategoryTextWithImage } from "@/components/CategoryLink";
 import { Slider } from "@/components/Slider";
-import { ProductCard } from "@/components/ProductCard";
+import { ProductsData } from "@/components/ProductsData";
 const page = () => {
   return (
     <div>
       <CategoryText />
       <Slider />
       <CategoryTextWithImage />
-      <ProductCard />
+      <ProductsData />
     </div>
   );
 };

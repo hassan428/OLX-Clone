@@ -1,4 +1,4 @@
-import { categoryLink } from "@/interfaces";
+import { CategoryLink } from "@/interfaces";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -10,7 +10,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-const category_link: categoryLink[] = [
+const category_link: CategoryLink[] = [
   {
     src: "mobiles.png",
     href: "/mobiles",
@@ -66,7 +66,7 @@ export const CategoryText = () => {
 };
 
 export const CategoryTextWithImage = () => {
-  const renderData = ({ href, src, title }: categoryLink, i: number) => (
+  const renderData = ({ href, src, title }: CategoryLink, i: number) => (
     <Link
       href={href}
       key={i}
@@ -83,7 +83,7 @@ export const CategoryTextWithImage = () => {
     </Link>
   );
   return (
-    <div className="p-2 text-xl">
+    <div className="p-2 text-xl border-b border-border">
       <Link href={"allcategories"}>
         <strong>All Categories</strong>
       </Link>
