@@ -105,6 +105,7 @@ export interface ProductCardProps {
   location: string;
   time: string;
   id: string;
+  className?: string;
 }
 
 export interface RenderProductCardProps {

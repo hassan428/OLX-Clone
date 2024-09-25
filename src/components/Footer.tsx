@@ -10,19 +10,19 @@ const footerdata: FooterLinkSection[] = [
   {
     title: "Popular Categories",
     data: [
-      { text: "Cars", href: "cars" },
-      { text: "Flats for rent", href: "flatsforrent" },
-      { text: "Mobile Phones", href: "mobilephones" },
-      { text: "Jobs", href: "jobs" },
+      { text: "Mobiles", href: "../category/mobiles" },
+      { text: "Vehicles", href: "../category/vehicles" },
+      { text: "Fashion & Beauty", href: "../category/fashion" },
+      { text: "Home Appliances", href: "../category/electronics" },
     ],
   },
   {
     title: "Trending Searches",
     data: [
-      { text: "Bikes", href: "bikes" },
-      { text: "Watches", href: "watches" },
-      { text: "books", href: "books" },
-      { text: "Dogs", href: "dogs" },
+      { text: "Vehicles", href: "../category/vehicles" },
+      { text: "Furniture & Home Decorator", href: "../category/furniture" },
+      { text: "Kids", href: "../category/kids" },
+      { text: "Birds", href: "../category/birds" },
     ],
   },
   {

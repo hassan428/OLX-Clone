@@ -9,44 +9,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
-const category_link: CategoryLink[] = [
-  {
-    src: "mobiles.png",
-    href: "/mobiles",
-    title: "Mobiles",
-  },
-  {
-    src: "fashion.png",
-    href: "/fashion",
-    title: "Fashion & Beauty",
-  },
-  {
-    src: "vehicles.png",
-    href: "/vehicles",
-    title: "Vehicles",
-  },
-  {
-    src: "furniture.png",
-    href: "/furniture",
-    title: "Furniture & Home Decorator",
-  },
-  {
-    src: "led.webp",
-    href: "/electronics",
-    title: "Electronics & Home Appliances",
-  },
-  {
-    src: "kids.png",
-    href: "/kids",
-    title: "Kids",
-  },
-  {
-    src: "birds.png",
-    href: "/birds",
-    title: "Birds",
-  },
-];
+import { category_link } from "@/utils";
 
 export const CategoryText = () => {
   return (
@@ -56,7 +19,7 @@ export const CategoryText = () => {
       </Link>
       {category_link.map(({ href, title }, i) => {
         return (
-          <Link href={href} key={i}>
+          <Link href={`category/${href}`} key={i}>
             <h1>{title.split(" ")[0]}</h1>
           </Link>
         );
@@ -68,7 +31,7 @@ export const CategoryText = () => {
 export const CategoryTextWithImage = () => {
   const renderData = ({ href, src, title }: CategoryLink, i: number) => (
     <Link
-      href={href}
+      href={`category/${href}`}
       key={i}
       className="flex flex-col items-center text-center gap-2 text-xs md:text-sm py-3"
     >
