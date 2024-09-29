@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, CheckCircle } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch";
 
@@ -14,9 +14,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function DarkLightModeBtn() {
-  const { setTheme } = useTheme();
+  const { setTheme, theme } = useTheme();
 
-  const title_theme: [string, string] = ["light", "dark"];
+  const title_theme: [string, string, string] = ["light", "dark", "system"];
 
   return (
     <DropdownMenu>
@@ -27,13 +27,16 @@ export function DarkLightModeBtn() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {title_theme.map((theme: string, i) => (
+        {title_theme.map((themesName: string, i) => (
           <DropdownMenuItem
-            className="cursor-pointer"
+            className="cursor-pointer justify-between"
             key={i}
-            onClick={() => setTheme(theme)}
+            onClick={() => setTheme(themesName)}
           >
-            {theme[0].toUpperCase() + theme.slice(1)}
+            {themesName[0].toUpperCase() + themesName.slice(1)}
+            {theme == themesName && (
+             <CheckCircle className="mr-2 text-green-500" />
+            )} 
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

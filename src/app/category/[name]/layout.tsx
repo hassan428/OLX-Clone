@@ -2,7 +2,6 @@ import { LayoutProps } from "@/interfaces";
 import React from "react";
 import { category_link } from "@/utils";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
 import {
   Sheet,
   SheetClose,
@@ -14,14 +13,15 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/Logo";
+import { PriceRange } from "@/components/PriceRange";
 
 const layout = ({ children, params }: LayoutProps) => {
   const { name } = params;
   const find_title = category_link.find(({ href }) => name == href);
 
-  const sidebarUi = () => (
-    <div className="sticky top-32 text-sm flex flex-col gap-2 max-h-screen font-light p-2">
-      <h1 className="font-bold text-base">Categories</h1>
+  const categoryUI = () => (
+    <>
       <Link
         href={"allcategories"}
         className={`ml-4 ${name == "allcategories" && "font-bold"}`}
@@ -37,47 +37,57 @@ const layout = ({ children, params }: LayoutProps) => {
           {title}
         </Link>
       ))}
+    </>
+  );
 
-      <div className="text-base font-bold">
-        <h1 className="my-2">Price</h1>
-        <div className="flex justify-around items-center gap-2">
-          <Input
-            type="number"
-            placeholder="Lowest"
-            className="focus:border-2 border-foreground focus-visible:ring-0"
-            // value={search_value}
-            // onChange={onChangeHandle}
-          />
-          <Input
-            type="number"
-            placeholder="Highest"
-            className="focus:border-2 border-foreground focus-visible:ring-0"
-            // value={search_value}
-            // onChange={onChangeHandle}
-          />
-        </div>
+  const sidebarUi = () => (
+    <div className="text-sm flex flex-col gap-2 max-h-screen font-light p-2">
+      <h1 className="font-bold text-base">Categories</h1>
+      {categoryUI()}
+      <div className="text-base font-bold flex flex-col gap-2">
+        <PriceRange />
       </div>
+    </div>
+  );
+
+  const sidebarSheetUi = () => (
+    <div>
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="default" size={"icon"}>
+            Filter
+          </Button>
+        </SheetTrigger>
+        <SheetContent
+          side={"left"}
+          className="text-sm flex flex-col gap-2 max-h-screen overflow-auto font-light p-2"
+        >
+          <SheetHeader className="m-3">
+            <Logo />
+          </SheetHeader>
+          <SheetTitle className="font-bold text-base">Categories</SheetTitle>
+          <SheetDescription className="flex flex-col gap-2">
+            {categoryUI()}
+          </SheetDescription>
+          <SheetFooter className="text-base font-bold flex flex-col gap-2">
+            <PriceRange />
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 
   return (
     <div className="p-2 w-full">
-      <h1 className="text-xl font-bold mb-3">
+      <h1 className="sm:text-xl font-bold mb-3">
         {find_title?.title || (name == "allcategories" && "All Categories")}
       </h1>
 
-      <div className="flex flex-col sm:flex-row items- sm:items-baseline sm:bg-input bg-background">
-        <div className="w-1/3 bg-input max-sm:hidden">{sidebarUi()}</div>
-        <div className="sm:hidden">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="default" size={"icon"}>
-                Filter
-              </Button>
-            </SheetTrigger>
-            <SheetContent side={"left"}>{sidebarUi()}</SheetContent>
-          </Sheet>
+      <div className="flex flex-col sm:flex-row items-start sm:bg-input bg-background">
+        <div className="w-1/3 bg-input max-sm:hidden sticky top-32 ">
+          {sidebarUi()}
         </div>
+        <div className="sm:hidden">{sidebarSheetUi()}</div>
 
         <div className="sm:w-2/3 w-full bg-background">{children}</div>
       </div>

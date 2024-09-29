@@ -113,3 +113,16 @@ export interface RenderProductCardProps {
   heading: string;
   href: string;
 }
+
+export interface ViewStyle {
+  Tag: IconType;
+  size: number;
+  onClick: () => void;
+  className?: string;
+  tooltipText: string;
+}
+
+export interface PriceRangeInterface {
+  lowest?: string;
+  highest?: string;
+}

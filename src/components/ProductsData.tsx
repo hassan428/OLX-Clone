@@ -5,6 +5,7 @@ import {
 } from "@/components/RenderProductCard";
 import { ProductCardProps, RenderProductCardProps } from "@/interfaces";
 
+let id = 1;
 export const ProductCardData = () => {
   const data: RenderProductCardProps[] = [
     {
@@ -17,7 +18,7 @@ export const ProductCardData = () => {
           src: "/assets/images/logo/Loxlight.png",
           time: "4 days ago",
           title: "Suzuki Alto 1993 Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
         {
           location: "Bahria Town Karachi",
@@ -25,7 +26,7 @@ export const ProductCardData = () => {
           src: "/assets/images/category/led.webp",
           time: "4 weeks ago",
           title: "LED Alto Model For Sale",
-          id: "2",
+          id: (id++).toString(),
         },
         {
           location: "Gulshan Karachi",
@@ -33,7 +34,7 @@ export const ProductCardData = () => {
           src: "/assets/images/products/mobile.jfif",
           time: "4 months ago",
           title: "iPhone Max Pro Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
         {
           location: "Karimabad Karachi",
@@ -41,7 +42,7 @@ export const ProductCardData = () => {
           src: "/assets/images/category/led.webp",
           time: "4 days ago",
           title: "Suzuki Alto 1993 Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
         {
           location: "Karimabad Karachi",
@@ -49,7 +50,7 @@ export const ProductCardData = () => {
           src: "/assets/images/logo/Loxlight.png",
           time: "4 days ago",
           title: "Suzuki Alto 1993 Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
         {
           location: "Karimabad Karachi",
@@ -58,7 +59,7 @@ export const ProductCardData = () => {
           time: "4 days ago",
           title:
             "Suzuki Alto 1993 Model For SaleSuzuki Alto 1993 Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
       ],
     },
@@ -72,7 +73,7 @@ export const ProductCardData = () => {
           src: "/assets/images/category/led.webp",
           time: "4 weeks ago",
           title: "LED Alto Model For Sale",
-          id: "2",
+          id: (id++).toString(),
         },
         {
           location: "Gulshan Karachi",
@@ -80,7 +81,7 @@ export const ProductCardData = () => {
           src: "/assets/images/products/mobile.jfif",
           time: "4 months ago",
           title: "iPhone Max Pro Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
         {
           location: "Karimabad Karachi",
@@ -88,7 +89,7 @@ export const ProductCardData = () => {
           src: "/assets/images/category/led.webp",
           time: "4 days ago",
           title: "Suzuki Alto 1993 Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
         {
           location: "Karimabad Karachi",
@@ -96,7 +97,7 @@ export const ProductCardData = () => {
           src: "/assets/images/logo/Loxlight.png",
           time: "4 days ago",
           title: "Suzuki Alto 1993 Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
         {
           location: "Karimabad Karachi",
@@ -104,7 +105,7 @@ export const ProductCardData = () => {
           src: "/assets/images/logo/Loxlight.png",
           time: "4 days ago",
           title: "Suzuki Alto 1993 Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
         {
           location: "Karimabad Karachi",
@@ -113,7 +114,7 @@ export const ProductCardData = () => {
           time: "4 days ago",
           title:
             "Suzuki Alto 1993 Model For SaleSuzuki Alto 1993 Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
       ],
     },
@@ -127,7 +128,7 @@ export const ProductCardData = () => {
           src: "/assets/images/logo/Loxlight.png",
           time: "4 days ago",
           title: "Suzuki Alto 1993 Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
         {
           location: "Gulshan Karachi",
@@ -135,7 +136,7 @@ export const ProductCardData = () => {
           src: "/assets/images/products/mobile.jfif",
           time: "4 months ago",
           title: "iPhone Max Pro Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
         {
           location: "Karimabad Karachi",
@@ -143,7 +144,7 @@ export const ProductCardData = () => {
           src: "/assets/images/category/led.webp",
           time: "4 days ago",
           title: "Suzuki Alto 1993 Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
         {
           location: "Bahria Town Karachi",
@@ -151,7 +152,7 @@ export const ProductCardData = () => {
           src: "/assets/images/category/led.webp",
           time: "4 weeks ago",
           title: "LED Alto Model For Sale",
-          id: "2",
+          id: (id++).toString(),
         },
         {
           location: "Karimabad Karachi",
@@ -159,7 +160,7 @@ export const ProductCardData = () => {
           src: "/assets/images/logo/Loxlight.png",
           time: "4 days ago",
           title: "Suzuki Alto 1993 Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
         {
           location: "Karimabad Karachi",
@@ -168,7 +169,7 @@ export const ProductCardData = () => {
           time: "4 days ago",
           title:
             "Suzuki Alto 1993 Model For SaleSuzuki Alto 1993 Model For Sale",
-          id: "1",
+          id: (id++).toString(),
         },
       ],
     },
@@ -185,31 +186,7 @@ export const MoreProductCardData = () => {
       src: "/assets/images/logo/Loxlight.png",
       time: "4 days ago",
       title: "Suzuki Alto 1993 Model For Sale",
-      id: "1",
-    },
-    {
-      location: "Gulshan Karachi",
-      price: "Rs. 2,500",
-      src: "/assets/images/products/mobile.jfif",
-      time: "4 months ago",
-      title: "iPhone Max Pro Model For Sale",
-      id: "1",
-    },
-    {
-      location: "Karimabad Karachi",
-      price: "Rs. 1,500",
-      src: "/assets/images/category/led.webp",
-      time: "4 days ago",
-      title: "Suzuki Alto 1993 Model For Sale",
-      id: "1",
-    },
-    {
-      location: "Bahria Town Karachi",
-      price: "Rs. 1,900",
-      src: "/assets/images/category/led.webp",
-      time: "4 weeks ago",
-      title: "LED Alto Model For Sale",
-      id: "2",
+      id: (id++).toString(),
     },
     {
       location: "Karimabad Karachi",
@@ -217,7 +194,39 @@ export const MoreProductCardData = () => {
       src: "/assets/images/logo/Loxlight.png",
       time: "4 days ago",
       title: "Suzuki Alto 1993 Model For Sale",
-      id: "1",
+      id: (id++).toString(),
+    },
+    {
+      location: "Gulshan Karachi",
+      price: "Rs. 2,500",
+      src: "/assets/images/products/mobile.jfif",
+      time: "4 months ago",
+      title: "iPhone Max Pro Model For Sale",
+      id: (id++).toString(),
+    },
+    {
+      location: "Karimabad Karachi",
+      price: "Rs. 1,500",
+      src: "/assets/images/category/led.webp",
+      time: "4 days ago",
+      title: "Suzuki Alto 1993 Model For Sale",
+      id: (id++).toString(),
+    },
+    {
+      location: "Bahria Town Karachi",
+      price: "Rs. 1,900",
+      src: "/assets/images/category/led.webp",
+      time: "4 weeks ago",
+      title: "LED Alto Model For Sale",
+      id: (id++).toString(),
+    },
+    {
+      location: "Karimabad Karachi",
+      price: "Rs. 1,500",
+      src: "/assets/images/logo/Loxlight.png",
+      time: "4 days ago",
+      title: "Suzuki Alto 1993 Model For Sale",
+      id: (id++).toString(),
     },
     {
       location: "Karimabad Karachi",
@@ -225,7 +234,7 @@ export const MoreProductCardData = () => {
       src: "/assets/images/products/mobile.jfif",
       time: "4 days ago",
       title: "Suzuki Alto 1993 Model For SaleSuzuki Alto 1993 Model For Sale",
-      id: "1",
+      id: (id++).toString(),
     },
   ];
 

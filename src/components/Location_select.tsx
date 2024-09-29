@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { DropdownConfig } from "./DropDownConfig";
 import { Option } from "@/interfaces";
+import { locationStrogeName } from "@/utils/constant";
 
 export function Location_select() {
   const location_of_pakistan: Option[] = [
@@ -34,14 +35,14 @@ export function Location_select() {
   const [defaultSelect, setDefaultSelect] = useState<Option | null>(null);
 
   useEffect(() => {
-    const val = localStorage.getItem("location");
+    const val = localStorage.getItem(locationStrogeName);
     const realValue = val && JSON.parse(val);
     setDefaultSelect(realValue);
   }, []);
 
   const handleSelect = (value: Option) => {
     setDefaultSelect(null);
-    localStorage.setItem("location", JSON.stringify(value));
+    localStorage.setItem(locationStrogeName, JSON.stringify(value));
   };
 
   return (

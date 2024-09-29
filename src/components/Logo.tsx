@@ -8,7 +8,8 @@ export const Logo = () => {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const navigate = useRouter();
-  // When mounted on client, set to true
+
+  // When mounted on client, set to truesfgrrr
   useEffect(() => {
     setMounted(true);
   }, []);
