@@ -1,8 +1,13 @@
 "use client";
 import * as React from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { MoreProductCardUI, ProductCardUI } from "@/components/ProductCard";
 import {
+  DetailProductCardUI,
+  MoreProductCardUI,
+  ProductCardUI,
+} from "@/components/ProductCard";
+import {
+  DetailProductCardProps,
   ProductCardProps,
   RenderProductCardProps,
   ViewStyle,
@@ -23,7 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CheckCircle } from "lucide-react";
-import { sortedStrogeName } from "@/utils/constant";
+import { gridViewStorageName, sortedStrogeName } from "@/utils/constant";
 
 export function RenderProductCard({
   cardData,
@@ -56,7 +61,10 @@ export function RenderProductCard({
 }
 
 export function RenderMoreProductCard(cardData: ProductCardProps[]) {
-  const [viewMode, setViewMode] = React.useState<Boolean>(true);
+  const gridStorageValue = localStorage.getItem(gridViewStorageName);
+  const parseValue = gridStorageValue ? JSON.parse(gridStorageValue) : false;
+
+  const [gridView, setGridView] = React.useState<Boolean>(parseValue);
   const [sortedValue, setsortedValue] = React.useState<string | null>(
     localStorage.getItem(sortedStrogeName)
   );
@@ -64,20 +72,26 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
   const viewStyle: ViewStyle[] = [
     {
       Tag: MdOutlineViewHeadline,
-      onClick: () => setViewMode(false),
+      onClick: () => {
+        setGridView(false);
+        localStorage.setItem(gridViewStorageName, "false");
+      },
       size: 30,
       tooltipText: "List",
       className: `${
-        !viewMode && "bg-green-500 text-black rounded-full"
+        !gridView && "bg-green-500 text-black rounded-full"
       } p-1 cursor-pointer`,
     },
     {
       Tag: FiGrid,
-      onClick: () => setViewMode(true),
+      onClick: () => {
+        setGridView(true);
+        localStorage.setItem(gridViewStorageName, "true");
+      },
       size: 30,
       tooltipText: "Grid",
       className: `${
-        viewMode && "bg-green-500 text-black rounded-full"
+        gridView && "bg-green-500 text-black rounded-full"
       } p-1 cursor-pointer`,
     },
   ];
@@ -145,12 +159,12 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
 
       <div
         className={`${
-          viewMode &&
+          gridView &&
           "grid grid-flow-dense grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2"
         }`}
       >
         {Object.values(cardData).map((data) =>
-          viewMode ? (
+          gridView ? (
             <ProductCardUI
               key={data.id}
               {...data}
@@ -163,4 +177,8 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
       </div>
     </div>
   );
+}
+
+export function RenderDetailProductCard({ imageSrc }: DetailProductCardProps) {
+  return <DetailProductCardUI imageSrc={imageSrc} />;
 }

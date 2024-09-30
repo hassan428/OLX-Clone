@@ -16,11 +16,16 @@ export function Slider() {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
-  const [slider_src, set_slider_src] = React.useState<SliderSrc[]>([
-    {
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuHCbHGd7D623E5XBmXkDJSQb0iTK5l3GtSQ&s",
-    },
-  ]);
+  const [slider_src, set_slider_src] = React.useState<SliderSrc[]>([]);
+
+  React.useEffect(() => {
+    set_slider_src([
+      ...slider_src,
+      {
+        src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuHCbHGd7D623E5XBmXkDJSQb0iTK5l3GtSQ&s",
+      },
+    ]);
+  }, []);
 
   return (
     <Carousel

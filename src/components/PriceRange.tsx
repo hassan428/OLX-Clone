@@ -5,7 +5,10 @@ import { useState } from "react";
 import { PriceRangeInterface } from "@/interfaces";
 
 export const PriceRange = () => {
-  const [range, setRange] = useState<PriceRangeInterface | null>(null);
+  const [range, setRange] = useState<PriceRangeInterface>({
+    highest: "99999",
+    lowest: "0",
+  });
   const [error, setError] = useState<string>("");
 
   const onChangeHandle = (e: any) => {
@@ -39,7 +42,7 @@ export const PriceRange = () => {
           className={`focus:border-2 focus-visible:ring-0 ${
             error ? "text-red-500 border-red-500" : "border-foreground"
           }`}
-          //   value={search_value}
+          value={range?.lowest}
           onChange={onChangeHandle}
         />
         <Input
@@ -49,12 +52,16 @@ export const PriceRange = () => {
           className={`focus:border-2 border-foreground focus-visible:ring-0 ${
             error && "text-red-500 border-red-500"
           }`}
-          //   value={search_value}
+          value={range?.highest}
           onChange={onChangeHandle}
         />
       </div>
       {error && <h1 className="text-red-500 text-xs">{error}</h1>}
-      <Button onClick={onClickHandle} variant="default" className="w-full">
+      <Button
+        onClick={onClickHandle}
+        variant="default"
+        className="w-full active:bg-background"
+      >
         Filter
       </Button>
     </>

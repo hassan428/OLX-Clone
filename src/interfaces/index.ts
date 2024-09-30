@@ -126,3 +126,18 @@ export interface PriceRangeInterface {
   lowest?: string;
   highest?: string;
 }
+
+export interface CardDetailsImage {
+  src: string[];
+}
+
+export interface DetailProductCardProps {
+  // price: string;
+  // src: string;
+  // title: string;
+  // location: string;
+  // time: string;
+  // id: string;
+  // className?: string;
+  imageSrc: string[];
+}

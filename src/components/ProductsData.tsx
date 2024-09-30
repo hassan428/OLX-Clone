@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  RenderDetailProductCard,
   RenderMoreProductCard,
   RenderProductCard,
 } from "@/components/RenderProductCard";
@@ -239,4 +240,23 @@ export const MoreProductCardData = () => {
   ];
 
   return <RenderMoreProductCard {...data} />;
+};
+
+export const DetailProductCardData = () => {
+  // const [imageSrc, setImageSrc] = React.useState<string[]>([]);
+
+  // React.useEffect(() => {
+  //   setImageSrc([
+  //     ...imageSrc,
+  //     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuHCbHGd7D623E5XBmXkDJSQb0iTK5l3GtSQ&s",
+  //     "/assets/images/products/mobile.jfif",
+  //   ]);
+  // }, []);
+
+  const imageSrc = [
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuHCbHGd7D623E5XBmXkDJSQb0iTK5l3GtSQ&s",
+    "/assets/images/products/mobile.jfif",
+  ];
+
+  return <RenderDetailProductCard imageSrc={imageSrc} />;
 };

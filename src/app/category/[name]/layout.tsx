@@ -79,7 +79,19 @@ const layout = ({ children, params }: LayoutProps) => {
 
   return (
     <div className="p-2 w-full">
-      <h1 className="sm:text-xl font-bold mb-3">
+      <div className="flex text-sm text-muted-foreground items-center gap-2">
+        <h1>
+          <Link href={"/"}>Home</Link>
+        </h1>
+        <h1>/</h1>
+        {find_title?.title && (
+          <h1>
+            <Link href={find_title.href}>{find_title.title}</Link>
+          </h1>
+        )}
+      </div>
+
+      <h1 className="sm:text-xl font-bold my-3">
         {find_title?.title || (name == "allcategories" && "All Categories")}
       </h1>
 
