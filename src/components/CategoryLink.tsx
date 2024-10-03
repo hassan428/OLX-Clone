@@ -15,12 +15,12 @@ export const CategoryText = () => {
   return (
     <div className="hidden md:flex justify-start items-center gap-5 p-2 text-sm">
       <Link href={"allcategories"}>
-        <strong>All Categories</strong>
+        <strong className="hover:font-extrabold">All Categories</strong>
       </Link>
       {category_link.map(({ href, title }, i) => {
         return (
           <Link href={`category/${href}`} key={i}>
-            <h1>{title.split(" ")[0]}</h1>
+            <h1 className="hover:font-bold">{title.split(" ")[0]}</h1>
           </Link>
         );
       })}
@@ -33,7 +33,7 @@ export const CategoryTextWithImage = () => {
     <Link
       href={`category/${href}`}
       key={i}
-      className="flex flex-col items-center text-center gap-2 text-xs md:text-sm py-3"
+      className="flex flex-col hover:bg-green-500 rounded-full items-center text-center gap-2 text-xs md:text-sm py-3"
     >
       <Image
         src={`/assets/images/category/${src}`}
@@ -61,8 +61,6 @@ export const CategoryTextWithImage = () => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        {/* <CarouselPrevious />
-      <CarouselNext /> */}
       </Carousel>
     </div>
   );

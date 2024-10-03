@@ -44,23 +44,26 @@ export function CardDetailImageSlider({ src }: CardDetailsImage) {
       onMouseEnter={plugin.current.stop}
       onMouseLeave={plugin.current.reset}
     >
-      <CarouselContent className="items-center">
+      <CarouselContent className="items-center text-center">
         {src.map((imageSrc, i) => (
-          <CarouselItem key={i}>
-            <div>
+          <CarouselItem
+            key={i}
+            className="flex justify-center items-center h-full w-full"
+          >
+            <div className="flex justify-center items-center h-56 sm:h-64">
               <Image
                 src={imageSrc}
                 width={1000}
                 height={1000}
                 alt="sliderImage"
                 priority={true}
-                className="w-full h-max object-cver"
+                className="object-contain w-full h-full"
               />
             </div>
           </CarouselItem>
         ))}
       </CarouselContent>
-      <div className="bg-background border border-foreground p-1 rounded-full flex items-center gap-2 absolute bottom-2 right-2">
+      <div className="bg-background text-sm border border-foreground p-1 rounded-full flex items-center gap-1 absolute bottom-2 right-2">
         <Camera />
         <h1>{`${current} / ${count}`}</h1>
       </div>

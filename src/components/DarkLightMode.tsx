@@ -29,11 +29,11 @@ export function DarkLightModeBtn() {
       <DropdownMenuContent align="end">
         {title_theme.map((themesName: string, i) => (
           <DropdownMenuItem
-            className="cursor-pointer justify-between"
+            className="cursor-pointer justify-between capitalize"
             key={i}
             onClick={() => setTheme(themesName)}
           >
-            {themesName[0].toUpperCase() + themesName.slice(1)}
+            {themesName}
             {theme == themesName && (
              <CheckCircle className="mr-2 text-green-500" />
             )} 

@@ -58,14 +58,14 @@ const appImage: AppImage[] = [
 export const Footer = () => {
   return (
     <div className="bg-border border-t border-black space-y-5">
-      <div className="md:flex w-full justify-between items-center ">
+      <div className="md:flex w-full justify-between items-start ">
         <div className="md:flex w-full items-center gap-5 lg:gap-10 md:p-3 ">
           {footerdata.map((data, i) => (
             <div key={i}>
               <div className="md:hidden">
                 <FooterDropDown {...data} />
               </div>
-              <div className="max-md:hidden ">
+              <div className="max-md:hidden">
                 <FooterLink {...data} />
               </div>
             </div>
@@ -82,7 +82,7 @@ export const Footer = () => {
               ))}
             </div>
           </div>
-          <div className="flex gap-3 p-3 items-center max-w-full flex-wrap justify-center">
+          <div className="flex gap-3 p-3 items-center w-full flex-wrap justify-center">
             {appImage.map(({ src, href }, i) => (
               <Link href={href} key={i} target="_blank">
                 <Image

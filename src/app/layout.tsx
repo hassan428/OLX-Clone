@@ -7,6 +7,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "next-themes";
 import { BackToTopBtn } from "@/components/BackToTopBtn";
+import { CategoryText } from "@/components/CategoryLink";
 
 const fontSans = FontSans({
   subsets: ["cyrillic-ext"],
@@ -40,6 +41,7 @@ const RootLayout: FC<LayoutProps> = ({ children }) => {
           disableTransitionOnChange
         >
           <Navbar />
+          <CategoryText />
           {children}
           <BackToTopBtn />
           <Footer />

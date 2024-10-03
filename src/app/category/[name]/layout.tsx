@@ -24,7 +24,9 @@ const layout = ({ children, params }: LayoutProps) => {
     <>
       <Link
         href={"allcategories"}
-        className={`ml-4 ${name == "allcategories" && "font-bold"}`}
+        className={`ml-4 hover:underline ${
+          name == "allcategories" && "font-bold"
+        }`}
       >
         All Categories
       </Link>
@@ -32,7 +34,9 @@ const layout = ({ children, params }: LayoutProps) => {
         <Link
           key={i}
           href={href}
-          className={`ml-8 ${find_title?.title == title && "font-bold"}`}
+          className={`ml-8 hover:underline ${
+            find_title?.title == title && "font-bold"
+          }`}
         >
           {title}
         </Link>
@@ -51,35 +55,33 @@ const layout = ({ children, params }: LayoutProps) => {
   );
 
   const sidebarSheetUi = () => (
-    <div>
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button variant="default" size={"icon"}>
-            Filter
-          </Button>
-        </SheetTrigger>
-        <SheetContent
-          side={"left"}
-          className="text-sm flex flex-col gap-2 max-h-screen overflow-auto font-light p-2"
-        >
-          <SheetHeader className="m-3">
-            <Logo />
-          </SheetHeader>
-          <SheetTitle className="font-bold text-base">Categories</SheetTitle>
-          <SheetDescription className="flex flex-col gap-2">
-            {categoryUI()}
-          </SheetDescription>
-          <SheetFooter className="text-base font-bold flex flex-col gap-2">
-            <PriceRange />
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
-    </div>
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="default" size={"icon"}>
+          Filter
+        </Button>
+      </SheetTrigger>
+      <SheetContent
+        side={"left"}
+        className="text-sm flex flex-col gap-2 max-h-screen overflow-auto font-light p-2"
+      >
+        <SheetHeader className="m-3">
+          <Logo />
+        </SheetHeader>
+        <SheetTitle className="font-bold text-base">Categories</SheetTitle>
+        <SheetDescription className="flex flex-col gap-2">
+          {categoryUI()}
+        </SheetDescription>
+        <SheetFooter className="text-base font-bold flex flex-col gap-2">
+          <PriceRange />
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 
   return (
     <div className="p-2 w-full">
-      <div className="flex text-sm text-muted-foreground items-center gap-2">
+      <div className="flex text-xs sm:text-sm text-muted-foreground items-center gap-2">
         <h1>
           <Link href={"/"}>Home</Link>
         </h1>
@@ -95,10 +97,8 @@ const layout = ({ children, params }: LayoutProps) => {
         {find_title?.title || (name == "allcategories" && "All Categories")}
       </h1>
 
-      <div className="flex flex-col sm:flex-row items-start sm:bg-input bg-background">
-        <div className="w-1/3 bg-input max-sm:hidden sticky top-32 ">
-          {sidebarUi()}
-        </div>
+      <div className="flex flex-col sm:flex-row items-start sm:bg-border bg-background">
+        <div className="w-1/3 max-sm:hidden sticky top-32 ">{sidebarUi()}</div>
         <div className="sm:hidden">{sidebarSheetUi()}</div>
 
         <div className="sm:w-2/3 w-full bg-background">{children}</div>

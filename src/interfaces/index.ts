@@ -24,12 +24,16 @@ export interface InputValue {
 }
 
 export interface Params {
-  name: string;
-  id: string;
+  name?: string;
+  id?: string;
 }
 
 export interface LayoutProps {
   children: ReactNode;
+  params: Params;
+}
+
+export interface PageProps {
   params: Params;
 }
 
@@ -98,13 +102,20 @@ export interface CategoryLink {
   title: string;
 }
 
+export interface ProductOtherDetails {
+  type?: string;
+  condition: string;
+}
+
 export interface ProductCardProps {
   price: string;
-  src: string;
+  src: string[];
   title: string;
+  description: string;
   location: string;
   time: string;
   id: string;
+  productOtherDetails: ProductOtherDetails;
   className?: string;
 }
 
@@ -131,13 +142,24 @@ export interface CardDetailsImage {
   src: string[];
 }
 
+export interface MoreProductCardDataProps {
+  categoryName: string;
+}
+
+export interface DetailProductCardDataProps {
+  productID: string;
+}
+
 export interface DetailProductCardProps {
-  // price: string;
-  // src: string;
-  // title: string;
-  // location: string;
-  // time: string;
-  // id: string;
-  // className?: string;
-  imageSrc: string[];
+  cardDetails: ProductCardProps;
+}
+
+export interface User {
+  username: string;
+  email?: string;
+  phoneNumber?: string;
+  gender?: string;
+  birthDate?: string;
+  aboutMe?: string;
+  avatarUrl?: string;
 }

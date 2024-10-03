@@ -5,7 +5,7 @@ import {
   DetailProductCardUI,
   MoreProductCardUI,
   ProductCardUI,
-} from "@/components/ProductCard";
+} from "@/components/ProductCardUI";
 import {
   DetailProductCardProps,
   ProductCardProps,
@@ -39,7 +39,9 @@ export function RenderProductCard({
     <div className="m-2 my-3">
       <div className="flex justify-between items-center my-2">
         <h1 className="text-2xl font-bold">{heading}</h1>
-        <Link href={`category/${href}`}>View more</Link>
+        <Link href={`category/${href}`} className="hover:underline">
+          View more
+        </Link>
       </div>
       <div className="hidden xmd:flex space-x-3">
         {cardData.map(
@@ -61,13 +63,21 @@ export function RenderProductCard({
 }
 
 export function RenderMoreProductCard(cardData: ProductCardProps[]) {
-  const gridStorageValue = localStorage.getItem(gridViewStorageName);
-  const parseValue = gridStorageValue ? JSON.parse(gridStorageValue) : false;
+  const [gridView, setGridView] = React.useState<Boolean>(false);
+  const [sortedValue, setsortedValue] = React.useState<string | null>(null);
 
-  const [gridView, setGridView] = React.useState<Boolean>(parseValue);
-  const [sortedValue, setsortedValue] = React.useState<string | null>(
-    localStorage.getItem(sortedStrogeName)
-  );
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const sortStorageValue = localStorage.getItem(sortedStrogeName);
+      const gridStorageValue = localStorage.getItem(gridViewStorageName);
+      const parseValue = gridStorageValue
+        ? JSON.parse(gridStorageValue)
+        : false;
+
+      setGridView(parseValue);
+      setsortedValue(sortStorageValue);
+    }
+  }, []);
 
   const viewStyle: ViewStyle[] = [
     {
@@ -104,57 +114,63 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
   ];
 
   return (
-    <div className="pl-2 w-full">
-      <div className="mb-2 flex sm:flex-row flex-col justify-end items-end gap-3 text-sm font-bold">
-        <div className="flex justify-end items-center gap-1">
-          <h1>VIEW</h1>
-          {viewStyle.map(
-            ({ Tag, onClick, size, tooltipText, className }, i) => (
-              <TooltipProvider key={i}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div>
-                      <Tag
-                        className={className}
-                        size={size}
-                        onClick={onClick}
-                      />
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{tooltipText}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )
-          )}
-        </div>
+    <div className="pl-2 w-full ">
+      <div className="flex justify-between items-end mb-2">
+        <h1 className="text-muted-foreground text-xs sm:text-sm">
+          Showing {Object.values(cardData).length} ads
+        </h1>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <div className="flex items-center gap-2">
-              <h1 className="cursor-pointer">SORT BY:</h1>
-              <h1 className="cursor-pointer font-normal">{sortedValue}</h1>
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {sortingValues.map((val, i) => (
-              <DropdownMenuItem
-                key={i}
-                onClick={() => {
-                  localStorage.setItem(sortedStrogeName, val);
-                  setsortedValue(val);
-                }}
-                className="justify-between gap-2"
-              >
-                <h1>{val}</h1>
-                {val == sortedValue && (
-                  <CheckCircle className="mr-2 text-green-500" />
-                )}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex sm:flex-row flex-col justify-end items-end sm:items-center gap-1 sm:gap-3 text-sm font-bold">
+          <div className="flex justify-end items-center gap-1">
+            <h1>VIEW</h1>
+            {viewStyle.map(
+              ({ Tag, onClick, size, tooltipText, className }, i) => (
+                <TooltipProvider key={i}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div>
+                        <Tag
+                          className={className}
+                          size={size}
+                          onClick={onClick}
+                        />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{tooltipText}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )
+            )}
+          </div>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="flex items-center gap-2">
+                <h1 className="cursor-pointer">SORT BY :</h1>
+                <h1 className="cursor-pointer font-normal">{sortedValue}</h1>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {sortingValues.map((val, i) => (
+                <DropdownMenuItem
+                  key={i}
+                  onClick={() => {
+                    localStorage.setItem(sortedStrogeName, val);
+                    setsortedValue(val);
+                  }}
+                  className="justify-between gap-2"
+                >
+                  <h1>{val}</h1>
+                  {val == sortedValue && (
+                    <CheckCircle className="mr-2 text-green-500" />
+                  )}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       <div
@@ -179,6 +195,6 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
   );
 }
 
-export function RenderDetailProductCard({ imageSrc }: DetailProductCardProps) {
-  return <DetailProductCardUI imageSrc={imageSrc} />;
+export function RenderDetailProductCard(data: DetailProductCardProps) {
+  return <DetailProductCardUI {...data} />;
 }
