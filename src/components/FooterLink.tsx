@@ -9,7 +9,7 @@ export const FooterLink = ({ data, title }: FooterLinkSection) => {
       <div>
         {data.map(({ href, text }, i) => (
           <Link key={i} href={href}>
-            <h1 className="text-sm hover:underline line-clamp-1">{text}</h1>
+            <h1 className="text-sm hover:font-bold line-clamp-1">{text}</h1>
           </Link>
         ))}
       </div>

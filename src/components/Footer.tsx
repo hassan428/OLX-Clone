@@ -10,19 +10,19 @@ const footerdata: FooterLinkSection[] = [
   {
     title: "Popular Categories",
     data: [
-      { text: "Mobiles", href: "../category/mobiles" },
-      { text: "Vehicles", href: "../category/vehicles" },
-      { text: "Fashion & Beauty", href: "../category/fashion" },
-      { text: "Home Appliances", href: "../category/electronics" },
+      { text: "Mobiles", href: "/category/mobiles" },
+      { text: "Vehicles", href: "/category/vehicles" },
+      { text: "Fashion & Beauty", href: "/category/fashion" },
+      { text: "Home Appliances", href: "/category/electronics" },
     ],
   },
   {
     title: "Trending Searches",
     data: [
-      { text: "Vehicles", href: "../category/vehicles" },
-      { text: "Furniture & Home Decorator", href: "../category/furniture" },
-      { text: "Kids", href: "../category/kids" },
-      { text: "Birds", href: "../category/birds" },
+      { text: "Vehicles", href: "/category/vehicles" },
+      { text: "Furniture & Home Decorator", href: "/category/furniture" },
+      { text: "Kids", href: "/category/kids" },
+      { text: "Birds", href: "/category/birds" },
     ],
   },
   {

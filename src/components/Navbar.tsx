@@ -10,6 +10,8 @@ import { DarkLightModeBtn } from "@/components/DarkLightMode";
 import { NavigateButton } from "@/components/NavigateButton";
 import { NavDrawer } from "@/components/NavDrawer";
 import { NavbarRoute } from "@/interfaces";
+import { isLogged } from "@/utils";
+import { ProfileRoutes } from "@/components/ProfileRoutes";
 
 export const Navbar = () => {
   const navbarRoute: NavbarRoute[] = [
@@ -54,15 +56,24 @@ export const Navbar = () => {
         <div className="w-full">
           <Location_select />
         </div>
-        <Search_input />
-        <div className="max-xmd:hidden">
-          <NavigateButton
-            btnText="Login"
-            variant="link"
-            method="push"
-            pageName="/login"
-          />
+
+        <div className="w-full">
+          <Search_input />
         </div>
+
+        <div className="max-xmd:hidden min-w-max">
+          {isLogged ? (
+            <ProfileRoutes />
+          ) : (
+            <NavigateButton
+              btnText="Login"
+              variant="link"
+              method="push"
+              pageName="/login"
+            />
+          )}
+        </div>
+
         <Sell_btn />
       </nav>
     </nav>

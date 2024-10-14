@@ -1,37 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { DropdownConfig } from "./DropDownConfig";
+import { LocationSelectConfig } from "@/components/LocationSelectConfig";
 import { Option } from "@/interfaces";
 import { locationStrogeName } from "@/utils/constant";
+import { location_of_pakistan } from "@/utils";
 
 export function Location_select() {
-  const location_of_pakistan: Option[] = [
-    {
-      value: "all",
-      label: "Over All, Pakistan",
-    },
-    {
-      value: "sindh",
-      label: "Sindh",
-    },
-    {
-      value: "punjab",
-      label: "Punjab",
-    },
-    {
-      value: "balochistan",
-      label: "Balochistan",
-    },
-    {
-      value: "kpk",
-      label: "Khyber Pakhtunkhwa",
-    },
-    {
-      value: "kashmir",
-      label: "Azad Kashmir",
-    },
-  ];
-
   const [defaultSelect, setDefaultSelect] = useState<Option | null>(null);
 
   useEffect(() => {
@@ -46,7 +20,7 @@ export function Location_select() {
   };
 
   return (
-    <DropdownConfig
+    <LocationSelectConfig
       options={location_of_pakistan}
       placeholder={"Select Location"}
       onSelect={handleSelect}

@@ -1,3 +1,4 @@
+import { InputProps } from "@/components/ui/input";
 import { LucideIcon } from "lucide-react";
 import { ButtonHTMLAttributes, ReactNode } from "react";
 import { IconType } from "react-icons";
@@ -9,7 +10,7 @@ export interface Option {
   value: string;
 }
 
-export interface DropdownProps {
+export interface LocationSelectProps {
   options: Option[];
   placeholder: string;
   onSelect: (value: Option) => void;
@@ -24,8 +25,8 @@ export interface InputValue {
 }
 
 export interface Params {
-  name?: string;
-  id?: string;
+  categoryName?: string;
+  profileID?: string;
 }
 
 export interface LayoutProps {
@@ -155,11 +156,37 @@ export interface DetailProductCardProps {
 }
 
 export interface User {
-  username: string;
+  name?: string;
   email?: string;
   phoneNumber?: string;
   gender?: string;
   birthDate?: string;
   aboutMe?: string;
   avatarUrl?: string;
+}
+
+export interface TextInputProps {
+  inputProps: InputProps;
+  cut_handle?: () => void;
+  error?: boolean;
+}
+
+export interface DropDownConfigProps {
+  placeholder: string;
+  defaultSelect?: string;
+  selectValue?: string;
+  selectHandle: (value: Option) => void;
+  dropdownData: Option[];
+  error?: boolean;
+}
+
+export interface BrthDate {
+  dd?: Option;
+  mm?: Option;
+  yy?: Option;
+}
+
+export interface ErrorTextProps {
+  errorText: string;
+  className?: string;
 }

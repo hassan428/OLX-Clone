@@ -28,7 +28,7 @@ export const ProductCardUI = ({
       className={`w-56 xmd:w-1/4 hover:bg-border cursor-pointer relative ${className}`}
       key={id}
     >
-      <Link href={`../products/${id}`}>
+      <Link href={`/products/${id}`}>
         <CardHeader className="p-0 h-40">
           <Image
             src={src[0]}
@@ -68,8 +68,8 @@ export const MoreProductCardUI = ({
   id,
 }: ProductCardProps) => {
   return (
-    <Link href={`../products/${id}`} key={id}>
-      <Card className="cursor-pointer  hover:bg-border h-40 sm:h-52 flex my-2 sm:m-2 border-2 border-border">
+    <Link href={`/products/${id}`} key={id}>
+      <Card className="cursor-pointer hover:bg-border h-36 sm:h-52 flex my-2 sm:m-2 border-2 border-border">
         <CardHeader className="p-0 w-28 sm:w-52">
           <Image
             src={src[0]}
@@ -81,19 +81,19 @@ export const MoreProductCardUI = ({
         </CardHeader>
         <div className="w-2/3 flex flex-col justify-between border-l-2 p-2 sm:p-5 border-border">
           <CardContent className="flex-col p-0">
-            <div className="flex justify-between items-center mb-2 ">
+            <div className="flex justify-between items-center mb-1 sm:mb-2 ">
               <CardTitle className="sm:text-xl text-base font-bold">
                 {price}
               </CardTitle>
               <Heart fill={"none"} />
             </div>
-            <CardDescription className="text-sm sm:text-base text-accent-foreground hover:underline leading-5 line-clamp-2 sm:line-clamp-3">
+            <CardDescription className="text-xs sm:text-base text-accent-foreground hover:underline leading-4 line-clamp-2 sm:line-clamp-3">
               <abbr title={title} className="no-underline">
                 {title}
               </abbr>
             </CardDescription>
           </CardContent>
-          <CardFooter className="p-0 flex flex-col items-start justify-start gap-2 text-muted-foreground text-xs">
+          <CardFooter className="p-0 flex flex-col items-start justify-start gap-2 text-muted-foreground text-[10px] sm:text-xs">
             <div className="flex items-center gap-2">
               <h1 className="line-clamp-1 ">{location}</h1>
               <h1 className="min-w-max">{time}</h1>
@@ -195,14 +195,17 @@ export const DetailProductCardUI = ({
         <div className="border border-border rounded p-3 my-3 flex flex-col gap-3">
           <h1 className="text-xl font-bold">Listed by private user</h1>
           <Link
-            href={"/profile"}
+            href={"/profile/id"}
             className="flex justify-start gap-3 items-center"
           >
             <Image
-              src={"/assets/images/load_avatar.png"}
+              // src={"/assets/images/load_avatar.png"}
               alt="Avatar"
               width={75}
               height={75}
+              priority={true}
+              src={"/assets/images/sliderimage.jfif"}
+              className="rounded-full object-cover w-20 h-20"
             />
             <div className="flex flex-col gap-1 text-sm">
               <h1>Username</h1>

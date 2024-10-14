@@ -14,12 +14,12 @@ import { category_link } from "@/utils";
 export const CategoryText = () => {
   return (
     <div className="hidden md:flex justify-start items-center gap-5 p-2 text-sm">
-      <Link href={"allcategories"}>
+      <Link href={"/allcategories"}>
         <strong className="hover:font-extrabold">All Categories</strong>
       </Link>
       {category_link.map(({ href, title }, i) => {
         return (
-          <Link href={`category/${href}`} key={i}>
+          <Link href={`/category/${href}`} key={i}>
             <h1 className="hover:font-bold">{title.split(" ")[0]}</h1>
           </Link>
         );
@@ -31,7 +31,7 @@ export const CategoryText = () => {
 export const CategoryTextWithImage = () => {
   const renderData = ({ href, src, title }: CategoryLink, i: number) => (
     <Link
-      href={`category/${href}`}
+      href={`/category/${href}`}
       key={i}
       className="flex flex-col hover:bg-green-500 rounded-full items-center text-center gap-2 text-xs md:text-sm py-3"
     >
@@ -47,8 +47,8 @@ export const CategoryTextWithImage = () => {
   );
   return (
     <div className="p-2 text-xl border-b border-border">
-      <Link href={"allcategories"}>
-        <strong>All Categories</strong>
+      <Link href={"/allcategories"}>
+        <strong className="hover:font-extrabold">All Categories</strong>
       </Link>
       <div className="hidden sm:grid grid-cols-6 xl:grid-cols-8">
         {category_link.map((data, i) => renderData(data, i))}

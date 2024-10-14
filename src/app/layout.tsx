@@ -40,11 +40,15 @@ const RootLayout: FC<LayoutProps> = ({ children }) => {
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          <CategoryText />
-          {children}
+          <div>
+            <Navbar />
+            <CategoryText />
+            {children}
+          </div>
           <BackToTopBtn />
-          <Footer />
+          <div className="">
+            <Footer />
+          </div>
         </ThemeProvider>
       </body>
     </html>

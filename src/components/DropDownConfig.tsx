@@ -1,77 +1,78 @@
 "use client";
+import { DropDownConfigProps } from "@/interfaces";
 import React, { useState, useRef, useEffect } from "react";
 import { RiArrowDownWideLine, RiArrowUpWideLine } from "react-icons/ri";
-import { IoLocation, IoLocationOutline } from "react-icons/io5";
-import { DropdownProps, Option } from "@/interfaces";
 
-export const DropdownConfig = ({
-  options,
+export const DropDownConfig = ({
   placeholder,
-  onSelect,
   defaultSelect,
-}: DropdownProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<Option | null>(
-    defaultSelect
-  );
+  selectHandle,
+  selectValue,
+  dropdownData,
+  error,
+}: DropDownConfigProps) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleOptionClick = (option: Option) => {
-    setSelectedOption(option);
-    onSelect(option);
-    setIsOpen(false);
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
   };
 
-  const toggleDropdown = () => setIsOpen(!isOpen);
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    // Cleanup listener on unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   return (
-    <div className="relative w-full" ref={dropdownRef}>
-      <button
-        onClick={toggleDropdown}
-        className={`w-full border border-foreground p-3 rounded-md flex items-center justify-between shadow-sm focus:outline-none transition-all`}
+    <div ref={dropdownRef} className="w-full">
+      <div
+        className={`border border-foreground ${
+          error && "border-red-600 text-red-600"
+        }  flex items-center cursor-pointer justify-between p-2 `}
+        onClick={() => setIsOpen(!isOpen)}
       >
-        <h1>{selectedOption?.label || defaultSelect?.label || placeholder}</h1>
+        <div>{defaultSelect || selectValue || placeholder}</div>
 
-        {isOpen ? (
-          <RiArrowUpWideLine size={25} />
-        ) : (
-          <RiArrowDownWideLine size={25} />
-        )}
-      </button>
-
+        <div>
+          {isOpen ? (
+            <RiArrowUpWideLine size={20} />
+          ) : (
+            <RiArrowDownWideLine size={20} />
+          )}
+        </div>
+      </div>
       {isOpen && (
-        <ul className="absolute z-10 bg-background w-full border rounded-md mt-2 shadow-lg">
-          {options.map((option) => (
-            <li
-              key={option.value}
-              onClick={() => handleOptionClick(option)}
-              className="p-3 hover:p-4 hover:border-y border-foreground cursor-pointer flex items-center gap-2"
-            >
-              {[selectedOption?.label, defaultSelect?.label].includes(
-                option.label
-              ) ? (
-                <IoLocation color="#16a34a" size={20} />
-              ) : (
-                <IoLocationOutline size={20} />
-              )}
-
-              {option.label}
-            </li>
-          ))}
-        </ul>
+        <div className="relative">
+          <div
+            className={`absolute z-10 bg-background overflow-auto w-full max-h-60  right-0 border rounded-md mt-2 shadow-lg `}
+          >
+            {dropdownData.map((value, i) => (
+              <div
+                key={i}
+                className="cursor-pointer hover:bg-input px-5 py-3"
+                onClick={() => {
+                  selectHandle(value);
+                  setIsOpen(false);
+                }}
+              >
+                <h1>{value.label}</h1>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

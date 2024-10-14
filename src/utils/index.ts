@@ -1,4 +1,54 @@
-import { CategoryLink, RenderProductCardProps } from "@/interfaces";
+import {
+  CategoryLink,
+  Option,
+  RenderProductCardProps,
+  RouteData,
+} from "@/interfaces";
+import {
+  IoCameraOutline,
+  IoCardOutline,
+  IoChatbubbleOutline,
+  IoEyeOutline,
+  IoHeartOutline,
+  IoHelpCircleOutline,
+  IoLogOutOutline,
+  IoNewspaperOutline,
+  IoNotificationsOutline,
+  IoSettingsOutline,
+} from "react-icons/io5";
+import { Moon } from "lucide-react";
+
+export const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+export const location_of_pakistan: Option[] = [
+  {
+    value: "all",
+    label: "Over All, Pakistan",
+  },
+  {
+    value: "sindh",
+    label: "Sindh",
+  },
+  {
+    value: "punjab",
+    label: "Punjab",
+  },
+  {
+    value: "balochistan",
+    label: "Balochistan",
+  },
+  {
+    value: "kpk",
+    label: "Khyber Pakhtunkhwa",
+  },
+  {
+    value: "kashmir",
+    label: "Azad Kashmir",
+  },
+];
 
 export const category_link: CategoryLink[] = [
   {
@@ -37,6 +87,99 @@ export const category_link: CategoryLink[] = [
     title: "Birds",
   },
 ];
+
+export const isLogged: boolean = true;
+
+export const route_data: RouteData[] = isLogged
+  ? [
+      {
+        title: "Dark Mode",
+        Icon: Moon,
+        href: "/",
+      },
+      {
+        title: "Start selling",
+        Icon: IoCameraOutline,
+        href: "/startselling",
+      },
+      {
+        title: "My ads",
+        Icon: IoNewspaperOutline,
+        href: "/myads",
+      },
+      {
+        href: "/myfavourites",
+        title: "Favourites & Saved searches",
+        Icon: IoHeartOutline,
+      },
+      {
+        href: "/profile/id",
+        title: "Public Profile",
+        Icon: IoEyeOutline,
+      },
+      {
+        href: "/payments",
+        title: "Buy Discounted Packages",
+        Icon: IoNewspaperOutline,
+      },
+      {
+        href: "/myorders",
+        title: "Bought Packages & Billing",
+        Icon: IoCardOutline,
+      },
+
+      {
+        title: "Chat",
+        Icon: IoChatbubbleOutline,
+        href: "/chat",
+      },
+      {
+        title: "Notifications",
+        Icon: IoNotificationsOutline,
+        href: "/notifications",
+      },
+      {
+        title: "Help",
+        Icon: IoHelpCircleOutline,
+        href: "/help",
+        className: "border-t",
+      },
+      {
+        href: "/setting",
+        title: "Setting",
+        Icon: IoSettingsOutline,
+        className: "border-b",
+      },
+      { href: "/logout", title: "Logout", Icon: IoLogOutOutline },
+    ]
+  : [
+      {
+        title: "Dark Mode",
+        Icon: Moon,
+        href: "/",
+      },
+      {
+        title: "Start selling",
+        Icon: IoCameraOutline,
+        href: "/startselling",
+      },
+      {
+        title: "My ads",
+        Icon: IoNewspaperOutline,
+        href: "/myads",
+      },
+      {
+        title: "Chat",
+        Icon: IoChatbubbleOutline,
+        href: "/chat",
+      },
+      {
+        title: "Help",
+        Icon: IoHelpCircleOutline,
+        href: "/help",
+        className: "border-y",
+      },
+    ];
 
 let id = 1;
 
@@ -381,3 +524,49 @@ export const data: RenderProductCardProps[] = [
     ],
   },
 ];
+
+// export const date: string[] = [
+//   "1",
+//   "2",
+//   "3",
+//   "4",
+//   "5",
+//   "6",
+//   "7",
+//   "8",
+//   "9",
+//   "10",
+//   "11",
+//   "12",
+//   "13",
+//   "14",
+//   "15",
+//   "16",
+//   "17",
+//   "18",
+//   "19",
+//   "20",
+//   "21",
+//   "22",
+//   "23",
+//   "24",
+//   "25",
+//   "26",
+//   "27",
+//   "28",
+//   "29",
+//   "30",
+//   "31",
+// ];
+
+function createDropDownData(start: number, end: number) {
+  let data: Option[] = [];
+  for (let i = start; i <= end; i++) {
+    data.push({ label: i.toString(), value: i.toString() });
+  }
+  return data;
+}
+
+export const date: Option[] = createDropDownData(1, 31);
+export const month: Option[] = createDropDownData(1, 12);
+export const year: Option[] = createDropDownData(1950, new Date().getFullYear()).reverse();

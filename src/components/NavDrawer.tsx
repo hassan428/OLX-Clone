@@ -16,114 +16,10 @@ import {
 } from "@/components/ui/sheet";
 
 import Image from "next/image";
-import {
-  IoCameraOutline,
-  IoCardOutline,
-  IoChatbubbleOutline,
-  IoEyeOutline,
-  IoHeartOutline,
-  IoHelpCircleOutline,
-  IoLogOutOutline,
-  IoNewspaperOutline,
-  IoNotificationsOutline,
-  IoSettingsOutline,
-} from "react-icons/io5";
+
 import Link from "next/link";
-import { Moon } from "lucide-react";
-import { RouteData } from "@/interfaces";
-const isLogged: boolean = true;
+import { isLogged, route_data } from "@/utils";
 const username: string = "Hassan Hanif";
-
-const route_data: RouteData[] = isLogged
-  ? [
-      {
-        title: "Dark Mode",
-        Icon: Moon,
-        href: "/",
-      },
-      {
-        title: "Start selling",
-        Icon: IoCameraOutline,
-        href: "startselling",
-      },
-      {
-        title: "My ads",
-        Icon: IoNewspaperOutline,
-        href: "myads",
-      },
-      {
-        href: "myfavourites",
-        title: "Favourites & Saved searches",
-        Icon: IoHeartOutline,
-      },
-      {
-        href: "publicprofileurl",
-        title: "Public Profile",
-        Icon: IoEyeOutline,
-      },
-      {
-        href: "payments",
-        title: "Buy Discounted Packages",
-        Icon: IoNewspaperOutline,
-      },
-      {
-        href: "myorders",
-        title: "Bought Packages & Billing",
-        Icon: IoCardOutline,
-      },
-
-      {
-        title: "Chat",
-        Icon: IoChatbubbleOutline,
-        href: "chat",
-      },
-      {
-        title: "Notifications",
-        Icon: IoNotificationsOutline,
-        href: "notifications",
-      },
-      {
-        title: "Help",
-        Icon: IoHelpCircleOutline,
-        href: "help",
-        className: "border-t",
-      },
-      {
-        href: "setting",
-        title: "Setting",
-        Icon: IoSettingsOutline,
-        className: "border-b",
-      },
-      { href: "logout", title: "Logout", Icon: IoLogOutOutline },
-    ]
-  : [
-      {
-        title: "Dark Mode",
-        Icon: Moon,
-        href: "/",
-      },
-      {
-        title: "Start selling",
-        Icon: IoCameraOutline,
-        href: "startselling",
-      },
-      {
-        title: "My ads",
-        Icon: IoNewspaperOutline,
-        href: "myads",
-      },
-      {
-        title: "Chat",
-        Icon: IoChatbubbleOutline,
-        href: "chat",
-      },
-      {
-        title: "Help",
-        Icon: IoHelpCircleOutline,
-        href: "help",
-        className: "border-y",
-      },
-    ];
 
 export function NavDrawer() {
   return (
@@ -144,6 +40,8 @@ export function NavDrawer() {
               alt="Avatar"
               width={75}
               height={75}
+              priority={true}
+              className="w-16 h-16 rounded-full object-cover"
             />
 
             <div>
@@ -162,7 +60,7 @@ export function NavDrawer() {
             </div>
           </div>
           {isLogged && (
-            <Link href={"/editProfile"}>
+            <Link href={"/editprofile"}>
               <Button
                 variant={"outline"}
                 className="w-full border-2 border-primary mt-2"

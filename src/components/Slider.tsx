@@ -43,6 +43,7 @@ export function Slider() {
                 width={1000}
                 height={1000}
                 alt="sliderImage"
+                priority={true}
                 className="w-full h-32 sm:h-48 xl:h-56 object-fill"
               />
             </div>

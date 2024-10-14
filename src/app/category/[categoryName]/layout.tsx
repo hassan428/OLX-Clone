@@ -17,15 +17,15 @@ import { Logo } from "@/components/Logo";
 import { PriceRange } from "@/components/PriceRange";
 
 const layout = ({ children, params }: LayoutProps) => {
-  const { name } = params;
-  const find_title = category_link.find(({ href }) => name == href);
+  const { categoryName } = params;
+  const find_title = category_link.find(({ href }) => categoryName == href);
 
   const categoryUI = () => (
     <>
       <Link
-        href={"allcategories"}
-        className={`ml-4 hover:underline ${
-          name == "allcategories" && "font-bold"
+        href={"/category/allcategories"}
+        className={`ml-4 hover:font-bold ${
+          categoryName == "allcategories" && "font-bold"
         }`}
       >
         All Categories
@@ -33,8 +33,8 @@ const layout = ({ children, params }: LayoutProps) => {
       {category_link.map(({ href, title }, i) => (
         <Link
           key={i}
-          href={href}
-          className={`ml-8 hover:underline ${
+          href={`/category/${href}`}
+          className={`ml-8 hover:font-bold ${
             find_title?.title == title && "font-bold"
           }`}
         >
@@ -94,7 +94,8 @@ const layout = ({ children, params }: LayoutProps) => {
       </div>
 
       <h1 className="sm:text-xl font-bold my-3">
-        {find_title?.title || (name == "allcategories" && "All Categories")}
+        {find_title?.title ||
+          (categoryName == "allcategories" && "All Categories")}
       </h1>
 
       <div className="flex flex-col sm:flex-row items-start sm:bg-border bg-background">

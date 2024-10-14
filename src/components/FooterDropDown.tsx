@@ -24,7 +24,7 @@ export const FooterDropDown = ({ data, title }: FooterLinkSection) => {
         <div className="bg-input flex flex-col gap-3 text-sm px-5 py-2">
           {data.map(({ href, text }, i) => (
             <Link key={i} href={href}>
-              <h1 className="hover:underline">{text}</h1>
+              <h1 className="hover:font-bold">{text}</h1>
             </Link>
           ))}
         </div>

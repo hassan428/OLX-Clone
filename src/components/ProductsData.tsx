@@ -24,7 +24,7 @@ export const MoreProductCardData = ({
   // Data Fetch
   const moreProductData = data.find((value) => value.href == categoryName)!;
 
-  console.log("moreProductData", moreProductData);
+  // console.log("moreProductData", moreProductData);
 
   return <RenderMoreProductCard {...moreProductData?.cardData} />;
 };
