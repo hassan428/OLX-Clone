@@ -37,7 +37,7 @@ export const DropDownConfig = ({
   }, [isOpen]);
 
   return (
-    <div ref={dropdownRef} className="w-full">
+    <div ref={dropdownRef} className="w-full text-sm">
       <div
         className={`border border-foreground ${
           error && "border-red-600 text-red-600"

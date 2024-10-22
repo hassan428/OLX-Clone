@@ -1,4 +1,6 @@
 "use client";
+import { Alert } from "@/components/Alert";
+import { DatePicker } from "@/components/DatePicker";
 import { DropDownConfig } from "@/components/DropDownConfig";
 import { ErrorText } from "@/components/ErrorText";
 import { TextInput } from "@/components/Text_input";
@@ -7,10 +9,12 @@ import { BrthDate, Option, User } from "@/interfaces";
 import { date, month, validateEmail, year } from "@/utils";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
-import { BsLightbulb } from "react-icons/bs";
-import { IoCameraReverseOutline } from "react-icons/io5";
+import { HiLightBulb } from "react-icons/hi";
+import { IoCameraReverseOutline, IoCloseOutline } from "react-icons/io5";
 
 const page = () => {
+  const defaultAvatarUrl = "/assets/images/load_avatar.png";
+
   const nameInput = (id: string) => (
     <>
       <TextInput
@@ -30,11 +34,8 @@ const page = () => {
 
   const [data, setData] = useState<User | null>(null);
   const [error, setError] = useState<User | null>(null);
-  const [birthDate, setBirthDate] = useState<BrthDate | null>(null);
   const [gender, setGender] = useState<Option | null>(null);
-  const [avatarUrl, setAvatarUrl] = useState<any>(
-    "/assets/images/load_avatar.png"
-  );
+  const [avatarUrl, setAvatarUrl] = useState<any>(defaultAvatarUrl);
 
   const setDataHandle = (newData: User) => {
     setData({ ...data, ...newData });
@@ -66,16 +67,11 @@ const page = () => {
 
   const saveChangesHandle = () => {
     setError(null);
-    if (birthDate && Object.keys(birthDate).length == 3) {
-      setDataHandle({ birthDate: Object.values(birthDate).join("-") });
-    }
 
-    if (avatarUrl) {
-      setData({ ...data, avatarUrl });
-    }
-    if (gender) {
-      setData({ ...data, gender: gender.value });
-    }
+    setDataHandle({
+      avatarUrl: avatarUrl != defaultAvatarUrl ? avatarUrl : undefined,
+      gender: gender?.value,
+    });
 
     // const phoneNumber = `+92${data?.phoneNumber}`; // update phone number on send data to backend
 
@@ -103,27 +99,6 @@ const page = () => {
 
   console.log("data", data);
 
-  const render_dob_ui = [
-    {
-      id: "dd",
-      placeholder: "DD",
-      dropdownData: date,
-      selectValue: birthDate?.dd?.label,
-    },
-    {
-      id: "mm",
-      placeholder: "MM",
-      dropdownData: month,
-      selectValue: birthDate?.mm?.label,
-    },
-    {
-      id: "yy",
-      placeholder: "YYYY",
-      dropdownData: year,
-      selectValue: birthDate?.yy?.label,
-    },
-  ];
-
   const genderData: Option[] = [
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
@@ -142,24 +117,35 @@ const page = () => {
             <input
               type="file"
               id="avatar"
+              accept="image/*"
               className="hidden"
               onChange={imageAvatarHandle}
             />
             <div className="relative">
+              {avatarUrl != defaultAvatarUrl && (
+                <div
+                  className="bg-foreground cursor-pointer absolute p-1 rounded-full right-0 top-0 text-background"
+                  onClick={() => setAvatarUrl(defaultAvatarUrl)}
+                >
+                  <IoCloseOutline />
+                </div>
+              )}
               <Image
+                src={avatarUrl}
                 alt="Avatar"
                 width={75}
                 height={75}
                 priority={true}
-                src={avatarUrl}
                 className="rounded-full object-cover min-w-20 h-20"
               />
-              <label
-                htmlFor="avatar"
-                className="bg-foreground flex sm:hidden absolute p-1 rounded-full right-0 bottom-0 text-background"
-              >
-                <IoCameraReverseOutline />
-              </label>
+              {avatarUrl == defaultAvatarUrl && (
+                <label
+                  htmlFor="avatar"
+                  className="bg-foreground flex sm:hidden absolute p-1 rounded-full right-0 bottom-0 text-background"
+                >
+                  <IoCameraReverseOutline />
+                </label>
+              )}
             </div>
             <div className="hidden sm:flex flex-col gap-1">
               <Button className="font-bold py-2 px-5">
@@ -186,25 +172,9 @@ const page = () => {
             <div className="flex flex-col gap-2 w-full">
               <h1 className="text-sm font-bold">Date of Birth</h1>
               <div>
-                <div className="flex items-center gap-5">
-                  {render_dob_ui.map(
-                    ({ dropdownData, id, placeholder, selectValue }, i) => (
-                      <DropDownConfig
-                        key={i}
-                        placeholder={placeholder}
-                        selectValue={selectValue}
-                        dropdownData={dropdownData}
-                        selectHandle={(value) =>
-                          setBirthDate({ ...birthDate, [id]: value })
-                        }
-                        error={error?.birthDate ? true : false}
-                      />
-                    )
-                  )}
-                </div>
-                {error?.birthDate && (
-                  <ErrorText className="mt-1" errorText={error.birthDate} />
-                )}
+                <DatePicker
+                  sendDate={(birthDate) => setDataHandle({ birthDate })}
+                />
               </div>
             </div>
 
@@ -229,7 +199,7 @@ const page = () => {
                 id="aboutMe"
                 className={`border border-foreground ${
                   error?.aboutMe && "border-red-600 text-red-600"
-                } resize-none outline-0 bg-background p-2 leading-5 text-base`}
+                } resize-none outline-0 bg-background p-2 leading-5 text-sm`}
                 rows={5}
                 placeholder="About me (Optional)"
                 maxLength={200}
@@ -246,7 +216,7 @@ const page = () => {
           <div className="w-full hidden sm:flex text-xs">
             <div className="flex flex-col gap-1 w-3/4 p-2 border border-muted-foreground">
               <div className="flex items-center gap-1">
-                <BsLightbulb />
+                <HiLightBulb size={20} color="yellow" />
                 <strong>Why is it important?</strong>
               </div>
               <h1 className="text-muted-foreground">
@@ -395,13 +365,24 @@ const page = () => {
         <h1 className="sm:font-semibol max-sm:text-xs max-sm:text-muted-foreground">
           Are you sure you want to delete your account?
         </h1>
-        <Button
-          className="max-w-max border border-foreground"
-          variant={"outline"}
-          onClick={deleteAccount}
-        >
-          Yes, delete my account
-        </Button>
+
+        <Alert
+          trigger={
+            <Button
+              className="max-w-max border border-foreground"
+              variant="outline"
+            >
+              Yes, delete my account
+            </Button>
+          }
+          title="Are you absolutely sure?"
+          description=" This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers."
+          doneText="Delete"
+          doneClickHandle={deleteAccount}
+          cancelText="Cancel"
+          canceClickHandle={() => console.log("cancel")}
+        />
 
         <Button
           className="w-max p-0 text-xs"

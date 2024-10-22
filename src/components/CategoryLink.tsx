@@ -53,7 +53,7 @@ export const CategoryTextWithImage = () => {
       <div className="hidden sm:grid grid-cols-6 xl:grid-cols-8">
         {category_link.map((data, i) => renderData(data, i))}
       </div>
-      <Carousel className="w-full sm:hidden ">
+      <Carousel className="w-full sm:hidden">
         <CarouselContent>
           {category_link.map((data, i) => (
             <CarouselItem key={i} className="basis-1/3">

@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "next-themes";
 import { BackToTopBtn } from "@/components/BackToTopBtn";
 import { CategoryText } from "@/components/CategoryLink";
+import { Toaster } from "@/components/ui/toaster";
 
 const fontSans = FontSans({
   subsets: ["cyrillic-ext"],
@@ -43,6 +44,7 @@ const RootLayout: FC<LayoutProps> = ({ children }) => {
           <div>
             <Navbar />
             <CategoryText />
+
             {children}
           </div>
           <BackToTopBtn />
@@ -50,6 +52,7 @@ const RootLayout: FC<LayoutProps> = ({ children }) => {
             <Footer />
           </div>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

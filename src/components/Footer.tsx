@@ -3,8 +3,8 @@ import { AppImage, FooterLinkSection, SocialMediaLinks } from "@/interfaces";
 import { FaFacebook, FaGithub, FaInstagram, FaTwitter } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
-import { FooterDropDown } from "@/components/FooterDropDown";
 import { FooterLink } from "@/components/FooterLink";
+import { FooterDropDown } from "@/components/FooterDropDown";
 
 const footerdata: FooterLinkSection[] = [
   {

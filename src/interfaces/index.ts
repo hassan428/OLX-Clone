@@ -160,7 +160,7 @@ export interface User {
   email?: string;
   phoneNumber?: string;
   gender?: string;
-  birthDate?: string;
+  birthDate?: Date;
   aboutMe?: string;
   avatarUrl?: string;
 }
@@ -189,4 +189,37 @@ export interface BrthDate {
 export interface ErrorTextProps {
   errorText: string;
   className?: string;
+}
+
+export interface ImageItem {
+  id: number;
+  file: File | null;
+  preview: string | null;
+}
+
+export interface ImageComponentProps {
+  image: ImageItem;
+  index: number;
+  moveImage: (dragIndex: number, hoverIndex: number) => void;
+  isFirst: boolean;
+
+  onClick: () => void;
+}
+
+export interface ImageUploaderProps {
+  onSortedImages: (sortedImages: ImageItem[]) => void;
+}
+
+export interface AlertProps {
+  trigger: ReactNode;
+  title: string;
+  description: string;
+  doneText: string;
+  doneClickHandle: () => void;
+  cancelText?: string;
+  canceClickHandle?: () => void;
+}
+
+export interface DatePickerProps {
+  sendDate: (date?: Date) => void;
 }
