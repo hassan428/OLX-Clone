@@ -99,8 +99,9 @@ export interface SliderSrc {
 
 export interface CategoryLink {
   href: string;
-  src: string;
+  src?: string;
   title: string;
+  subCategories?: CategoryLink[]; // Optional since not all categories will have subcategories
 }
 
 export interface ProductOtherDetails {

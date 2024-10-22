@@ -50,41 +50,210 @@ export const location_of_pakistan: Option[] = [
   },
 ];
 
+// export const category_link: CategoryLink[] = [
+//   {
+//     src: "mobiles.png",
+//     href: "mobiles",
+//     title: "Mobiles",
+//   },
+//   {
+//     src: "fashion.png",
+//     href: "fashion",
+//     title: "Fashion & Beauty",
+//   },
+//   {
+//     src: "vehicles.png",
+//     href: "vehicles",
+//     title: "Vehicles",
+//   },
+//   {
+//     src: "furniture.png",
+//     href: "furniture",
+//     title: "Furniture & Home Decorator",
+//   },
+//   {
+//     src: "led.webp",
+//     href: "electronics",
+//     title: "Electronics & Home Appliances",
+//   },
+//   {
+//     src: "kids.png",
+//     href: "kids",
+//     title: "Kids",
+//   },
+//   {
+//     src: "birds.png",
+//     href: "birds",
+//     title: "Birds",
+//   },
+// ];
+
 export const category_link: CategoryLink[] = [
   {
     src: "mobiles.png",
     href: "mobiles",
     title: "Mobiles",
+    subCategories: [
+      {
+        href: "mobiles/accessories",
+        title: "Accessories",
+      },
+      {
+        href: "mobiles/tablets",
+        title: "Tablets",
+      },
+      {
+        href: "mobiles/smart-watches",
+        title: "Smart Watches",
+      },
+      {
+        href: "mobiles/other-mobiles",
+        title: "Other Mobile",
+      },
+    ],
   },
   {
     src: "fashion.png",
     href: "fashion",
     title: "Fashion & Beauty",
+    subCategories: [
+      {
+        href: "fashion/men",
+        title: "Men's Fashion",
+      },
+      {
+        href: "fashion/women",
+        title: "Women's Fashion",
+      },
+      {
+        href: "fashion/kids",
+        title: "Kid's Fashion",
+      },
+      {
+        href: "fashion/makeup",
+        title: "Makeup",
+      },
+      {
+        href: "fashion/footwear",
+        title: "Footwear",
+      },
+      {
+        href: "fashion/other-fashion",
+        title: "Other Fashion",
+      },
+    ],
   },
   {
     src: "vehicles.png",
     href: "vehicles",
     title: "Vehicles",
+    subCategories: [
+      {
+        href: "vehicles/bikes",
+        title: "Bikes",
+      },
+      {
+        href: "vehicles/cars",
+        title: "Cars",
+      },
+      {
+        href: "vehicles/rickshaw",
+        title: "Rickshaw",
+      },
+      {
+        href: "vehicles/buses-vans",
+        title: "Buses and Vans",
+      },
+      {
+        href: "vehicles/other-vehicles",
+        title: "Other Vehicles",
+      },
+    ],
   },
   {
     src: "furniture.png",
     href: "furniture",
     title: "Furniture & Home Decorator",
+    subCategories: [
+      {
+        href: "furniture/living-room",
+        title: "Living Room Furniture",
+      },
+      {
+        href: "furniture/bedroom",
+        title: "Bedroom Furniture",
+      },
+      {
+        href: "furniture/office",
+        title: "Office Furniture",
+      },
+      {
+        href: "furniture/home-decor",
+        title: "Home Decor",
+      },
+      {
+        href: "furniture/other-furniture",
+        title: "Other Furniture",
+      },
+    ],
   },
   {
     src: "led.webp",
     href: "electronics",
     title: "Electronics & Home Appliances",
-  },
-  {
-    src: "kids.png",
-    href: "kids",
-    title: "Kids",
+    subCategories: [
+      {
+        href: "electronics/computers-accessories",
+        title: "Computers & Accessories",
+      },
+      {
+        href: "electronics/games",
+        title: "Games",
+      },
+      {
+        href: "electronics/televisions",
+        title: "Televisions",
+      },
+      {
+        href: "electronics/home-audio",
+        title: "Home Audio",
+      },
+      {
+        href: "electronics/home-appliances",
+        title: "Home Appliances",
+      },
+      {
+        href: "electronics/other-electronics",
+        title: "Other Electronics",
+      },
+    ],
   },
   {
     src: "birds.png",
     href: "birds",
     title: "Birds",
+    subCategories: [
+      {
+        href: "birds/cats",
+        title: "Cats",
+      },
+      {
+        href: "birds/dogs",
+        title: "Dogs",
+      },
+      {
+        href: "birds/parrot",
+        title: "Parrot",
+      },
+      {
+        href: "birds/pigeons",
+        title: "Pigeons",
+      },
+      {
+        href: "birds/other-birds",
+        title: "Other Birds",
+      },
+    ],
   },
 ];
 
@@ -97,7 +266,7 @@ export const route_data: RouteData[] = isLogged
         Icon: Moon,
         href: "/",
       },
-   
+
       {
         title: "My ads",
         Icon: IoNewspaperOutline,
@@ -531,4 +700,7 @@ function createDropDownData(start: number, end: number) {
 
 export const date: Option[] = createDropDownData(1, 31);
 export const month: Option[] = createDropDownData(1, 12);
-export const year: Option[] = createDropDownData(1950, new Date().getFullYear()).reverse();
+export const year: Option[] = createDropDownData(
+  1950,
+  new Date().getFullYear()
+).reverse();

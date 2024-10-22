@@ -17,11 +17,51 @@ import { Logo } from "@/components/Logo";
 import { PriceRange } from "@/components/PriceRange";
 
 const layout = ({ children, params }: LayoutProps) => {
+  // const { categoryName } = params;
+  // const find_title = category_link.find(({ href }) => categoryName == href);
+
+  // const categoryUI = () => (
+  //   <>
+  //     <Link
+  //       href={"/category/allcategories"}
+  //       className={`ml-4 hover:font-bold ${
+  //         categoryName == "allcategories" && "font-bold"
+  //       }`}
+  //     >
+  //       All Categories
+  //     </Link>
+  //     {find_title
+  //       ? find_title.subCategories?.map(({ href, title }, i) => (
+  //           <Link
+  //             key={i}
+  //             href={`/category/${href}`}
+  //             className={`ml-8 hover:font-bold ${
+  //               find_title?.title == title && "font-bold"
+  //             }`}
+  //           >
+  //             {title}
+  //           </Link>
+  //         ))
+  //       : category_link.map(({ href, title }, i) => (
+  //           <Link
+  //             key={i}
+  //             href={`/category/${href}`}
+  //             className={`ml-8 hover:font-bold ${
+  //               find_title?.title == title && "font-bold"
+  //             }`}
+  //           >
+  //             {title}
+  //           </Link>
+  //         ))}
+  //   </>
+  // );
+
   const { categoryName } = params;
   const find_title = category_link.find(({ href }) => categoryName == href);
 
   const categoryUI = () => (
     <>
+      {/* Link for All Categories */}
       <Link
         href={"/category/allcategories"}
         className={`ml-4 hover:font-bold ${
@@ -30,17 +70,42 @@ const layout = ({ children, params }: LayoutProps) => {
       >
         All Categories
       </Link>
-      {category_link.map(({ href, title }, i) => (
-        <Link
-          key={i}
-          href={`/category/${href}`}
-          className={`ml-8 hover:font-bold ${
-            find_title?.title == title && "font-bold"
-          }`}
-        >
-          {title}
-        </Link>
-      ))}
+
+      {/* If All Categories is selected, show all main categories */}
+      {categoryName === "allcategories" &&
+        category_link.map(({ href, title }, i) => (
+          <Link
+            key={i}
+            href={`/category/${href}`}
+            className={`ml-8 hover:font-bold`}
+          >
+            {title}
+          </Link>
+        ))}
+
+      {/* If a specific category is selected, show the category and its subcategories (if any) */}
+      {find_title && (
+        <>
+          {/* Main Category Link */}
+          <Link
+            href={`/category/${find_title.href}`}
+            className={`ml-8 hover:font-bold font-bold`} // Highlight the selected category
+          >
+            {find_title.title}
+          </Link>
+
+          {/* Subcategories of the selected category */}
+          {find_title.subCategories?.map(({ href, title }, i) => (
+            <Link
+              key={i}
+              href={`/category/${href}`}
+              className="ml-12 hover:font-bold"
+            >
+              {title}
+            </Link>
+          ))}
+        </>
+      )}
     </>
   );
 

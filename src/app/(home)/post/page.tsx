@@ -1,5 +1,6 @@
 "use client";
 
+import { CategoryDialog } from "@/components/CategoryDialog";
 import { DropDownConfig } from "@/components/DropDownConfig";
 import { ErrorText } from "@/components/ErrorText";
 import { ImageUploader } from "@/components/ImageDragDrop";
@@ -94,7 +95,7 @@ const page = () => {
                       <h1 className="text-muted-foreground">Tablets</h1>
                     </div>
                   </div>
-                  <h1 className="text-blue-600 cursor-pointer">Change</h1>
+                  <CategoryDialog />
                 </div>
               </div>
             </div>
