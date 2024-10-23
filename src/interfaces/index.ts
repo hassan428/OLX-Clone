@@ -156,7 +156,7 @@ export interface DetailProductCardProps {
   cardDetails: ProductCardProps;
 }
 
-export interface User {
+export interface UserDetails {
   name?: string;
   email?: string;
   phoneNumber?: string;
@@ -223,4 +223,26 @@ export interface AlertProps {
 
 export interface DatePickerProps {
   sendDate: (date?: Date) => void;
+}
+
+export interface SentCategory {
+  src?: string;
+  main?: string;
+  sub?: string;
+}
+
+export interface CategoryDialogProps {
+  sentCategoryData: (value: SentCategory) => void;
+}
+
+export interface AdDetails {
+  mainCategory?: string;
+  subCategory?: string;
+  image?: string[];
+  adTitle?: string;
+  description?: string;
+  location?: string;
+  price?: string;
+  name?: string;
+  phoneNumber?: string;
 }

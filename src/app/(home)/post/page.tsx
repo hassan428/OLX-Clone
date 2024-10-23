@@ -6,10 +6,11 @@ import { ErrorText } from "@/components/ErrorText";
 import { ImageUploader } from "@/components/ImageDragDrop";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
-import { ImageItem, Option } from "@/interfaces";
+import { Switch } from "@/components/ui/switch";
+import { SentCategory, ImageItem, Option, AdDetails } from "@/interfaces";
 import { location_of_pakistan } from "@/utils";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const page = () => {
   const conditionData: Option[] = [
@@ -28,12 +29,7 @@ const page = () => {
     { label: "Nokia", value: "nokia" },
   ];
 
-  const [brand, setBrand] = useState<Option | null>(null);
-  const [condition, setCondition] = useState<Option | null>(null);
-  const [location, setLocation] = useState<Option | null>(null);
-
   const [sortedImages, setSortedImages] = useState<File[]>([]);
-  console.log("sortedImages", sortedImages);
   // Function to handle sorted images passed from the child component
   const handleSortedImages = (images: ImageItem[]) => {
     const validImages = images.filter((img) => img.file !== null);
@@ -41,11 +37,19 @@ const page = () => {
     adsImageHandle();
   };
 
-  const [data, setData] = useState<any | null>(null); // type define krna baqi hain
-  const [error, setError] = useState<any | null>(null);
+  const [brand, setBrand] = useState<Option | null>(null);
+  const [condition, setCondition] = useState<Option | null>(null);
+  const [location, setLocation] = useState<Option | null>(null);
+  const [category, setCategory] = useState<SentCategory | null>(null);
+  const [data, setData] = useState<AdDetails | null>(null);
+  const [error, setError] = useState<AdDetails | null>(null);
 
-  const setDataHandle = (newData: any) => {
+  const setDataHandle = (newData: AdDetails) => {
     setData({ ...data, ...newData });
+  };
+
+  const setErrorHandle = (newError: AdDetails) => {
+    setError({ ...error, ...newError });
   };
 
   const adsImageHandle = () => {
@@ -59,15 +63,50 @@ const page = () => {
           })
       )
     )
-      .then((imageBase64) => {
-        console.log("imageBase64", imageBase64);
-        // Use imageBase64 array here
-      })
+      .then((imageBase64: any[]) =>
+        setDataHandle({
+          image: imageBase64,
+        })
+      )
       .catch((error) => console.error("Error reading files", error));
   };
 
+  useEffect(() => {
+    if (sortedImages.length > 0) {
+      adsImageHandle();
+    }
+
+    // setErrorHandle({
+    //   mainCategory: data?.mainCategory && undefined,
+    // });
+
+    setDataHandle({ mainCategory: category?.main, subCategory: category?.sub });
+  }, [category, sortedImages]);
+
   const postNowHandle = () => {
-    console.log("postNowHandle");
+    setErrorHandle({
+      name: !data?.name ? "Name is required!" : undefined,
+      location: !data?.location ? "Location is required!" : undefined,
+      mainCategory: !data?.mainCategory
+        ? "Please select a category to proceed."
+        : undefined,
+      image: sortedImages.length == 0 ? ["true"] : undefined,
+      // email: !data?.email
+      //   ? "Email is required!"
+      //   : !validateEmail(data.email)
+      //   ? "Please enter a valid email address"
+      //   : undefined,
+      // phoneNumber: !data?.phoneNumber
+      //   ? "PhoneNumber is required!"
+      //   : data.phoneNumber.length !== 10
+      //   ? "Please enter a valid PhoneNumber"
+      //   : undefined,
+    });
+
+    console.log("data", data);
+    console.log("brand", brand);
+    console.log("condition", condition);
+    console.log("location", location);
   };
 
   return (
@@ -78,37 +117,68 @@ const page = () => {
           <div className="border-2 border-border rounded-xl m-2">
             {/* first Section */}
             <div className="flex flex-col sm:flex-row gap-2 items-center border-b-2 border-border p-2 sm:p-5 text-xs sm:text-sm">
-              <h1 className="w-full sm:w-1/4 font-bold">Category</h1>
-              <div className="w-full sm:w-3/4">
+              <h1
+                className={`w-full sm:w-1/4 font-bold ${
+                  error?.mainCategory && "text-red-600"
+                }`}
+              >
+                Category
+              </h1>
+              <div className="w-full flex flex-col sm:w-3/4">
                 <div className="flex items-center justify-between">
                   <div className="flex gap-1 ">
                     <Image
-                      src={`/assets/images/category/mobiles.png`}
-                      alt={"mobiles"}
+                      src={`/assets/images/${
+                        category?.src
+                          ? `category/${category.src} `
+                          : "load_avatar.png"
+                      }`}
+                      alt={"mobiles load_avatar.png"}
                       width={80}
                       height={80}
                       className="rounded-full w-14 h-14 sm:w-16 sm:h-16"
                       priority={true}
                     />
                     <div className="flex flex-col justify-evenly ">
-                      <h1 className="font-bold">Mobiles</h1>
-                      <h1 className="text-muted-foreground">Tablets</h1>
+                      <h1 className="font-bold">{`${
+                        category?.main || "Main"
+                      }`}</h1>
+                      <h1 className="text-muted-foreground">{`${
+                        category?.sub || "Sub"
+                      }`}</h1>
                     </div>
                   </div>
-                  <CategoryDialog />
+
+                  <CategoryDialog sentCategoryData={setCategory} />
                 </div>
+                {error?.mainCategory && (
+                  <ErrorText className="mt-1" errorText={error.mainCategory} />
+                )}
               </div>
             </div>
 
             {/* second Section */}
 
             <div className="flex flex-col sm:flex-row gap-2 items-center border-b-2 border-border p-2 sm:p-5  text-xs sm:text-sm">
-              <h1 className="w-full sm:w-1/4 font-bold">Upload Images</h1>
+              <h1
+                className={`w-full sm:w-1/4 font-bold ${
+                  error?.image && "text-red-600"
+                }`}
+              >
+                Upload Images
+              </h1>
               <div className="w-full sm:w-3/4 flex flex-col gap-2">
                 <ImageUploader onSortedImages={handleSortedImages} />
-                <h1 className="text-[11px] leading-3 sm:text-xs text-muted-foreground">
-                  For the cover picture we recommend using the landscape mode.
-                </h1>
+                {error?.image ? (
+                  <ErrorText
+                    className="mt-1"
+                    errorText={"Please provide an image"}
+                  />
+                ) : (
+                  <h1 className="text-[11px] leading-3 sm:text-xs text-muted-foreground">
+                    For the cover picture we recommend using the landscape mode.
+                  </h1>
+                )}
               </div>
             </div>
 
@@ -157,21 +227,22 @@ const page = () => {
                 <h1 className="w-full sm:w-1/4 font-bold">Ad Title*</h1>
                 <div className="w-full sm:w-3/4">
                   <TextInput
-                    error={error?.title ? true : false}
-                    cut_handle={() => setDataHandle({ title: "" })}
+                    error={error?.adTitle ? true : false}
+                    cut_handle={() => setDataHandle({ adTitle: "" })}
                     inputProps={{
                       autoComplete: "title",
                       maxLength: 50,
                       id: "title",
-                      value: data?.title || "",
+                      value: data?.adTitle || "",
                       placeholder: "Enter Title",
-                      onChange: (e) => setDataHandle({ title: e.target.value }),
+                      onChange: (e) =>
+                        setDataHandle({ adTitle: e.target.value }),
                     }}
                   />
                   <div className="flex items-baseline justify-between mt-0.5 gap-2">
                     <div>
-                      {error?.title ? (
-                        <ErrorText errorText={error.title} />
+                      {error?.adTitle ? (
+                        <ErrorText errorText={error.adTitle} />
                       ) : (
                         <h1 className="text-xs">
                           Mention the key features of your item (e.g. brand,
@@ -182,7 +253,7 @@ const page = () => {
 
                     <div>
                       <h1 className="text-xs w-max">{`${
-                        data?.title?.length || "0"
+                        data?.adTitle?.length || "0"
                       } / 50`}</h1>
                     </div>
                   </div>
@@ -195,7 +266,7 @@ const page = () => {
                   <textarea
                     id="description"
                     className={`border border-foreground ${
-                      error?.aboutMe && "border-red-600 text-red-600"
+                      error?.description && "border-red-600 text-red-600"
                     } resize-none outline-0 bg-background p-2 leading-5 text-sm w-full`}
                     rows={5}
                     placeholder="Describe the item you're selling"
@@ -349,6 +420,17 @@ const page = () => {
                     <ErrorText className="mt-1" errorText={error.phoneNumber} />
                   )}
                 </div>
+              </div>
+
+              <div className="flex justify-between items-center pb-3 pt-5 text-sm">
+                <h1 className="w-3/4 font-bold">Show my phone number in ads</h1>
+
+                <Switch
+                  defaultChecked={false}
+                  id="showPhoneNumber"
+                  className="data-[state=unchecked]:bg-gray-400 data-[state=checked]:bg-green-400"
+                  onCheckedChange={(val: boolean) => console.log("val", val)}
+                />
               </div>
             </div>
             <div className="flex justify-end p-2 sm:p-5 text-xs sm:text-sm">

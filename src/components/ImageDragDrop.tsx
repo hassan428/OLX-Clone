@@ -64,7 +64,6 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
             width={80}
             height={80}
             className="w-full h-full object-cover rounded-xl"
-            onClick={onClick}
           />
         </>
       )}
@@ -124,16 +123,11 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
     [images, onSortedImages]
   );
 
-  const cutSpecificImageHandle = () => {
-    // const updateArray = [
-    //   images.filter(({ id }) => image.id != id),
-    //   {
-    //     id: index,
-    //     file: null,
-    //     preview: null,
-    //   },
-    // ];
-    // setImages(updateArray.flatMap((value) => value));
+  const cutSpecificImageHandle = (index: number) => {
+    const updatedImages = images.filter((_, i) => i !== index);
+    updatedImages.push({ id: updatedImages.length, file: null, preview: null });
+    setImages(updatedImages);
+    onSortedImages(updatedImages);
   };
 
   return (
@@ -167,7 +161,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
                     image={image}
                     moveImage={moveImage}
                     isFirst={index === 0}
-                    onClick={cutSpecificImageHandle}
+                    onClick={() => cutSpecificImageHandle(index)}
                   />
                 )}
               </div>
@@ -197,7 +191,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
                     </div>
                   )}
                   <IoCloseOutline
-                    onClick={cutSpecificImageHandle}
+                    onClick={() => cutSpecificImageHandle(index)}
                     className="absolute cursor-pointer text-lg top-0 right-0 bg-foreground text-background rounded-xl"
                   />
                   <Image
@@ -206,7 +200,6 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
                     width={80}
                     height={80}
                     className="w-full h-full object-cover rounded-xl"
-                    onClick={cutSpecificImageHandle}
                   />
                 </div>
               )

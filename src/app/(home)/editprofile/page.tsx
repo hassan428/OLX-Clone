@@ -5,7 +5,7 @@ import { DropDownConfig } from "@/components/DropDownConfig";
 import { ErrorText } from "@/components/ErrorText";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
-import { BrthDate, Option, User } from "@/interfaces";
+import { BrthDate, Option, UserDetails } from "@/interfaces";
 import { date, month, validateEmail, year } from "@/utils";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
@@ -32,12 +32,12 @@ const page = () => {
     </>
   );
 
-  const [data, setData] = useState<User | null>(null);
-  const [error, setError] = useState<User | null>(null);
+  const [data, setData] = useState<UserDetails | null>(null);
+  const [error, setError] = useState<UserDetails | null>(null);
   const [gender, setGender] = useState<Option | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<any>(defaultAvatarUrl);
 
-  const setDataHandle = (newData: User) => {
+  const setDataHandle = (newData: UserDetails) => {
     setData({ ...data, ...newData });
   };
 

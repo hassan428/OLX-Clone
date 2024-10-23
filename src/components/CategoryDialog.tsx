@@ -7,41 +7,66 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
-import { RiArrowLeftWideLine, RiArrowRightWideLine } from "react-icons/ri";
+import { RiArrowRightWideLine } from "react-icons/ri";
 
 import Image from "next/image";
 import { category_link } from "@/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { CategoryDialogProps, SentCategory } from "@/interfaces";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
-export const CategoryDialog = () => {
-  const [clickTitle, setClickTitle] = useState<string>("");
+export const CategoryDialog = ({ sentCategoryData }: CategoryDialogProps) => {
+  const [category, setCategory] = useState<SentCategory | null>(null);
 
   const find_select_category = category_link.find(
-    ({ title }) => title == clickTitle
+    ({ title }) => title == category?.main
   );
+
+  useEffect(() => {
+    category?.sub && sentCategoryData(category);
+  }, [category, sentCategoryData]);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <h1 className="text-blue-600 cursor-pointer">Change</h1>
+        <h1 className="text-blue-600 cursor-pointer">Select</h1>
       </DialogTrigger>
       <DialogContent className="text-sm max-sm:min-h-screen max-sm:px-2 max-sm:py-4">
         <DialogHeader>
-          <DialogTitle>Choose a category</DialogTitle>
+          <div>
+            <DialogTitle className={`${category?.main && "max-sm:hidden"}`}>
+              Choose a category
+            </DialogTitle>
+            {category?.main && (
+              <div
+                onClick={() => setCategory(null)}
+                className="w-max flex items-center gap-3 justify-between cursor-pointer sm:hidden"
+              >
+                <ArrowLeft size={20} />
+                <DialogTitle className="font-bold text-sm">
+                  {category?.main}
+                </DialogTitle>
+              </div>
+            )}
+          </div>
 
           <div className="flex flex-col sm:flex-row w-full">
             <div
               className={`flex flex-col w-full sm:w-1/2 my-2 sm:border-2 border-border border-t-0 border-r-0  ${
-                clickTitle && "hidden sm:flex"
+                category?.main && "hidden sm:flex"
               }`}
             >
               {category_link.map(({ title, src }, i) => (
                 <div
-                  onClick={() => setClickTitle(title)}
+                  onClick={() =>
+                    setCategory({ ...category, main: title, src, sub: "" })
+                  }
                   key={i}
-                  className={`flex h-14 items-center justify-between cursor-pointer hover:bg-green-200 sm:border-t-2 border-border p-2 ${
-                    title == clickTitle && "bg-green-200"
+                  className={`flex h-14 items-center justify-between cursor-pointer hover:bg-green-500 sm:border-y-2 border-border p-2 ${
+                    title == category?.main && "bg-green-500"
                   }  `}
                 >
                   <div className="flex gap-2 items-center">
@@ -60,29 +85,21 @@ export const CategoryDialog = () => {
               ))}
             </div>
 
-            {clickTitle && (
-              <div
-                onClick={() => setClickTitle("")}
-                className="flex items-center justify-start mt-3 cursor-pointer sm:hidden"
-              >
-                <RiArrowLeftWideLine size={20} />
-                <h1 className="font-bold text-base ">{clickTitle}</h1>
-              </div>
-            )}
-
             <div
               className={`flex flex-col w-full sm:w-1/2 my-2 sm:border-2 border-border   ${
-                !clickTitle && "hidden sm:flex"
+                !category?.main && "hidden sm:flex"
               }`}
             >
               {find_select_category?.subCategories?.map(({ title }, i) => (
-                <div
+                <DialogClose
                   key={i}
-                  className="flex h-14 items-center justify-between cursor-pointer hover:bg-green-200 border-border p-2 sm:border-b-2"
+                  onClick={() => setCategory({ ...category, sub: title })}
+                  className={`flex h-14 items-center justify-between cursor-pointer hover:bg-green-500 border-border p-2 sm:border-y-2 ${
+                    title == category?.sub && "bg-green-500"
+                  }`}
                 >
                   <h1 className="font-bold">{title}</h1>
-                  <RiArrowRightWideLine size={20} />
-                </div>
+                </DialogClose>
               ))}
             </div>
           </div>
