@@ -75,39 +75,47 @@ const page = () => {
     if (sortedImages.length > 0) {
       adsImageHandle();
     }
-
-    // setErrorHandle({
-    //   mainCategory: data?.mainCategory && undefined,
-    // });
-
-    setDataHandle({ mainCategory: category?.main, subCategory: category?.sub });
-  }, [category, sortedImages]);
+  }, [category, sortedImages, location]);
 
   const postNowHandle = () => {
+    setDataHandle({
+      mainCategory: category?.main,
+      subCategory: category?.sub,
+      location: location?.value,
+    });
     setErrorHandle({
       name: !data?.name ? "Name is required!" : undefined,
-      location: !data?.location ? "Location is required!" : undefined,
-      mainCategory: !data?.mainCategory
+      location: !location ? "Location is required!" : undefined,
+      mainCategory: !category?.main
         ? "Please select a category to proceed."
         : undefined,
       image: sortedImages.length == 0 ? ["true"] : undefined,
-      // email: !data?.email
-      //   ? "Email is required!"
-      //   : !validateEmail(data.email)
-      //   ? "Please enter a valid email address"
-      //   : undefined,
-      // phoneNumber: !data?.phoneNumber
-      //   ? "PhoneNumber is required!"
-      //   : data.phoneNumber.length !== 10
-      //   ? "Please enter a valid PhoneNumber"
-      //   : undefined,
-    });
+      adTitle: !data?.adTitle
+        ? "Ad Title is requird!"
+        : data.adTitle.length < 5
+        ? "A minimum length of 5 characters is allowed."
+        : undefined,
+      description: !data?.description
+        ? "Description is requird!"
+        : data.description.length < 10
+        ? "Description should contain at least 10 alphanumeric characters."
+        : undefined,
 
-    console.log("data", data);
-    console.log("brand", brand);
-    console.log("condition", condition);
-    console.log("location", location);
+      price: !data?.price
+        ? "Price is required!"
+        : parseInt(data.price) < 200
+        ? "The minimum allowed value is PKR 200"
+        : undefined,
+
+      phoneNumber: !data?.phoneNumber
+        ? "PhoneNumber is required!"
+        : data.phoneNumber.length !== 10
+        ? "Please enter a valid PhoneNumber"
+        : undefined,
+    });
   };
+  console.log("data", data);
+  console.log("location", location);
 
   return (
     <>
@@ -224,7 +232,13 @@ const page = () => {
             {/* fourth Section */}
             <div className="flex flex-col p-2 sm:p-5 text-xs sm:text-sm">
               <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
-                <h1 className="w-full sm:w-1/4 font-bold">Ad Title*</h1>
+                <h1
+                  className={`w-full sm:w-1/4 font-bold ${
+                    error?.adTitle && "text-red-600"
+                  }`}
+                >
+                  Ad Title*
+                </h1>
                 <div className="w-full sm:w-3/4">
                   <TextInput
                     error={error?.adTitle ? true : false}
@@ -261,7 +275,13 @@ const page = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
-                <h1 className="w-full sm:w-1/4 font-bold">Description*</h1>
+                <h1
+                  className={`w-full sm:w-1/4 font-bold ${
+                    error?.description && "text-red-600"
+                  }`}
+                >
+                  Description*
+                </h1>
                 <div className="w-full sm:w-3/4 flex flex-col gap-0.5">
                   <textarea
                     id="description"
@@ -297,7 +317,13 @@ const page = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
-                <h1 className="w-full sm:w-1/4 font-bold">Location*</h1>
+                <h1
+                  className={`w-full sm:w-1/4 font-bold ${
+                    error?.location && "text-red-600"
+                  }`}
+                >
+                  Location*
+                </h1>
                 <div className="w-full sm:w-3/4">
                   <div>
                     <DropDownConfig
@@ -305,11 +331,11 @@ const page = () => {
                       selectValue={location?.label || ""}
                       dropdownData={location_of_pakistan}
                       selectHandle={setLocation}
-                      // error={error?.gender ? true : false}
+                      error={error?.location ? true : false}
                     />
-                    {/* {error?.gender && (
-                <ErrorText className="mt-1" errorText={error.gender} />
-              )} */}
+                    {error?.location && (
+                      <ErrorText className="mt-1" errorText={error.location} />
+                    )}
                   </div>
                 </div>
               </div>
@@ -320,7 +346,13 @@ const page = () => {
 
           <div className="border-2 border-border rounded-xl m-2">
             <div className="flex flex-col sm:flex-row gap-2 items-center p-2 sm:p-5 text-xs sm:text-sm">
-              <h1 className="w-full sm:w-1/4 font-bold">Price*</h1>
+              <h1
+                className={`w-full sm:w-1/4 font-bold ${
+                  error?.price && "border-red-600"
+                }`}
+              >
+                Price*
+              </h1>
               <div className="w-full sm:w-3/4">
                 <div className="flex">
                   <div
@@ -363,7 +395,13 @@ const page = () => {
           <div className="border-2 border-border rounded-xl m-2">
             <div className="flex flex-col border-b-2 border-border p-2 sm:p-5 text-xs sm:text-sm">
               <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
-                <h1 className="w-full sm:w-1/4 font-bold">Name*</h1>
+                <h1
+                  className={`w-full sm:w-1/4 font-bold ${
+                    error?.name && "text-red-600"
+                  }`}
+                >
+                  Name*
+                </h1>
                 <div className="w-full sm:w-3/4">
                   <TextInput
                     error={error?.name ? true : false}
@@ -384,7 +422,13 @@ const page = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
-                <h1 className="w-full sm:w-1/4 font-bold">Phone Number*</h1>
+                <h1
+                  className={`w-full sm:w-1/4 font-bold ${
+                    error?.phoneNumber && "text-red-600"
+                  }`}
+                >
+                  Phone Number*
+                </h1>
                 <div className="w-full sm:w-3/4">
                   <div className="flex">
                     <div
@@ -429,7 +473,9 @@ const page = () => {
                   defaultChecked={false}
                   id="showPhoneNumber"
                   className="data-[state=unchecked]:bg-gray-400 data-[state=checked]:bg-green-400"
-                  onCheckedChange={(val: boolean) => console.log("val", val)}
+                  onCheckedChange={(val: boolean) =>
+                    setDataHandle({ showMyPhNum: val })
+                  }
                 />
               </div>
             </div>

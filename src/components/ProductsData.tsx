@@ -7,8 +7,6 @@ import {
 import {
   DetailProductCardDataProps,
   MoreProductCardDataProps,
-  ProductCardProps,
-  RenderProductCardProps,
 } from "@/interfaces";
 import { data } from "@/utils";
 
@@ -19,14 +17,17 @@ export const ProductCardData = () => {
 };
 
 export const MoreProductCardData = ({
-  categoryName,
+  mainCategory,
 }: MoreProductCardDataProps) => {
   // Data Fetch
-  const moreProductData = data.find((value) => value.href == categoryName)!;
+  const moreProductData = data.find((value) => value.href == mainCategory)!;
 
   // console.log("moreProductData", moreProductData);
-
-  return <RenderMoreProductCard {...moreProductData?.cardData} />;
+  return mainCategory == "allcategories" ? (
+    data.map((value) => <RenderMoreProductCard {...value?.cardData} />)
+  ) : (
+    <RenderMoreProductCard {...moreProductData?.cardData} />
+  );
 };
 
 export const DetailProductCardData = ({

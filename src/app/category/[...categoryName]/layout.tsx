@@ -17,47 +17,10 @@ import { Logo } from "@/components/Logo";
 import { PriceRange } from "@/components/PriceRange";
 
 const layout = ({ children, params }: LayoutProps) => {
-  // const { categoryName } = params;
-  // const find_title = category_link.find(({ href }) => categoryName == href);
-
-  // const categoryUI = () => (
-  //   <>
-  //     <Link
-  //       href={"/category/allcategories"}
-  //       className={`ml-4 hover:font-bold ${
-  //         categoryName == "allcategories" && "font-bold"
-  //       }`}
-  //     >
-  //       All Categories
-  //     </Link>
-  //     {find_title
-  //       ? find_title.subCategories?.map(({ href, title }, i) => (
-  //           <Link
-  //             key={i}
-  //             href={`/category/${href}`}
-  //             className={`ml-8 hover:font-bold ${
-  //               find_title?.title == title && "font-bold"
-  //             }`}
-  //           >
-  //             {title}
-  //           </Link>
-  //         ))
-  //       : category_link.map(({ href, title }, i) => (
-  //           <Link
-  //             key={i}
-  //             href={`/category/${href}`}
-  //             className={`ml-8 hover:font-bold ${
-  //               find_title?.title == title && "font-bold"
-  //             }`}
-  //           >
-  //             {title}
-  //           </Link>
-  //         ))}
-  //   </>
-  // );
-
   const { categoryName } = params;
-  const find_title = category_link.find(({ href }) => categoryName == href);
+  const find_main_category = category_link.find(
+    ({ href }) => categoryName && categoryName[0] == href
+  );
 
   const categoryUI = () => (
     <>
@@ -65,14 +28,15 @@ const layout = ({ children, params }: LayoutProps) => {
       <Link
         href={"/category/allcategories"}
         className={`ml-4 hover:font-bold ${
-          categoryName == "allcategories" && "font-bold"
+          categoryName && categoryName[0] == "allcategories" && "font-bold"
         }`}
       >
         All Categories
       </Link>
 
       {/* If All Categories is selected, show all main categories */}
-      {categoryName === "allcategories" &&
+      {categoryName &&
+        categoryName[0] === "allcategories" &&
         category_link.map(({ href, title }, i) => (
           <Link
             key={i}
@@ -84,22 +48,24 @@ const layout = ({ children, params }: LayoutProps) => {
         ))}
 
       {/* If a specific category is selected, show the category and its subcategories (if any) */}
-      {find_title && (
+      {find_main_category && (
         <>
           {/* Main Category Link */}
           <Link
-            href={`/category/${find_title.href}`}
+            href={`/category/${find_main_category.href}`}
             className={`ml-8 hover:font-bold font-bold`} // Highlight the selected category
           >
-            {find_title.title}
+            {find_main_category.title}
           </Link>
 
           {/* Subcategories of the selected category */}
-          {find_title.subCategories?.map(({ href, title }, i) => (
+          {find_main_category.subCategories?.map(({ href, title }, i) => (
             <Link
               key={i}
-              href={`/category/${href}`}
-              className="ml-12 hover:font-bold"
+              href={`/category/${find_main_category.href}/${href}`}
+              className={`ml-12 hover:font-bold ${
+                categoryName && categoryName[1] == href && "font-bold"
+              }`}
             >
               {title}
             </Link>
@@ -151,15 +117,17 @@ const layout = ({ children, params }: LayoutProps) => {
           <Link href={"/"}>Home</Link>
         </h1>
         <h1>/</h1>
-        {find_title?.title && (
+        {find_main_category?.title && (
           <h1>
-            <Link href={find_title.href}>{find_title.title}</Link>
+            <Link href={find_main_category.href}>
+              {find_main_category.title}
+            </Link>
           </h1>
         )}
       </div>
 
       <h1 className="sm:text-xl font-bold my-3">
-        {find_title?.title ||
+        {find_main_category?.title ||
           (categoryName == "allcategories" && "All Categories")}
       </h1>
 

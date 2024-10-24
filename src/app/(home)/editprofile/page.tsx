@@ -163,7 +163,11 @@ const page = () => {
         <div className="sm:flex w-full gap-2 items-start sm:border-b border-muted-foreground">
           <div className="flex w-full flex-col gap-5 sm:pb-5">
             <div className="hidden sm:flex flex-col gap-2">
-              <h1 className="text-sm font-bold">Name</h1>
+              <h1
+                className={`text-sm font-bold ${error?.name && "text-red-600"}`}
+              >
+                Name
+              </h1>
               <div>
                 {nameInput("Name")} {/* input id   */}
               </div>
@@ -230,7 +234,13 @@ const page = () => {
 
         <div className="flex flex-col gap-5 sm:pb-5 sm:border-b border-muted-foreground">
           <div className="flex flex-col gap-3">
-            <h1 className="text-sm font-bold">Contact</h1>
+            <h1
+              className={`text-sm font-bold ${
+                error?.phoneNumber || (error?.email && "text-red-600")
+              }`}
+            >
+              Contact
+            </h1>
 
             <div className="sm:flex items-center gap-2">
               <div className="w-full">

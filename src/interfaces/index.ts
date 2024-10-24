@@ -10,8 +10,13 @@ export interface Option {
   value: string;
 }
 
+export interface LocationDataProps {
+  province: Option;
+  cities?: Option[];
+}
+
 export interface LocationSelectProps {
-  options: Option[];
+  options: LocationDataProps[]; // Array of provinces with optional cities
   placeholder: string;
   onSelect: (value: Option) => void;
   defaultSelect: Option | null;
@@ -145,7 +150,8 @@ export interface CardDetailsImage {
 }
 
 export interface MoreProductCardDataProps {
-  categoryName: string;
+  mainCategory: string;
+  subCategory: string;
 }
 
 export interface DetailProductCardDataProps {
@@ -245,4 +251,5 @@ export interface AdDetails {
   price?: string;
   name?: string;
   phoneNumber?: string;
+  showMyPhNum?: boolean;
 }

@@ -4,7 +4,7 @@ import React from "react";
 export const Sell_btn = () => {
   return (
     <Link
-      href={"post"}
+      href={"/post"}
       className="
       border-4
     border-t-purple-800 

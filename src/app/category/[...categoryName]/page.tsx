@@ -4,7 +4,10 @@ import { PageProps } from "@/interfaces";
 const page = ({ params }: PageProps) => {
   return (
     params.categoryName && (
-      <MoreProductCardData categoryName={params.categoryName} />
+      <MoreProductCardData
+        mainCategory={params.categoryName[0]}
+        subCategory={params.categoryName[1]}
+      />
     )
   );
 };

@@ -1,5 +1,6 @@
 import {
   CategoryLink,
+  LocationDataProps,
   Option,
   RenderProductCardProps,
   RouteData,
@@ -23,70 +24,41 @@ export const validateEmail = (email: string): boolean => {
   return emailRegex.test(email);
 };
 
-export const location_of_pakistan: Option[] = [
+export const location_of_pakistan: LocationDataProps[] = [
   {
-    value: "all",
-    label: "Over All, Pakistan",
+    province: { value: "all", label: "Over All, Pakistan" },
   },
   {
-    value: "sindh",
-    label: "Sindh",
+    province: { value: "sindh", label: "Sindh" },
+    cities: [
+      { value: "karachi", label: "Karachi" },
+      { value: "hyderabad", label: "Hyderabad" },
+      { value: "sukkur", label: "Sukkur" },
+    ],
   },
   {
-    value: "punjab",
-    label: "Punjab",
+    province: { value: "punjab", label: "Punjab" },
+    cities: [
+      { value: "lahore", label: "Lahore" },
+      { value: "rawalpindi", label: "Rawalpindi" },
+      { value: "faisalabad", label: "Faisalabad" },
+    ],
   },
   {
-    value: "balochistan",
-    label: "Balochistan",
+    province: { value: "balochistan", label: "Balochistan" },
+    cities: [
+      { value: "quetta", label: "Quetta" },
+      { value: "gwadar", label: "Gwadar" },
+    ],
   },
   {
-    value: "kpk",
-    label: "Khyber Pakhtunkhwa",
-  },
-  {
-    value: "kashmir",
-    label: "Azad Kashmir",
+    province: { value: "kpk", label: "Khyber Pakhtunkhwa" },
+    cities: [
+      { value: "peshawar", label: "Peshawar" },
+      { value: "abbottabad", label: "Abbottabad" },
+    ],
   },
 ];
-
-// export const category_link: CategoryLink[] = [
-//   {
-//     src: "mobiles.png",
-//     href: "mobiles",
-//     title: "Mobiles",
-//   },
-//   {
-//     src: "fashion.png",
-//     href: "fashion",
-//     title: "Fashion & Beauty",
-//   },
-//   {
-//     src: "vehicles.png",
-//     href: "vehicles",
-//     title: "Vehicles",
-//   },
-//   {
-//     src: "furniture.png",
-//     href: "furniture",
-//     title: "Furniture & Home Decorator",
-//   },
-//   {
-//     src: "led.webp",
-//     href: "electronics",
-//     title: "Electronics & Home Appliances",
-//   },
-//   {
-//     src: "kids.png",
-//     href: "kids",
-//     title: "Kids",
-//   },
-//   {
-//     src: "birds.png",
-//     href: "birds",
-//     title: "Birds",
-//   },
-// ];
 
 export const category_link: CategoryLink[] = [
   {
@@ -95,19 +67,19 @@ export const category_link: CategoryLink[] = [
     title: "Mobiles",
     subCategories: [
       {
-        href: "mobiles/accessories",
+        href: "accessories",
         title: "Accessories",
       },
       {
-        href: "mobiles/tablets",
+        href: "tablets",
         title: "Tablets",
       },
       {
-        href: "mobiles/smart-watches",
+        href: "smart-watches",
         title: "Smart Watches",
       },
       {
-        href: "mobiles/other-mobiles",
+        href: "other-mobiles",
         title: "Other Mobile",
       },
     ],
@@ -118,27 +90,27 @@ export const category_link: CategoryLink[] = [
     title: "Fashion & Beauty",
     subCategories: [
       {
-        href: "fashion/men",
+        href: "men",
         title: "Men's Fashion",
       },
       {
-        href: "fashion/women",
+        href: "women",
         title: "Women's Fashion",
       },
       {
-        href: "fashion/kids",
+        href: "kids",
         title: "Kid's Fashion",
       },
       {
-        href: "fashion/makeup",
+        href: "makeup",
         title: "Makeup",
       },
       {
-        href: "fashion/footwear",
+        href: "footwear",
         title: "Footwear",
       },
       {
-        href: "fashion/other-fashion",
+        href: "other-fashion",
         title: "Other Fashion",
       },
     ],
@@ -149,23 +121,23 @@ export const category_link: CategoryLink[] = [
     title: "Vehicles",
     subCategories: [
       {
-        href: "vehicles/bikes",
+        href: "bikes",
         title: "Bikes",
       },
       {
-        href: "vehicles/cars",
+        href: "cars",
         title: "Cars",
       },
       {
-        href: "vehicles/rickshaw",
+        href: "rickshaw",
         title: "Rickshaw",
       },
       {
-        href: "vehicles/buses-vans",
+        href: "buses-vans",
         title: "Buses and Vans",
       },
       {
-        href: "vehicles/other-vehicles",
+        href: "other-vehicles",
         title: "Other Vehicles",
       },
     ],
@@ -176,23 +148,23 @@ export const category_link: CategoryLink[] = [
     title: "Furniture & Home Decorator",
     subCategories: [
       {
-        href: "furniture/living-room",
+        href: "living-room",
         title: "Living Room Furniture",
       },
       {
-        href: "furniture/bedroom",
+        href: "bedroom",
         title: "Bedroom Furniture",
       },
       {
-        href: "furniture/office",
+        href: "office",
         title: "Office Furniture",
       },
       {
-        href: "furniture/home-decor",
+        href: "home-decor",
         title: "Home Decor",
       },
       {
-        href: "furniture/other-furniture",
+        href: "other-furniture",
         title: "Other Furniture",
       },
     ],
@@ -203,27 +175,27 @@ export const category_link: CategoryLink[] = [
     title: "Electronics & Home Appliances",
     subCategories: [
       {
-        href: "electronics/computers-accessories",
+        href: "computers-accessories",
         title: "Computers & Accessories",
       },
       {
-        href: "electronics/games",
+        href: "games",
         title: "Games",
       },
       {
-        href: "electronics/televisions",
+        href: "televisions",
         title: "Televisions",
       },
       {
-        href: "electronics/home-audio",
+        href: "home-audio",
         title: "Home Audio",
       },
       {
-        href: "electronics/home-appliances",
+        href: "home-appliances",
         title: "Home Appliances",
       },
       {
-        href: "electronics/other-electronics",
+        href: "other-electronics",
         title: "Other Electronics",
       },
     ],
@@ -234,23 +206,23 @@ export const category_link: CategoryLink[] = [
     title: "Birds",
     subCategories: [
       {
-        href: "birds/cats",
+        href: "cats",
         title: "Cats",
       },
       {
-        href: "birds/dogs",
+        href: "dogs",
         title: "Dogs",
       },
       {
-        href: "birds/parrot",
+        href: "parrot",
         title: "Parrot",
       },
       {
-        href: "birds/pigeons",
+        href: "pigeons",
         title: "Pigeons",
       },
       {
-        href: "birds/other-birds",
+        href: "other-birds",
         title: "Other Birds",
       },
     ],
