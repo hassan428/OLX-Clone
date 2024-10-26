@@ -4,6 +4,7 @@ import { CategoryDialog } from "@/components/CategoryDialog";
 import { DropDownConfig } from "@/components/DropDownConfig";
 import { ErrorText } from "@/components/ErrorText";
 import { ImageUploader } from "@/components/ImageDragDrop";
+import { LocationSelectConfig } from "@/components/LocationSelectConfig";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -116,6 +117,11 @@ const page = () => {
   };
   console.log("data", data);
   console.log("location", location);
+
+  const handleSelect = (value: Option) => {
+    setLocation(value);
+    // localStorage.setItem(locationStrogeName, JSON.stringify(value));
+  };
 
   return (
     <>
@@ -285,7 +291,7 @@ const page = () => {
                 <div className="w-full sm:w-3/4 flex flex-col gap-0.5">
                   <textarea
                     id="description"
-                    className={`border border-foreground ${
+                    className={`border border-foreground rounded-md ${
                       error?.description && "border-red-600 text-red-600"
                     } resize-none outline-0 bg-background p-2 leading-5 text-sm w-full`}
                     rows={5}
@@ -326,12 +332,11 @@ const page = () => {
                 </h1>
                 <div className="w-full sm:w-3/4">
                   <div>
-                    <DropDownConfig
+                    <LocationSelectConfig
+                      options={location_of_pakistan}
                       placeholder={"Select Location"}
-                      selectValue={location?.label || ""}
-                      dropdownData={location_of_pakistan}
-                      selectHandle={setLocation}
-                      error={error?.location ? true : false}
+                      onSelect={handleSelect}
+                      defaultSelect={null}
                     />
                     {error?.location && (
                       <ErrorText className="mt-1" errorText={error.location} />
@@ -356,7 +361,7 @@ const page = () => {
               <div className="w-full sm:w-3/4">
                 <div className="flex">
                   <div
-                    className={`border border-foreground ${
+                    className={`border border-foreground rounded-l-md  ${
                       error?.price && "border-red-600 text-red-600"
                     } text-base px-2 flex items-center`}
                   >
@@ -365,6 +370,7 @@ const page = () => {
                   <TextInput
                     error={error?.price ? true : false}
                     cut_handle={() => setDataHandle({ price: "" })}
+                    className="rounded-l-none"
                     inputProps={{
                       id: "price",
                       value: data?.price || "",
@@ -432,7 +438,7 @@ const page = () => {
                 <div className="w-full sm:w-3/4">
                   <div className="flex">
                     <div
-                      className={`border border-foreground ${
+                      className={`border border-foreground rounded-l-md ${
                         error?.phoneNumber && "border-red-600 text-red-600"
                       } text-base px-2 flex items-center`}
                     >
@@ -441,6 +447,7 @@ const page = () => {
                     <TextInput
                       error={error?.phoneNumber ? true : false}
                       cut_handle={() => setDataHandle({ phoneNumber: "" })}
+                      className="rounded-l-none"
                       inputProps={{
                         id: "phoneNumber",
                         value: data?.phoneNumber || "",

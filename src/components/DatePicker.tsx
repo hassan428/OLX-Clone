@@ -18,10 +18,12 @@ export const DatePicker = ({ sendDate }: DatePickerProps) => {
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
-          className={cn("w-full pl-3 text-left font-normal")}
+          className={cn(
+            "w-full pl-3 text-left rounded-md font-normal border border-foreground"
+          )}
         >
           <span>{dob?.toDateString() || "Pick a date"}</span>
-          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+          <CalendarIcon className="ml-auto h-4 w-4 " />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">

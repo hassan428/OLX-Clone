@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useRef, useEffect } from "react";
-import { RiArrowDownWideLine, RiArrowUpWideLine } from "react-icons/ri";
+import { RiArrowDownWideLine } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { route_data } from "@/utils";
 import { NavScreenBtn } from "@/components/NavScreenBtn";
@@ -50,11 +50,10 @@ export const ProfileRoutes = () => {
         />
 
         <div>
-          {isOpen ? (
-            <RiArrowUpWideLine size={20} />
-          ) : (
-            <RiArrowDownWideLine size={20} />
-          )}
+          <RiArrowDownWideLine
+            className={`transition-all ${isOpen ? "rotate-180" : "rotate-0"} `}
+            size={25}
+          />
         </div>
       </div>
       {isOpen && (

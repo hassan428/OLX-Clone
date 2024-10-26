@@ -8,12 +8,13 @@ export const TextInput = ({
   inputProps,
   cut_handle,
   error,
+  className,
 }: TextInputProps) => {
   return (
     <div
-      className={`border border-foreground ${
+      className={`border border-foreground rounded-md flex items-center justify-center w-full p-0.5 ${
         error && "text-red-600 border-red-600"
-      }  flex items-center justify-center w-full p-0.5 `}
+      } ${className}`}
     >
       <Input
         {...inputProps}

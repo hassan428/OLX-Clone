@@ -246,7 +246,7 @@ const page = () => {
               <div className="w-full">
                 <div className="flex">
                   <div
-                    className={`border border-foreground ${
+                    className={`border border-foreground rounded-l-md ${
                       error?.phoneNumber && "border-red-600 text-red-600"
                     } text-base px-2 flex items-center`}
                   >
@@ -255,6 +255,7 @@ const page = () => {
                   <TextInput
                     error={error?.phoneNumber ? true : false}
                     cut_handle={() => setDataHandle({ phoneNumber: "" })}
+                    className="rounded-l-none"
                     inputProps={{
                       id: "phoneNumber",
                       value: data?.phoneNumber || "",

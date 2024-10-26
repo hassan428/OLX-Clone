@@ -176,6 +176,7 @@ export interface TextInputProps {
   inputProps: InputProps;
   cut_handle?: () => void;
   error?: boolean;
+  className?:string
 }
 
 export interface DropDownConfigProps {

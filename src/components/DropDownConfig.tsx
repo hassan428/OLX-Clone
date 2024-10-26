@@ -1,7 +1,7 @@
 "use client";
 import { DropDownConfigProps } from "@/interfaces";
 import React, { useState, useRef, useEffect } from "react";
-import { RiArrowDownWideLine, RiArrowUpWideLine } from "react-icons/ri";
+import { RiArrowDownWideLine } from "react-icons/ri";
 
 export const DropDownConfig = ({
   placeholder,
@@ -39,7 +39,7 @@ export const DropDownConfig = ({
   return (
     <div ref={dropdownRef} className="w-full text-sm">
       <div
-        className={`border border-foreground ${
+        className={`border border-foreground rounded-md ${
           error && "border-red-600 text-red-600"
         }  flex items-center cursor-pointer justify-between p-2 `}
         onClick={() => setIsOpen(!isOpen)}
@@ -47,11 +47,10 @@ export const DropDownConfig = ({
         <div>{defaultSelect || selectValue || placeholder}</div>
 
         <div>
-          {isOpen ? (
-            <RiArrowUpWideLine size={20} />
-          ) : (
-            <RiArrowDownWideLine size={20} />
-          )}
+          <RiArrowDownWideLine
+            className={`transition-all ${isOpen ? "rotate-180" : "rotate-0"} `}
+            size={25}
+          />
         </div>
       </div>
       {isOpen && (
