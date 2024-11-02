@@ -1,35 +1,20 @@
 "use client";
-
 import { CategoryDialog } from "@/components/CategoryDialog";
 import { DropDownConfig } from "@/components/DropDownConfig";
-import { ErrorText } from "@/components/ErrorText";
-import { ImageUploader } from "@/components/ImageDragDrop";
-import { LocationSelectConfig } from "@/components/LocationSelectConfig";
+import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { SentCategory, ImageItem, Option, AdDetails } from "@/interfaces";
-import { location_of_pakistan } from "@/utils";
+import {
+  SentCategory,
+  ImageItem,
+  Option,
+  AdDetails,
+  DynamicData,
+} from "@/interfaces";
+import { categoryOptionsData } from "@/utils";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 const page = () => {
-  const conditionData: Option[] = [
-    { label: "New", value: "new" },
-    { label: "Open Box", value: "openbox" },
-    { label: "Used", value: "used" },
-    { label: "Refurbished", value: "refurbished" },
-    { label: "For Parts", value: "parts" },
-  ];
-
-  const brandData: Option[] = [
-    { label: "Apple", value: "apple" },
-    { label: "Samsung", value: "samsung" },
-    { label: "Vivo", value: "vivo" },
-    { label: "Realme", value: "realme" },
-    { label: "Nokia", value: "nokia" },
-  ];
-
   const [sortedImages, setSortedImages] = useState<File[]>([]);
   // Function to handle sorted images passed from the child component
   const handleSortedImages = (images: ImageItem[]) => {
@@ -38,12 +23,11 @@ const page = () => {
     adsImageHandle();
   };
 
-  const [brand, setBrand] = useState<Option | null>(null);
-  const [condition, setCondition] = useState<Option | null>(null);
   const [location, setLocation] = useState<Option | null>(null);
   const [category, setCategory] = useState<SentCategory | null>(null);
   const [data, setData] = useState<AdDetails | null>(null);
   const [error, setError] = useState<AdDetails | null>(null);
+  const [dynamicData, setDynamicData] = useState<DynamicData | null>(null);
 
   const setDataHandle = (newData: AdDetails) => {
     setData({ ...data, ...newData });
@@ -76,7 +60,11 @@ const page = () => {
     if (sortedImages.length > 0) {
       adsImageHandle();
     }
-  }, [category, sortedImages, location]);
+  }, [sortedImages]);
+
+  useEffect(() => {
+    setDynamicData(null);
+  }, [category]);
 
   const postNowHandle = () => {
     setDataHandle({
@@ -115,13 +103,8 @@ const page = () => {
         : undefined,
     });
   };
-  console.log("data", data);
-  console.log("location", location);
-
-  const handleSelect = (value: Option) => {
-    setLocation(value);
-    // localStorage.setItem(locationStrogeName, JSON.stringify(value));
-  };
+  // console.log("data", data);
+  console.log("dynamicData", dynamicData);
 
   return (
     <>
@@ -133,7 +116,7 @@ const page = () => {
             <div className="flex flex-col sm:flex-row gap-2 items-center border-b-2 border-border p-2 sm:p-5 text-xs sm:text-sm">
               <h1
                 className={`w-full sm:w-1/4 font-bold ${
-                  error?.mainCategory && "text-red-600"
+                  error?.mainCategory && "text-error"
                 }`}
               >
                 Category
@@ -166,17 +149,21 @@ const page = () => {
                   <CategoryDialog sentCategoryData={setCategory} />
                 </div>
                 {error?.mainCategory && (
-                  <ErrorText className="mt-1" errorText={error.mainCategory} />
+                  <Text
+                    className="mt-1"
+                    error={error.mainCategory ? true : false}
+                    text={error.mainCategory}
+                  />
                 )}
               </div>
             </div>
 
             {/* second Section */}
 
-            <div className="flex flex-col sm:flex-row gap-2 items-center border-b-2 border-border p-2 sm:p-5  text-xs sm:text-sm">
+            {/* <div className="flex flex-col sm:flex-row gap-2 items-center border-b-2 border-border p-2 sm:p-5  text-xs sm:text-sm">
               <h1
                 className={`w-full sm:w-1/4 font-bold ${
-                  error?.image && "text-red-600"
+                  error?.image && "text-error"
                 }`}
               >
                 Upload Images
@@ -184,9 +171,9 @@ const page = () => {
               <div className="w-full sm:w-3/4 flex flex-col gap-2">
                 <ImageUploader onSortedImages={handleSortedImages} />
                 {error?.image ? (
-                  <ErrorText
+                  <Text
                     className="mt-1"
-                    errorText={"Please provide an image"}
+                    Text={"Please provide an image"}
                   />
                 ) : (
                   <h1 className="text-[11px] leading-3 sm:text-xs text-muted-foreground">
@@ -194,53 +181,215 @@ const page = () => {
                   </h1>
                 )}
               </div>
-            </div>
+            </div> */}
 
             {/* third Section */}
 
-            <div className="flex flex-col border-b-2 border-border p-2 sm:p-5 text-xs sm:text-sm">
-              <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
-                <h1 className="w-full sm:w-1/4 font-bold">Brand*</h1>
-                <div className="w-full sm:w-3/4">
-                  <div>
-                    <DropDownConfig
-                      placeholder={"Select Brand"}
-                      selectValue={brand?.label || ""}
-                      dropdownData={brandData}
-                      selectHandle={setBrand}
-                      // error={error?.gender ? true : false}
-                    />
-                    {/* {error?.gender && (
-                <ErrorText className="mt-1" errorText={error.gender} />
-              )} */}
-                  </div>
+            {categoryOptionsData.map(({ subCategory, groups }, i) => {
+              if (subCategory !== category?.sub) {
+                return null;
+              }
+              return (
+                <div
+                  key={i}
+                  className="flex flex-col border-b-2 border-border p-2 sm:p-5 text-xs sm:text-sm"
+                >
+                  {groups.map(
+                    (
+                      {
+                        label,
+                        values,
+                        nestedGroup,
+                        helpingText,
+                        inputType,
+                        maxLength,
+                      },
+                      i
+                    ) => {
+                      return (
+                        <div key={i}>
+                          <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
+                            <h1 className="w-full sm:w-1/4 font-bold capitalize">
+                              {label}*
+                            </h1>
+                            <div className="w-full sm:w-3/4">
+                              <div>
+                                <DropDownConfig
+                                  placeholder={label}
+                                  maxLength={maxLength}
+                                  selectValue={
+                                    dynamicData
+                                      ? dynamicData[label]?.label ||
+                                        dynamicData[label]
+                                      : ""
+                                  }
+                                  cut_handle={() =>
+                                    setDynamicData({
+                                      ...dynamicData,
+                                      [label]: "",
+                                    })
+                                  }
+                                  onChange={(e) => {
+                                    const { value } = e.target;
+                                    if (value.length == 0)
+                                      setDynamicData({
+                                        ...dynamicData,
+                                        [label]: "",
+                                      });
+                                    for (let i = 0; i < value.length; i++)
+                                      if (
+                                        inputType == "number" &&
+                                        !Number.isNaN(
+                                          Number(value.split("")[i])
+                                        )
+                                      )
+                                        setDynamicData({
+                                          ...dynamicData,
+                                          [label]: value
+                                            .slice(0)
+                                            .split(" ")
+                                            .join(""),
+                                        });
+                                      else if (inputType == "Text")
+                                        setDynamicData({
+                                          ...dynamicData,
+                                          [label]: e.target.value,
+                                        });
+                                      else
+                                        setDynamicData({
+                                          ...dynamicData,
+                                        });
+                                  }}
+                                  dropdownData={values}
+                                  selectHandle={(selectOption) => {
+                                    const prev =
+                                      i === 0 ? {} : { ...dynamicData };
+                                    setDynamicData({
+                                      ...prev,
+                                      [label]: selectOption,
+                                    });
+                                  }}
+                                />
+                                {helpingText && (
+                                  <Text className="mt-1" text={helpingText} />
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          {nestedGroup?.conditionalOptions?.map(
+                            (
+                              {
+                                values,
+                                condition,
+                                helpingText,
+                                inputType,
+                                maxLength,
+                              },
+                              i
+                            ) => {
+                              if (
+                                !dynamicData ||
+                                !Object.values(dynamicData).find(
+                                  (savedData) => savedData?.value === condition
+                                )
+                              ) {
+                                return null;
+                              }
+                              return (
+                                <div
+                                  key={i}
+                                  className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3"
+                                >
+                                  <h1 className="w-full sm:w-1/4 font-bold capitalize">
+                                    {nestedGroup.title}*
+                                  </h1>
+                                  <div className="w-full sm:w-3/4">
+                                    <div>
+                                      <DropDownConfig
+                                        placeholder={nestedGroup.title}
+                                        selectValue={
+                                          dynamicData[nestedGroup.title]
+                                            ?.label ||
+                                          dynamicData[nestedGroup.title] ||
+                                          ""
+                                        }
+                                        maxLength={maxLength}
+                                        id={nestedGroup.title}
+                                        cut_handle={() =>
+                                          setDynamicData({
+                                            ...dynamicData,
+                                            [nestedGroup.title]: "",
+                                          })
+                                        }
+                                        onChange={(e) => {
+                                          const { value } = e.target;
+                                          if (value.length == 0)
+                                            setDynamicData({
+                                              ...dynamicData,
+
+                                              [nestedGroup.title]: "",
+                                            });
+                                          for (let i = 0; i < value.length; i++)
+                                            if (
+                                              inputType == "number" &&
+                                              !Number.isNaN(
+                                                Number(value.split("")[i])
+                                              )
+                                            )
+                                              setDynamicData({
+                                                ...dynamicData,
+                                                [nestedGroup.title]: value
+                                                  .slice(0)
+                                                  .split(" ")
+                                                  .join(""),
+                                              });
+                                            else if (inputType == "Text")
+                                              setDynamicData({
+                                                ...dynamicData,
+                                                [nestedGroup.title]:
+                                                  e.target.value,
+                                              });
+                                            else
+                                              setDynamicData({
+                                                ...dynamicData,
+                                              });
+                                        }}
+                                        dropdownData={values}
+                                        selectHandle={(selectOption) => {
+                                          setDynamicData({
+                                            ...dynamicData,
+                                            [nestedGroup.title]: selectOption,
+                                          });
+                                        }}
+                                      />
+
+                                      {helpingText && (
+                                        <Text
+                                          className="mt-1"
+                                          text={helpingText}
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            }
+                          )}
+                        </div>
+                      );
+                    }
+                  )}
                 </div>
-              </div>
-              <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
-                <h1 className="w-full sm:w-1/4 font-bold">Condition*</h1>
-                <div className="w-full sm:w-3/4">
-                  <div>
-                    <DropDownConfig
-                      placeholder={"Select Condition"}
-                      selectValue={condition?.label || ""}
-                      dropdownData={conditionData}
-                      selectHandle={setCondition}
-                      // error={error?.gender ? true : false}
-                    />
-                    {/* {error?.gender && (
-                <ErrorText className="mt-1" errorText={error.gender} />
-              )} */}
-                  </div>
-                </div>
-              </div>
-            </div>
+              );
+            })}
 
             {/* fourth Section */}
-            <div className="flex flex-col p-2 sm:p-5 text-xs sm:text-sm">
+            {/* <div className="flex flex-col p-2 sm:p-5 text-xs sm:text-sm">
               <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
                 <h1
                   className={`w-full sm:w-1/4 font-bold ${
-                    error?.adTitle && "text-red-600"
+                    error?.adTitle && "text-error"
                   }`}
                 >
                   Ad Title*
@@ -262,7 +411,7 @@ const page = () => {
                   <div className="flex items-baseline justify-between mt-0.5 gap-2">
                     <div>
                       {error?.adTitle ? (
-                        <ErrorText errorText={error.adTitle} />
+                        <Text Text={error.adTitle} />
                       ) : (
                         <h1 className="text-xs">
                           Mention the key features of your item (e.g. brand,
@@ -283,7 +432,7 @@ const page = () => {
               <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
                 <h1
                   className={`w-full sm:w-1/4 font-bold ${
-                    error?.description && "text-red-600"
+                    error?.description && "text-error"
                   }`}
                 >
                   Description*
@@ -292,7 +441,7 @@ const page = () => {
                   <textarea
                     id="description"
                     className={`border border-foreground rounded-md ${
-                      error?.description && "border-red-600 text-red-600"
+                      error?.description && "border-error text-error"
                     } resize-none outline-0 bg-background p-2 leading-5 text-sm w-full`}
                     rows={5}
                     placeholder="Describe the item you're selling"
@@ -305,7 +454,7 @@ const page = () => {
                   <div className="flex items-baseline justify-between gap-2">
                     <div>
                       {error?.description ? (
-                        <ErrorText errorText={error.description} />
+                        <Text Text={error.description} />
                       ) : (
                         <h1 className="text-xs">
                           Include condition, features and reason for selling
@@ -322,29 +471,30 @@ const page = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
+              <div className="flex  flex-col sm:flex-row max-sm:gap-2 items-center py-3">
                 <h1
                   className={`w-full sm:w-1/4 font-bold ${
-                    error?.location && "text-red-600"
+                    error?.location && "text-error"
                   }`}
                 >
                   Location*
                 </h1>
-                <div className="w-full sm:w-3/4">
+                <div className="w-full text-sm sm:w-3/4">
                   <div>
                     <LocationSelectConfig
-                      options={location_of_pakistan}
+                      options={location_of_pakistan.slice(1)}
                       placeholder={"Select Location"}
-                      onSelect={handleSelect}
-                      defaultSelect={null}
+                      onSelect={setLocation}
+                      isDefaultSelect={false}
+                      error={error?.location ? true : false}
                     />
                     {error?.location && (
-                      <ErrorText className="mt-1" errorText={error.location} />
+                      <Text className="mt-1" Text={error.location} />
                     )}
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* fifth Section */}
@@ -353,7 +503,7 @@ const page = () => {
             <div className="flex flex-col sm:flex-row gap-2 items-center p-2 sm:p-5 text-xs sm:text-sm">
               <h1
                 className={`w-full sm:w-1/4 font-bold ${
-                  error?.price && "border-red-600"
+                  error?.price && "text-error"
                 }`}
               >
                 Price*
@@ -362,7 +512,7 @@ const page = () => {
                 <div className="flex">
                   <div
                     className={`border border-foreground rounded-l-md  ${
-                      error?.price && "border-red-600 text-red-600"
+                      error?.price && "border-error text-error"
                     } text-base px-2 flex items-center`}
                   >
                     <h1>Rs</h1>
@@ -390,7 +540,11 @@ const page = () => {
                   />
                 </div>
                 {error?.price && (
-                  <ErrorText className="mt-1" errorText={error.price} />
+                  <Text
+                    className="mt-1"
+                    error={error?.price ? true : false}
+                    text={error.price}
+                  />
                 )}
               </div>
             </div>
@@ -398,12 +552,12 @@ const page = () => {
 
           {/* sixth Section */}
 
-          <div className="border-2 border-border rounded-xl m-2">
+          {/* <div className="border-2 border-border rounded-xl m-2">
             <div className="flex flex-col border-b-2 border-border p-2 sm:p-5 text-xs sm:text-sm">
               <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
                 <h1
                   className={`w-full sm:w-1/4 font-bold ${
-                    error?.name && "text-red-600"
+                    error?.name && "text-error"
                   }`}
                 >
                   Name*
@@ -422,7 +576,7 @@ const page = () => {
                     }}
                   />
                   {error?.name && (
-                    <ErrorText className="mt-1" errorText={error.name} />
+                    <Text className="mt-1" Text={error.name} />
                   )}
                 </div>
               </div>
@@ -430,7 +584,7 @@ const page = () => {
               <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
                 <h1
                   className={`w-full sm:w-1/4 font-bold ${
-                    error?.phoneNumber && "text-red-600"
+                    error?.phoneNumber && "text-error"
                   }`}
                 >
                   Phone Number*
@@ -439,7 +593,7 @@ const page = () => {
                   <div className="flex">
                     <div
                       className={`border border-foreground rounded-l-md ${
-                        error?.phoneNumber && "border-red-600 text-red-600"
+                        error?.phoneNumber && "border-error text-error"
                       } text-base px-2 flex items-center`}
                     >
                       <h1>+92</h1>
@@ -468,7 +622,7 @@ const page = () => {
                     />
                   </div>
                   {error?.phoneNumber && (
-                    <ErrorText className="mt-1" errorText={error.phoneNumber} />
+                    <Text className="mt-1" Text={error.phoneNumber} />
                   )}
                 </div>
               </div>
@@ -491,7 +645,7 @@ const page = () => {
                 Post now
               </Button>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="hidden sm:flex flex-col gap-5 w-1/4 text-xs border-2 border-border rounded-xl my-1 p-5 pr-2 ">

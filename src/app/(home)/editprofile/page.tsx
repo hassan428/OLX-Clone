@@ -2,11 +2,11 @@
 import { Alert } from "@/components/Alert";
 import { DatePicker } from "@/components/DatePicker";
 import { DropDownConfig } from "@/components/DropDownConfig";
-import { ErrorText } from "@/components/ErrorText";
+import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
-import { BrthDate, Option, UserDetails } from "@/interfaces";
-import { date, month, validateEmail, year } from "@/utils";
+import { Option, UserDetails } from "@/interfaces";
+import { validateEmail } from "@/utils";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 import { HiLightBulb } from "react-icons/hi";
@@ -28,7 +28,9 @@ const page = () => {
           onChange: (e) => setDataHandle({ name: e.target.value }),
         }}
       />
-      {error?.name && <ErrorText errorText={error.name} />}
+      {error?.name && (
+        <Text error={error?.name ? true : false} text={error.name} />
+      )}
     </>
   );
 
@@ -164,7 +166,7 @@ const page = () => {
           <div className="flex w-full flex-col gap-5 sm:pb-5">
             <div className="hidden sm:flex flex-col gap-2">
               <h1
-                className={`text-sm font-bold ${error?.name && "text-red-600"}`}
+                className={`text-sm font-bold ${error?.name && "text-error"}`}
               >
                 Name
               </h1>
@@ -193,7 +195,11 @@ const page = () => {
                   error={error?.gender ? true : false}
                 />
                 {error?.gender && (
-                  <ErrorText className="mt-1" errorText={error.gender} />
+                  <Text
+                    className="mt-1"
+                    error={error.gender ? true : false}
+                    text={error.gender}
+                  />
                 )}
               </div>
             </div>
@@ -202,7 +208,7 @@ const page = () => {
               <textarea
                 id="aboutMe"
                 className={`border border-foreground ${
-                  error?.aboutMe && "border-red-600 text-red-600"
+                  error?.aboutMe && "border-error text-error"
                 } resize-none outline-0 bg-background p-2 leading-5 text-sm`}
                 rows={5}
                 placeholder="About me (Optional)"
@@ -210,9 +216,7 @@ const page = () => {
                 onChange={(e) => setDataHandle({ aboutMe: e.target.value })}
               />
               <div className="flex items-center justify-end">
-                <h1 className="text-xs ">{`${
-                  data?.aboutMe?.length || "0"
-                } / 200`}</h1>
+                <Text text={`${data?.aboutMe?.length || "0"} / 200`} />
               </div>
             </div>
           </div>
@@ -236,7 +240,7 @@ const page = () => {
           <div className="flex flex-col gap-3">
             <h1
               className={`text-sm font-bold ${
-                error?.phoneNumber || (error?.email && "text-red-600")
+                error?.phoneNumber || (error?.email && "text-error")
               }`}
             >
               Contact
@@ -247,7 +251,7 @@ const page = () => {
                 <div className="flex">
                   <div
                     className={`border border-foreground rounded-l-md ${
-                      error?.phoneNumber && "border-red-600 text-red-600"
+                      error?.phoneNumber && "border-error text-error"
                     } text-base px-2 flex items-center`}
                   >
                     <h1 className="">+92</h1>
@@ -276,7 +280,11 @@ const page = () => {
                   />
                 </div>
                 {error?.phoneNumber && (
-                  <ErrorText className="mt-1" errorText={error.phoneNumber} />
+                  <Text
+                    className="mt-1"
+                    error={error.phoneNumber ? true : false}
+                    text={error.phoneNumber}
+                  />
                 )}
               </div>
               <h1 className="hidden sm:inline w-full text-xs text-muted-foreground">
@@ -303,7 +311,11 @@ const page = () => {
                 }}
               />
               {error?.email && (
-                <ErrorText className="mt-1" errorText={error.email} />
+                <Text
+                  className="mt-1"
+                  error={error?.email ? true : false}
+                  text={error.email}
+                />
               )}
             </div>
             <h1 className="hidden sm:inline w-full text-xs text-muted-foreground">

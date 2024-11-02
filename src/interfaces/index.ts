@@ -1,6 +1,6 @@
 import { InputProps } from "@/components/ui/input";
 import { LucideIcon } from "lucide-react";
-import { ButtonHTMLAttributes, ReactNode } from "react";
+import { ButtonHTMLAttributes, ChangeEvent, ReactNode } from "react";
 import { IconType } from "react-icons";
 
 type IconComponent = IconType | LucideIcon;
@@ -19,7 +19,8 @@ export interface LocationSelectProps {
   options: LocationDataProps[]; // Array of provinces with optional cities
   placeholder: string;
   onSelect: (value: Option) => void;
-  defaultSelect: Option | null;
+  isDefaultSelect?: boolean;
+  error?: boolean;
 }
 
 export interface InputValue {
@@ -176,7 +177,7 @@ export interface TextInputProps {
   inputProps: InputProps;
   cut_handle?: () => void;
   error?: boolean;
-  className?:string
+  className?: string;
 }
 
 export interface DropDownConfigProps {
@@ -184,19 +185,17 @@ export interface DropDownConfigProps {
   defaultSelect?: string;
   selectValue?: string;
   selectHandle: (value: Option) => void;
-  dropdownData: Option[];
+  dropdownData?: Option[];
   error?: boolean;
+  id?: string;
+  cut_handle?: () => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export interface BrthDate {
-  dd?: Option;
-  mm?: Option;
-  yy?: Option;
-}
-
-export interface ErrorTextProps {
-  errorText: string;
+export interface TextProps {
+  text: string;
   className?: string;
+  error?: boolean;
 }
 
 export interface ImageItem {
@@ -254,3 +253,46 @@ export interface AdDetails {
   phoneNumber?: string;
   showMyPhNum?: boolean;
 }
+interface ConditionalOption {
+  condition: string;
+  values?: Option[];
+  inputType?: "number" | "Text";
+  maxLength?: number;
+  helpingText?: string;
+}
+
+interface NestedOptionGroup {
+  title: string;
+  conditionalOptions?: ConditionalOption[];
+}
+
+interface OptionGroup {
+  label: string;
+  values?: Option[];
+  inputType?: "number" | "Text";
+  helpingText?: string;
+  maxLength?: number;
+  nestedGroup?: NestedOptionGroup;
+}
+
+export interface CategoryOptions {
+  subCategory: string;
+  groups: OptionGroup[];
+}
+
+export interface DropDownConfigProps {
+  placeholder: string;
+  defaultSelect?: string;
+  selectValue?: string;
+  selectHandle: (value: Option) => void;
+  dropdownData?: Option[];
+  error?: boolean;
+  id?: string;
+  maxLength?: number;
+  cut_handle?: () => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+}
+
+export type DynamicData = {
+  [key: string]: any;
+};

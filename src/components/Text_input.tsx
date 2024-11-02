@@ -13,7 +13,7 @@ export const TextInput = ({
   return (
     <div
       className={`border border-foreground rounded-md flex items-center justify-center w-full p-0.5 ${
-        error && "text-red-600 border-red-600"
+        error && "text-error border-error"
       } ${className}`}
     >
       <Input

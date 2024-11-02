@@ -22,7 +22,6 @@ export const Search_input = () => {
     >
       <div className="flex items-center justify-center w-full">
         <Input
-          type="text"
           id="search"
           placeholder="Search"
           className="focus-visible:ring-0 outline-0 border-0 rounded-none text-base"

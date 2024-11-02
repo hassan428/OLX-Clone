@@ -15,6 +15,8 @@ export const LocationSelectConfig = ({
   options,
   placeholder,
   onSelect,
+  error,
+  isDefaultSelect,
 }: LocationSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<Option | null>(null);
@@ -24,8 +26,8 @@ export const LocationSelectConfig = ({
 
   useEffect(() => {
     const val = localStorage.getItem(locationStrogeName);
-    const realValue = val && JSON.parse(val);
-    setDefaultSelect(realValue);
+    const realValue: Option = val && JSON.parse(val);
+    isDefaultSelect && setDefaultSelect(realValue);
     selectedOption && setDefaultSelect(null);
   }, [selectedOption]);
 
@@ -51,11 +53,13 @@ export const LocationSelectConfig = ({
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   return (
-    <div className="relative w-full" ref={dropdownRef}>
+    <div className="relative w-full " ref={dropdownRef}>
       {/* Dropdown button */}
       <button
         onClick={toggleDropdown}
-        className={`w-full border border-foreground p-3 rounded-md flex items-center justify-between shadow-sm focus:outline-none transition-all`}
+        className={`w-full border border-foreground p-3 rounded-md flex items-center justify-between shadow-sm focus:outline-none transition-all ${
+          error && "text-error border-error"
+        }`}
       >
         <h1>{selectedOption?.label || defaultSelect?.label || placeholder}</h1>
 
@@ -67,19 +71,19 @@ export const LocationSelectConfig = ({
 
       {/* Dropdown menu */}
       {isOpen && (
-        <div className="absolute z-10 bg-background w-full border rounded-md mt-2 shadow-lg">
+        <div className="absolute z-10 bg-border w-full border rounded-md mt-2 shadow-lg">
           <Accordion type="single" collapsible className="w-full">
             {options.map(({ province, cities }, i) => {
               return province.value === "all" ? (
                 <div
                   key={i}
                   onClick={() => handleOptionClick(province)}
-                  className={`flex items-center gap-2 px-3 py-4 border-b cursor-pointer rounded  ${
+                  className={`flex items-center gap-2 px-3 py-4 border-b-2 border-background cursor-pointer  ${
                     [selectedOption?.label, defaultSelect?.label].includes(
                       province.label
                     )
-                      ? "bg-green-300 text-green-900 hover:bg-green-300 font-bold"
-                      : "hover:bg-input"
+                      ? "bg-green-300 text-green-900 hover:bg-green-300 font-semibold"
+                      : "hover:bg-input hover:font-semibold"
                   }`}
                 >
                   {[selectedOption?.label, defaultSelect?.label].includes(
@@ -94,7 +98,7 @@ export const LocationSelectConfig = ({
               ) : (
                 <AccordionItem key={i} value={`items-${i}`}>
                   <AccordionTrigger
-                    className={`text-left hover:border-b-2 border-background px-3 ${
+                    className={`text-left border-b-2 border-background px-3 ${
                       [selectedOption?.label, defaultSelect?.label].includes(
                         province.label
                       ) ||
@@ -103,8 +107,8 @@ export const LocationSelectConfig = ({
                           city.label === selectedOption?.label ||
                           city.label === defaultSelect?.label
                       )
-                        ? "bg-green-300 border-b-2 text-green-900 hover:bg-green-300 font-bold"
-                        : "bg-input"
+                        ? "bg-green-300 border-b-2 text-green-900 hover:bg-green-300 font-semibold"
+                        : "hover:bg-input hover:font-semibold"
                     }`}
                   >
                     <div className="flex items-center gap-2 ">
@@ -123,7 +127,7 @@ export const LocationSelectConfig = ({
                       {province.label}
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent className="flex flex-col p-0 bg-border mb-2 rounded">
+                  <AccordionContent className="flex flex-col p-0 bg-border mb-1">
                     {cities?.map((city) => (
                       <div
                         key={city.value}
@@ -133,8 +137,8 @@ export const LocationSelectConfig = ({
                             selectedOption?.label,
                             defaultSelect?.label,
                           ].includes(city.label)
-                            ? "bg-green-300 text-green-900 hover:bg-green-300 font-bold"
-                            : "hover:bg-input"
+                            ? "bg-green-300 text-green-900 hover:bg-green-300 font-semibold"
+                            : "hover:bg-input hover:font-semibold"
                         }`}
                       >
                         {[selectedOption?.label, defaultSelect?.label].includes(
