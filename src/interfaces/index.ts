@@ -308,8 +308,15 @@ export interface CategoryOptions {
     | "Kid's Fashion"
     | "Women's Fashion"
     | "Accessories"
+    | "Jewellery"
+    | "Clothes"
     | "Smart Watches"
-    | "Men's Fashion";
+    | "Tables & Dining"
+    | "Garden & Outdoor"
+    | "Bathroom Accessories"
+    | "Men's Fashion"
+    | "Beds & Wardrobes"
+    | "Sofa & Chairs";
 }
 
 export interface DropDownConfigProps {
