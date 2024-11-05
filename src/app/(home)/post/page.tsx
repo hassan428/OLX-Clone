@@ -285,13 +285,14 @@ const page = () => {
                                 helpingText,
                                 inputType,
                                 maxLength,
+                                label,
                               },
                               i
                             ) => {
                               if (
                                 !dynamicData ||
-                                !Object.values(dynamicData).find(
-                                  (savedData) => savedData?.value === condition
+                                !Object.values(dynamicData).find((savedData) =>
+                                  condition.includes(savedData?.value)
                                 )
                               ) {
                                 return null;
@@ -302,24 +303,27 @@ const page = () => {
                                   className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3"
                                 >
                                   <h1 className="w-full sm:w-1/4 font-bold capitalize">
-                                    {nestedGroup.title}*
+                                    {label || nestedGroup.title}*
                                   </h1>
                                   <div className="w-full sm:w-3/4">
                                     <div>
                                       <DropDownConfig
-                                        placeholder={nestedGroup.title}
+                                        placeholder={label || nestedGroup.title}
                                         selectValue={
-                                          dynamicData[nestedGroup.title]
-                                            ?.label ||
-                                          dynamicData[nestedGroup.title] ||
+                                          dynamicData[
+                                            label || nestedGroup.title
+                                          ]?.label ||
+                                          dynamicData[
+                                            label || nestedGroup.title
+                                          ] ||
                                           ""
                                         }
                                         maxLength={maxLength}
-                                        id={nestedGroup.title}
+                                        id={label || nestedGroup.title}
                                         cut_handle={() =>
                                           setDynamicData({
                                             ...dynamicData,
-                                            [nestedGroup.title]: "",
+                                            [label || nestedGroup.title]: "",
                                           })
                                         }
                                         onChange={(e) => {
@@ -328,7 +332,7 @@ const page = () => {
                                             setDynamicData({
                                               ...dynamicData,
 
-                                              [nestedGroup.title]: "",
+                                              [label || nestedGroup.title]: "",
                                             });
                                           for (let i = 0; i < value.length; i++)
                                             if (
@@ -339,15 +343,16 @@ const page = () => {
                                             )
                                               setDynamicData({
                                                 ...dynamicData,
-                                                [nestedGroup.title]: value
-                                                  .slice(0)
-                                                  .split(" ")
-                                                  .join(""),
+                                                [label || nestedGroup.title]:
+                                                  value
+                                                    .slice(0)
+                                                    .split(" ")
+                                                    .join(""),
                                               });
                                             else if (inputType == "Text")
                                               setDynamicData({
                                                 ...dynamicData,
-                                                [nestedGroup.title]:
+                                                [label || nestedGroup.title]:
                                                   e.target.value,
                                               });
                                             else
@@ -359,7 +364,8 @@ const page = () => {
                                         selectHandle={(selectOption) => {
                                           setDynamicData({
                                             ...dynamicData,
-                                            [nestedGroup.title]: selectOption,
+                                            [label || nestedGroup.title]:
+                                              selectOption,
                                           });
                                         }}
                                       />

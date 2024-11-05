@@ -254,19 +254,20 @@ export interface AdDetails {
   showMyPhNum?: boolean;
 }
 interface ConditionalOption {
-  condition: string;
+  condition: string[];
   values?: Option[];
   inputType?: "number" | "Text";
   maxLength?: number;
   helpingText?: string;
+  label?: string;
 }
 
-interface NestedOptionGroup {
+export interface NestedOptionGroup {
   title: string;
   conditionalOptions?: ConditionalOption[];
 }
 
-interface OptionGroup {
+export interface OptionGroup {
   label: string;
   values?: Option[];
   inputType?: "number" | "Text";
@@ -276,8 +277,39 @@ interface OptionGroup {
 }
 
 export interface CategoryOptions {
-  subCategory: string;
   groups: OptionGroup[];
+  subCategory:
+    | "Tablets"
+    | "Mobiles"
+    | "Makeup"
+    | "Footwear"
+    | "Other Fashion"
+    | "Bikes"
+    | "Cars"
+    | "Rickshaw & Chingchi"
+    | "Living Room Furniture"
+    | "Bedroom Furniture"
+    | "Office Furniture"
+    | "Home Decor"
+    | "Other Furniture"
+    | "Computers & Accessories"
+    | "Games"
+    | "Televisions"
+    | "Home Audio"
+    | "Home Appliances"
+    | "Other Electronics"
+    | "Cats"
+    | "Dogs"
+    | "Parrot"
+    | "Pigeons"
+    | "Other Birds"
+    | "Buses and Vans"
+    | "Other Vehicles"
+    | "Kid's Fashion"
+    | "Women's Fashion"
+    | "Accessories"
+    | "Smart Watches"
+    | "Men's Fashion";
 }
 
 export interface DropDownConfigProps {
