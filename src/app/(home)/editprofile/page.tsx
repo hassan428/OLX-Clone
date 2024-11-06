@@ -1,7 +1,7 @@
 "use client";
 import { Alert } from "@/components/Alert";
 import { DatePicker } from "@/components/DatePicker";
-import { DropDownConfig } from "@/components/DropDownConfig";
+import { DropDownConfig } from "@/components/InputAndDropdown";
 import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";

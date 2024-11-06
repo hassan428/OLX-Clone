@@ -1,6 +1,6 @@
 "use client";
 import { CategoryDialog } from "@/components/CategoryDialog";
-import { DropDownConfig } from "@/components/DropDownConfig";
+import { InputAndDropdown } from '@/components/InputAndDropdown';
 import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
 import {
@@ -214,7 +214,7 @@ const page = () => {
                             </h1>
                             <div className="w-full sm:w-3/4">
                               <div>
-                                <DropDownConfig
+                                <InputAndDropdown
                                   placeholder={label}
                                   maxLength={maxLength}
                                   selectValue={
@@ -307,7 +307,7 @@ const page = () => {
                                   </h1>
                                   <div className="w-full sm:w-3/4">
                                     <div>
-                                      <DropDownConfig
+                                      <InputAndDropdown
                                         placeholder={label || nestedGroup.title}
                                         selectValue={
                                           dynamicData[

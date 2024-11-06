@@ -5,7 +5,7 @@ import { RiArrowDownWideLine } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { TextInput } from "@/components/Text_input";
 
-export const DropDownConfig = ({
+export const InputAndDropdown = ({
   placeholder,
   defaultSelect,
   selectHandle,
@@ -97,7 +97,9 @@ export const DropDownConfig = ({
             {dropdownData?.map((option, i) => (
               <div
                 key={i}
-                className="cursor-pointer hover:bg-input px-5 py-3"
+                className={`cursor-pointer hover:bg-input px-5 py-3 ${
+                  option.label == selectValue && "font-black"
+                }`}
                 onClick={() => {
                   selectHandle(option);
                   setIsOpen(false);
