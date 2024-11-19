@@ -18,7 +18,7 @@ export const TextInput = ({
     >
       <Input
         {...inputProps}
-        className="focus-visible:ring-0 outline-0 border-0 rounded-none text-sm"
+        className="focus-visible:ring-0 placeholder:capitalize outline-0 border-0 rounded-none text-sm"
       />
       {inputProps.value && (
         <IoCloseSharp className="cursor-pointer mr-1" onClick={cut_handle} />

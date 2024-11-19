@@ -34,7 +34,7 @@ export const CategoryDialog = ({ sentCategoryData }: CategoryDialogProps) => {
       <DialogTrigger asChild>
         <h1 className="text-blue-600 cursor-pointer">Select</h1>
       </DialogTrigger>
-      <DialogContent className="text-sm max-sm:min-h-screen max-sm:px-2 max-sm:py-4">
+      <DialogContent className="text-sm max-sm:min-h-screen max-h-[27rem] overflow-auto max-sm:px-1 max-sm:py-4 gap-0">
         <DialogHeader>
           <div>
             <DialogTitle className={`${category?.main && "max-sm:hidden"}`}>

@@ -19,6 +19,7 @@ import Image from "next/image";
 
 import Link from "next/link";
 import { isLogged, route_data } from "@/utils";
+import { LoginSignupAlert } from "@/components/LoginSignupAlert";
 const username: string = "Hassan Hanif";
 
 export function NavDrawer() {
@@ -89,20 +90,27 @@ export function NavDrawer() {
 
         <SheetFooter>
           <div className={`w-full ${isLogged && "hidden"}`}>
-            <Link href={"/login"}>
-              <Button className="w-full border-2 border-primary my-2">
-                Login
-              </Button>
-            </Link>
-
-            <Link href={"/signup"}>
-              <Button
-                variant={"outline"}
-                className="w-full border-2 border-primary"
-              >
-                Create a new account
-              </Button>
-            </Link>
+            {/* <SheetClose asChild> */}
+            <LoginSignupAlert
+              trigger={
+                <Button className="w-full border-2 border-primary my-2">
+                  Login
+                </Button>
+              }
+            />
+            {/* </SheetClose> */}
+            {/* <SheetClose asChild> */}
+            <LoginSignupAlert
+              trigger={
+                <Button
+                  variant={"outline"}
+                  className="w-full border-2 border-primary"
+                >
+                  Create a new account
+                </Button>
+              }
+            />
+            {/* </SheetClose> */}
           </div>
         </SheetFooter>
       </SheetContent>

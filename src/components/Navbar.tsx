@@ -12,6 +12,8 @@ import { NavDrawer } from "@/components/NavDrawer";
 import { NavbarRoute } from "@/interfaces";
 import { isLogged } from "@/utils";
 import { ProfileRoutes } from "@/components/ProfileRoutes";
+import { Button } from "@/components/ui/button";
+import { LoginSignupAlert } from "@/components/LoginSignupAlert";
 
 export const Navbar = () => {
   const navbarRoute: NavbarRoute[] = [
@@ -65,12 +67,15 @@ export const Navbar = () => {
           {isLogged ? (
             <ProfileRoutes />
           ) : (
-            <NavigateButton
-              btnText="Login"
-              variant="link"
-              method="push"
-              pageName="/login"
+            <LoginSignupAlert
+              trigger={<Button variant={"link"}>Login</Button>}
             />
+            // <NavigateButton
+            //   btnText="Login"
+            //   variant="link"
+            //   method="push"
+            //   pageName="/login"
+            // />
           )}
         </div>
 

@@ -1,7 +1,7 @@
 "use client";
 import { Alert } from "@/components/Alert";
 import { DatePicker } from "@/components/DatePicker";
-import { DropDownConfig } from "@/components/InputAndDropdown";
+import { InputAndDropdown } from "@/components/InputAndDropdown";
 import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
@@ -19,13 +19,21 @@ const page = () => {
     <>
       <TextInput
         error={error?.name ? true : false}
-        cut_handle={() => setDataHandle({ name: "" })}
+        cut_handle={() => {
+          setDataHandle({ name: "" });
+          setErrorHandle({ name: "Name is required!" });
+        }}
         inputProps={{
           autoComplete: "name",
           id,
           value: data?.name || "",
           placeholder: "Enter Name",
-          onChange: (e) => setDataHandle({ name: e.target.value }),
+          onChange: (e) => {
+            setDataHandle({ name: e.target.value });
+            setErrorHandle({
+              name: e.target.value ? undefined : "Name is required!",
+            });
+          },
         }}
       />
       {error?.name && (
@@ -40,7 +48,15 @@ const page = () => {
   const [avatarUrl, setAvatarUrl] = useState<any>(defaultAvatarUrl);
 
   const setDataHandle = (newData: UserDetails) => {
-    setData({ ...data, ...newData });
+    setData((pre) => {
+      return { ...pre, ...newData };
+    });
+  };
+
+  const setErrorHandle = (newError: UserDetails) => {
+    setError((pre) => {
+      return { ...pre, ...newError };
+    });
   };
 
   const imageAvatarHandle = ({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -55,9 +71,9 @@ const page = () => {
     }
   };
 
-  const connectFacebook = () => {
-    console.log("connectFacebook");
-  };
+  // const connectFacebook = () => {
+  //   console.log("connectFacebook");
+  // };
 
   const connectGoogle = () => {
     console.log("connectGoogle");
@@ -77,7 +93,7 @@ const page = () => {
 
     // const phoneNumber = `+92${data?.phoneNumber}`; // update phone number on send data to backend
 
-    setError({
+    setErrorHandle({
       name: !data?.name ? "Name is required!" : undefined,
       email: !data?.email
         ? "Email is required!"
@@ -85,7 +101,7 @@ const page = () => {
         ? "Please enter a valid email address"
         : undefined,
       phoneNumber: !data?.phoneNumber
-        ? "PhoneNumber is required!"
+        ? "Phone Number is required!"
         : data.phoneNumber.length !== 10
         ? "Please enter a valid PhoneNumber"
         : undefined,
@@ -187,7 +203,7 @@ const page = () => {
             <div className="flex flex-col gap-2 w-full">
               <h1 className="text-sm font-bold">Gender</h1>
               <div>
-                <DropDownConfig
+                <InputAndDropdown
                   placeholder={"Select your gender"}
                   selectValue={gender?.label || ""}
                   dropdownData={genderData}
@@ -240,7 +256,7 @@ const page = () => {
           <div className="flex flex-col gap-3">
             <h1
               className={`text-sm font-bold ${
-                error?.phoneNumber || (error?.email && "text-error")
+                error?.phoneNumber && error?.email && "text-error"
               }`}
             >
               Contact
@@ -258,7 +274,12 @@ const page = () => {
                   </div>
                   <TextInput
                     error={error?.phoneNumber ? true : false}
-                    cut_handle={() => setDataHandle({ phoneNumber: "" })}
+                    cut_handle={() => {
+                      setDataHandle({ phoneNumber: "" });
+                      setErrorHandle({
+                        phoneNumber: "Phone Number is required!",
+                      });
+                    }}
                     className="rounded-l-none"
                     inputProps={{
                       id: "phoneNumber",
@@ -270,11 +291,16 @@ const page = () => {
                         if (value.length == 0)
                           setDataHandle({ phoneNumber: "" });
                         for (let i = 0; i < value.length; i++)
-                          if (!Number.isNaN(Number(value.split("")[i])))
+                          if (!Number.isNaN(Number(value.split("")[i]))) {
                             setDataHandle({
                               phoneNumber: value.slice(0).split(" ").join(""),
                             });
-                          else setDataHandle({});
+                            setErrorHandle({
+                              phoneNumber: value
+                                ? undefined
+                                : "Phone Number is required!",
+                            });
+                          } else setDataHandle({});
                       },
                     }}
                   />
@@ -298,16 +324,25 @@ const page = () => {
             <div className="w-full">
               <TextInput
                 error={error?.email ? true : false}
-                cut_handle={() => setDataHandle({ email: "" })}
+                cut_handle={() => {
+                  setDataHandle({ email: "" });
+                  setErrorHandle({
+                    email: "Email is required!",
+                  });
+                }}
                 inputProps={{
                   autoComplete: "email",
                   id: "email",
                   value: data?.email || "",
                   placeholder: "Email",
-                  onChange: (e) =>
+                  onChange: (e) => {
                     setDataHandle({
                       email: e.target.value.split(" ").join(""),
-                    }),
+                    });
+                    setErrorHandle({
+                      email: e.target.value ? undefined : "Email is required!",
+                    });
+                  },
                 }}
               />
               {error?.email && (
@@ -328,7 +363,7 @@ const page = () => {
         <div className="flex flex-col gap-5 sm:pb-5 sm:border-b border-muted-foreground">
           <div className="flex flex-col gap-3">
             <h1 className="text-sm font-bold">Optional Information</h1>
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <div className="flex flex-col items-start w-full text-sm gap-1">
                 <h1 className="font-bold">Facebook</h1>
                 <h6 className="text-muted-foreground text-xs">
@@ -345,7 +380,7 @@ const page = () => {
                   Connect
                 </Button>
               </div>
-            </div>
+            </div> */}
             <div className="flex items-center gap-2">
               <div className="flex flex-col items-start w-full text-sm gap-1">
                 <h1 className="font-bold">Google</h1>

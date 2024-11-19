@@ -227,6 +227,10 @@ export interface AlertProps {
   canceClickHandle?: () => void;
 }
 
+export interface LoginSignupAlertProps {
+  trigger: ReactNode;
+}
+
 export interface DatePickerProps {
   sendDate: (date?: Date) => void;
 }
@@ -260,6 +264,7 @@ interface ConditionalOption {
   maxLength?: number;
   helpingText?: string;
   label?: string;
+  errorText?: string;
 }
 
 export interface NestedOptionGroup {
@@ -269,6 +274,7 @@ export interface NestedOptionGroup {
 
 export interface OptionGroup {
   label: string;
+  errorText?: string;
   values?: Option[];
   inputType?: "number" | "Text";
   helpingText?: string;
@@ -337,3 +343,11 @@ export interface DropDownConfigProps {
 export type DynamicData = {
   [key: string]: any;
 };
+
+export type LoginSignupScreen =
+  | "login"
+  | "join"
+  | "loginEmail"
+  | "joinEmail"
+  | "loginPhone"
+  | "joinPhone";

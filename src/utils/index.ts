@@ -380,7 +380,7 @@ export const categoryOptionsData: CategoryOptions[] = [
               ].map((label) => createOption(label)),
             },
             {
-              condition: ["others_make"],
+              condition: ["other_make"],
               inputType: "Text",
               maxLength: 15,
               helpingText:
@@ -514,7 +514,7 @@ export const categoryOptionsData: CategoryOptions[] = [
               values: ["Other"].map((label) => createOption(label)),
             },
             {
-              condition: ["others_make"],
+              condition: ["other_make"],
               inputType: "number",
               maxLength: 15,
               helpingText:
@@ -3237,7 +3237,7 @@ export const categoryOptionsData: CategoryOptions[] = [
   },
 ];
 
-export const isLogged: boolean = true;
+export const isLogged: boolean = false;
 
 export const route_data: RouteData[] = isLogged
   ? [
