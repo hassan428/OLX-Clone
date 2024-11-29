@@ -515,7 +515,7 @@ export const categoryOptionsData: CategoryOptions[] = [
             },
             {
               condition: ["other_make"],
-              inputType: "number",
+              inputType: "Text",
               maxLength: 15,
               helpingText:
                 "Please enter the model of the bike (e.g., specific models like CBR 500R).",

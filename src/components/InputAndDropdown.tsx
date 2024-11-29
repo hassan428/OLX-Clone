@@ -50,7 +50,7 @@ export const InputAndDropdown = ({
         autoComplete: id,
         id,
         maxLength,
-        value: selectValue,
+        value: selectValue || "",
         placeholder: `Enter ${placeholder}`,
         onChange,
       }}

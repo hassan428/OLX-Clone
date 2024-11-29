@@ -344,10 +344,28 @@ export type DynamicData = {
   [key: string]: any;
 };
 
-export type LoginSignupScreen =
+export type LoginSignupScreenName =
   | "login"
   | "join"
   | "loginEmail"
   | "joinEmail"
   | "loginPhone"
-  | "joinPhone";
+  | "joinPhone"
+  | "forgotPassPhone"
+  | "forgotPassEmail";
+
+export interface LoginSignupRoute {
+  current: LoginSignupScreenName;
+  previous?: LoginSignupScreenName;
+}
+
+export interface LoginSignup {
+  email?: string;
+  phoneNumber?: string;
+  password?: string;
+}
+
+export interface SubmitButton {
+  text: string;
+  onClick: () => void;
+}

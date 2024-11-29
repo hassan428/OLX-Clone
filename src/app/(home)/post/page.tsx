@@ -7,34 +7,32 @@ import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import {
-  SentCategory,
-  ImageItem,
-  Option,
-  AdDetails,
-  DynamicData,
-} from "@/interfaces";
+import { SentCategory, ImageItem, AdDetails, DynamicData } from "@/interfaces";
 import { categoryOptionsData, location_of_pakistan } from "@/utils";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 const page = () => {
   const [sortedImages, setSortedImages] = useState<File[]>([]);
-  // Function to handle sorted images passed from the child component
-  const handleSortedImages = (images: ImageItem[]) => {
-    const validImages = images.filter((img) => img.file !== null);
-    setSortedImages(validImages.map((img) => img.file!)); // Only store valid files
-    adsImageHandle();
-  };
-
-  const dynamicDataKeys: string[] = [];
-
-  const [location, setLocation] = useState<Option | null>(null);
   const [category, setCategory] = useState<SentCategory | null>(null);
   const [data, setData] = useState<AdDetails | null>(null);
   const [error, setError] = useState<AdDetails | null>(null);
   const [dynamicData, setDynamicData] = useState<DynamicData | null>(null);
   const [dynamicError, setDynamicError] = useState<DynamicData | null>(null);
+  const [priceInWords, setPriceInWords] = useState<string>("");
+
+  // Function to handle sorted images passed from the child component
+  const handleSortedImages = (images: ImageItem[]) => {
+    const validImages = images.filter((img) => img.file !== null);
+    setSortedImages(validImages.map((img) => img.file!)); // Only store valid files
+    adsImageHandle();
+    setErrorHandle({
+      image: validImages.length == 0 ? ["true"] : undefined,
+    });
+  };
+
+  const dynamicDataKeys: string[] = [];
+  const numRegix = /^[0-9]*$/;
 
   const setDataHandle = (newData: AdDetails) => {
     setData((pre) => {
@@ -86,32 +84,42 @@ const page = () => {
   }, [sortedImages]);
 
   useEffect(() => {
-    setDynamicData(null);
-  }, [category]);
-
-  const postNowHandle = () => {
-    dynamicDataKeys.map((value) => {
-      if (!dynamicData || !dynamicData[value]) {
-        setDynamicErrorHandle({ [value]: `${value} is required!` });
-      } else setDynamicErrorHandle({ [value]: undefined });
+    // setDynamicData(null);
+    setDynamicError(null);
+    setErrorHandle({
+      mainCategory: category?.main && undefined,
     });
-
     setDataHandle({
       mainCategory: category?.main,
       subCategory: category?.sub,
-      location: location?.value,
     });
+    dynamicDataKeys.map((value) =>
+      setDynamicDataHandle({
+        [value]: undefined,
+      })
+    );
+  }, [category]);
+
+  const postNowHandle = () => {
+    dynamicDataKeys.map((value) =>
+      setDynamicErrorHandle({
+        [value]:
+          !dynamicData || !dynamicData[value]
+            ? `${value} is required!`
+            : undefined,
+      })
+    );
+
     setErrorHandle({
       name: !data?.name ? "Name is required!" : undefined,
-      location: !location ? "Location is required!" : undefined,
+      location: !data?.location ? "Location is required!" : undefined,
       mainCategory: !category?.main
         ? "Please select a category to proceed."
         : undefined,
       image: sortedImages.length == 0 ? ["true"] : undefined,
       adTitle: !data?.adTitle
         ? "Ad Title is requird!"
-        : // console.log("data", data);
-        data.adTitle.length < 5
+        : data.adTitle.length < 5
         ? "A minimum length of 5 characters is allowed."
         : undefined,
       description: !data?.description
@@ -132,25 +140,46 @@ const page = () => {
         ? "Please enter a valid phone number"
         : undefined,
     });
-    if (error || dynamicError) {
-      // if (
-      //   (error &&
-      //     Object.values(error).find((val) => val == "" || undefined || null)) ||
-      //   (dynamicError &&
-      //     Object.values(dynamicError).find(
-      //       (val) => val == "" || undefined || null
-      //     ))
-      // )
+
+    const isError = (obj: any, changeCondition: boolean = false): boolean => {
+      return Object.values(obj).some((val) => {
+        if (changeCondition) {
+          return val !== undefined && val !== "" && val !== null;
+        } else {
+          return val === undefined || val === "" || val === null;
+        }
+      });
+    };
+
+    if (
+      isError({ ...data, ...dynamicData }) ||
+      isError({ ...error, ...dynamicError }, true)
+    ) {
       console.log("error hain");
     } else {
       console.log("error nahi hain");
     }
+    // console.log("data", data);
+    // console.log("dynamicData", dynamicData);
+    // console.log("dynamicError", dynamicError);
+    // console.log("error", error);
   };
-  console.log("dynamicDataKeys", dynamicDataKeys);
-  // console.log("data", data);
-  console.log("dynamicData", dynamicData);
-  console.log("dynamicError", dynamicError);
-  console.log("error", error);
+
+  // console.log("dynamicDataKeys", dynamicDataKeys);
+  const formatPrice = (num: number): string => {
+    if (num >= 10000000) {
+      // Convert to Crores
+      return `${(num / 10000000).toFixed(1)} Crore`;
+    } else if (num >= 100000) {
+      // Convert to Lakhs
+      return `${(num / 100000).toFixed(1)} Lac`;
+    } else if (num >= 1000) {
+      // Convert to Thousands
+      return `${(num / 1000).toFixed(1)} Thousand`;
+    } else {
+      return num.toString(); // Keep as is for smaller numbers
+    }
+  };
 
   return (
     <>
@@ -277,10 +306,10 @@ const page = () => {
                                   placeholder={label}
                                   maxLength={maxLength}
                                   selectValue={
-                                    dynamicData
-                                      ? dynamicData[label]?.label ||
-                                        dynamicData[label]
-                                      : ""
+                                    dynamicData &&
+                                    (dynamicData[label]?.label ||
+                                      dynamicData[label])
+                                    // : ""
                                   }
                                   cut_handle={() => {
                                     setDynamicErrorHandle({
@@ -292,45 +321,46 @@ const page = () => {
                                   }}
                                   onChange={(e) => {
                                     const { value } = e.target;
-                                    if (value.length == 0) {
-                                      setDynamicDataHandle({
-                                        [label]: "",
-                                      });
+
+                                    if (
+                                      (inputType == "number" &&
+                                        numRegix.test(value)) ||
+                                      inputType == "Text"
+                                    ) {
                                       setDynamicErrorHandle({
-                                        [label]: `${label} is required!`,
+                                        [label]: !value
+                                          ? `${label} is required!`
+                                          : undefined,
+                                      });
+                                      setDynamicDataHandle({
+                                        [label]: value,
                                       });
                                     }
-                                    for (let i = 0; i < value.length; i++)
-                                      if (
-                                        inputType == "number" &&
-                                        !Number.isNaN(
-                                          Number(value.split("")[i])
+
+                                    setDynamicErrorHandle({
+                                      [label]:
+                                        label == "Year" &&
+                                        value.length <= 4 &&
+                                        value.length >= 1 &&
+                                        !(
+                                          +value >= 1950 &&
+                                          +value <= new Date().getFullYear()
                                         )
-                                      ) {
-                                        setDynamicDataHandle({
-                                          [label]: value
-                                            .slice(0)
-                                            .split(" ")
-                                            .join(""),
-                                        });
-                                        setDynamicErrorHandle({
-                                          [label]: undefined,
-                                        });
-                                      } else if (inputType == "Text") {
-                                        setDynamicDataHandle({
-                                          [label]: e.target.value,
-                                        });
-                                        setDynamicErrorHandle({
-                                          [label]: undefined,
-                                        });
-                                      } else {
-                                        setDynamicDataHandle({});
-                                      }
+                                          ? `Please enter a valid year between 1900 and ${new Date().getFullYear()}.`
+                                          : !value
+                                          ? `${label} is required!`
+                                          : undefined,
+                                    });
                                   }}
                                   dropdownData={values}
                                   selectHandle={(selectOption) => {
-                                    const prev =
-                                      i === 0 ? {} : { ...dynamicData };
+                                    let prev = { ...dynamicData };
+
+                                    i === 0 &&
+                                      dynamicDataKeys.map((value) => {
+                                        prev[value] = undefined;
+                                      });
+
                                     setDynamicData({
                                       ...prev,
                                       [label]: selectOption,
@@ -343,7 +373,7 @@ const page = () => {
                                 {dynamicError && dynamicError[label] ? (
                                   <Text
                                     className="mt-1"
-                                    error={dynamicError[label]}
+                                    error
                                     text={errorText || dynamicError[label]}
                                   />
                                 ) : (
@@ -412,8 +442,7 @@ const page = () => {
                                           ]?.label ||
                                           dynamicData[
                                             label || nestedGroup.title
-                                          ] ||
-                                          ""
+                                          ]
                                         }
                                         maxLength={maxLength}
                                         id={label || nestedGroup.title}
@@ -429,44 +458,24 @@ const page = () => {
                                         }}
                                         onChange={(e) => {
                                           const { value } = e.target;
-                                          if (value.length == 0) {
+                                          if (
+                                            (inputType == "number" &&
+                                              numRegix.test(value)) ||
+                                            inputType == "Text"
+                                          ) {
                                             setDynamicErrorHandle({
-                                              [label || nestedGroup.title]: `${
-                                                label || nestedGroup.title
-                                              } is required!`,
+                                              [label || nestedGroup.title]:
+                                                !value
+                                                  ? `${
+                                                      label || nestedGroup.title
+                                                    } is required!`
+                                                  : undefined,
                                             });
                                             setDynamicDataHandle({
-                                              [label || nestedGroup.title]: "",
+                                              [label || nestedGroup.title]:
+                                                value,
                                             });
                                           }
-                                          for (let i = 0; i < value.length; i++)
-                                            if (
-                                              inputType == "number" &&
-                                              !Number.isNaN(
-                                                Number(value.split("")[i])
-                                              )
-                                            ) {
-                                              setDynamicDataHandle({
-                                                [label || nestedGroup.title]:
-                                                  value
-                                                    .slice(0)
-                                                    .split(" ")
-                                                    .join(""),
-                                              });
-                                              setDynamicErrorHandle({
-                                                [label || nestedGroup.title]:
-                                                  undefined,
-                                              });
-                                            } else if (inputType == "Text") {
-                                              setDynamicDataHandle({
-                                                [label || nestedGroup.title]:
-                                                  e.target.value,
-                                              });
-                                              setDynamicErrorHandle({
-                                                [label || nestedGroup.title]:
-                                                  undefined,
-                                              });
-                                            } else setDynamicDataHandle({});
                                         }}
                                         dropdownData={values}
                                         selectHandle={(selectOption) => {
@@ -488,11 +497,7 @@ const page = () => {
                                       ] ? (
                                         <Text
                                           className="mt-1"
-                                          error={
-                                            dynamicError[
-                                              label || nestedGroup.title
-                                            ]
-                                          }
+                                          error
                                           text={
                                             errorText ||
                                             dynamicError[
@@ -638,7 +643,7 @@ const page = () => {
                       options={location_of_pakistan.slice(1)}
                       placeholder={"Select Location"}
                       onSelect={(val) => {
-                        setLocation(val);
+                        setDataHandle({ location: val.value });
                         setErrorHandle({ location: undefined });
                       }}
                       isDefaultSelect={false}
@@ -691,23 +696,30 @@ const page = () => {
                       maxLength: 10,
                       onChange: (e) => {
                         const { value } = e.target;
-                        if (value.length == 0) {
-                          setErrorHandle({ price: "Price is required!" });
-                          setDataHandle({ price: "" });
+                        const minPrice = 200;
+                        if (numRegix.test(value)) {
+                          setPriceInWords(formatPrice(Number(value)));
+                          setErrorHandle({
+                            price: !value
+                              ? "Price is required!"
+                              : Number(value) < minPrice
+                              ? `Price should be greater than ${minPrice}`
+                              : undefined,
+                          });
+                          setDataHandle({
+                            price: value,
+                          });
                         }
-                        for (let i = 0; i < value.length; i++)
-                          if (!Number.isNaN(Number(value.split("")[i]))) {
-                            setErrorHandle({ price: undefined });
-                            setDataHandle({
-                              price: value.slice(0).split(" ").join(""),
-                            });
-                          } else setDataHandle({});
                       },
                     }}
                   />
                 </div>
-                {error?.price && (
-                  <Text className="mt-1" error={true} text={error.price} />
+                {(error?.price || priceInWords) && (
+                  <Text
+                    className="mt-1"
+                    error={error?.price ? true : false}
+                    text={error?.price || `PKR ${priceInWords}`}
+                  />
                 )}
               </div>
             </div>
@@ -787,30 +799,22 @@ const page = () => {
                         maxLength: 10,
                         onChange: (e) => {
                           const { value } = e.target;
-                          if (value.length == 0) {
-                            setDataHandle({ phoneNumber: "" });
+                          if (numRegix.test(value)) {
                             setErrorHandle({
-                              phoneNumber: "Phone Number is required!",
+                              phoneNumber: !value
+                                ? "Phone Number is required!"
+                                : undefined,
+                            });
+                            setDataHandle({
+                              phoneNumber: value,
                             });
                           }
-
-                          for (let i = 0; i < value.length; i++)
-                            if (!Number.isNaN(Number(value.split("")[i]))) {
-                              setErrorHandle({ phoneNumber: undefined });
-                              setDataHandle({
-                                phoneNumber: value.slice(0).split(" ").join(""),
-                              });
-                            } else setDataHandle({});
                         },
                       }}
                     />
                   </div>
                   {error?.phoneNumber && (
-                    <Text
-                      className="mt-1"
-                      error={true}
-                      text={error.phoneNumber}
-                    />
+                    <Text className="mt-1" error text={error.phoneNumber} />
                   )}
                 </div>
               </div>

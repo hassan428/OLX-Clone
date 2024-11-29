@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { IoCloseSharp } from "react-icons/io5";
+import { IoCloseSharp, IoEye, IoEyeOff } from "react-icons/io5";
 import { TextInputProps } from "@/interfaces";
 
 export const TextInput = ({
@@ -10,6 +10,9 @@ export const TextInput = ({
   error,
   className,
 }: TextInputProps) => {
+  const [passwordInput, setPasswordInput] = useState<string | undefined>(
+    "password"
+  );
   return (
     <div
       className={`border border-foreground rounded-md flex items-center justify-center w-full p-0.5 ${
@@ -18,11 +21,32 @@ export const TextInput = ({
     >
       <Input
         {...inputProps}
-        className="focus-visible:ring-0 placeholder:capitalize outline-0 border-0 rounded-none text-sm"
+        type={inputProps.type == "password" ? passwordInput : inputProps.type}
+        className="focus-visible:ring-0 placeholder:capitalize outline-0 border-0 rounded-r-none text-sm m-[1px]"
       />
       {inputProps.value && (
-        <IoCloseSharp className="cursor-pointer mr-1" onClick={cut_handle} />
+        <IoCloseSharp
+          size={15}
+          className="cursor-pointer mr-1"
+          onClick={cut_handle}
+        />
       )}
+      {inputProps.type == "password" &&
+        (passwordInput == "password" ? (
+          <IoEye
+            size={20}
+            className="cursor-pointer mr-1"
+            onClick={() => {
+              setPasswordInput("text");
+            }}
+          />
+        ) : (
+          <IoEyeOff
+            size={20}
+            className="cursor-pointer mr-1"
+            onClick={() => setPasswordInput("password")}
+          />
+        ))}
     </div>
   );
 };

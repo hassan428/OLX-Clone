@@ -15,7 +15,6 @@ import Image from "next/image";
 import { category_link } from "@/utils";
 import { useEffect, useState } from "react";
 import { CategoryDialogProps, SentCategory } from "@/interfaces";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 export const CategoryDialog = ({ sentCategoryData }: CategoryDialogProps) => {
