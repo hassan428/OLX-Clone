@@ -351,6 +351,7 @@ export type LoginSignupScreenName =
   | "joinEmail"
   | "loginPhone"
   | "joinPhone"
+  | "otp"
   | "forgotPassPhone"
   | "forgotPassEmail";
 
@@ -368,4 +369,9 @@ export interface LoginSignup {
 export interface SubmitButton {
   text: string;
   onClick: () => void;
+}
+
+export interface OTP_input_props {
+  onChange: (value: string) => void;
+  value: string;
 }

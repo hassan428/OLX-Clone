@@ -27,6 +27,25 @@ export const validateEmail = (email: string): boolean => {
   return emailRegex.test(email);
 };
 
+
+export const formatPrice = (num: number): string => {
+  if (num >= 10000000) {
+    // Convert to Crores
+    return `${(num / 10000000).toFixed(1)} Crore`;
+  } else if (num >= 100000) {
+    // Convert to Lakhs
+    return `${(num / 100000).toFixed(1)} Lac`;
+  } else if (num >= 1000) {
+    // Convert to Thousands
+    return `${(num / 1000).toFixed(1)} Thousand`;
+  } else {
+    return num.toString(); // Keep as is for smaller numbers
+  }
+};
+
+
+
+
 export const location_of_pakistan: LocationDataProps[] = [
   {
     province: createOption("Over All, Pakistan", "all"),

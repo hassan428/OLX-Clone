@@ -26,6 +26,7 @@ import { BsGoogle } from "react-icons/bs";
 import { ReactNode, useEffect, useState } from "react";
 import { TextInput } from "@/components/Text_input";
 import { Text } from "@/components/Text";
+import { OTP_input } from "@/components/OTP_input";
 
 const screenRoute: LoginSignupRoute[] = [
   {
@@ -61,15 +62,18 @@ const screenRoute: LoginSignupRoute[] = [
 ];
 
 export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
-  const [screen, setScreen] = useState<LoginSignupScreenName>("login");
+  const [screen, setScreen] = useState<LoginSignupScreenName>("otp");
   const [prevScreen, setPrevScreen] = useState<LoginSignupScreenName>("login");
   const [error, setError] = useState<LoginSignup | null>(null);
   const [data, setData] = useState<LoginSignup | null>(null);
+  const loginOrEmail = screen.slice(screen.length - 5);
+  const [otp, setOtp] = useState("");
 
   useEffect(() => {
     screenRoute.find(({ current, previous }) => {
       screen == current && previous && setPrevScreen(previous);
     });
+    setData(null);
   }, [screen]);
 
   const setDataHandle = (newData: LoginSignup) => {
@@ -276,6 +280,15 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     );
   };
 
+  const otpUi = (): ReactNode => {
+    return (
+      <>
+        <OTP_input value={otp} onChange={(value: string) => setOtp(value)} />
+        {submitButtonUi({ text: "Next", onClick: navigatePasswordHandle })}
+      </>
+    );
+  };
+
   const joinEmailUi = (): ReactNode => {
     return (
       <>
@@ -323,25 +336,20 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
   };
 
   const footer = (): ReactNode => {
+    const isLoginScreen: boolean = screen.includes("login");
     return (
       <AlertDialogFooter className="sm:justify-center">
-        {screen.includes("login") ? (
-          <Button
-            variant={"link"}
-            onClick={() => setScreen("join")}
-            className="font-semibold hover:underline"
-          >
-            New to LOX? Create an account
-          </Button>
-        ) : (
-          <Button
-            variant={"link"}
-            onClick={() => setScreen("login")}
-            className="font-semibold hover:underline"
-          >
-            Already have an account? Log in
-          </Button>
-        )}
+        <Button
+          variant={"link"}
+          onClick={() => setScreen(isLoginScreen ? "join" : "login")}
+          className="font-semibold hover:underline text-blue-500"
+        >
+          <AlertDialogDescription className="text-blue-500">
+            {isLoginScreen
+              ? "New to LOX? Create an account"
+              : "Already have an account? Log in"}
+          </AlertDialogDescription>
+        </Button>
       </AlertDialogFooter>
     );
   };
@@ -391,38 +399,35 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     <AlertDialog>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
 
-      <AlertDialogContent className="flex flex-col px-2 sm:px-5 py-5  max-sm:min-h-screen sm:max-h-[25rem] overflow-y-auto w-full sm:w-2/5 rounded-lg">
+      <AlertDialogContent className="flex flex-col px-2 sm:px-5 py-5  max-sm:min-h-screen sm:max-h-[30rem] overflow-y-auto w-full sm:w-2/5 rounded-lg">
         {/* Header */}
         <AlertDialogHeader className="sm:text-center">
           <div className="flex justify-center mb-2">
             <Logo />
           </div>
-          <AlertDialogTitle className="text-xl font-bold ">
+          <AlertDialogTitle className="text-xl sm:text-2xl font-bold my-2">
             {screen == "login"
               ? "Login into your LOX account"
               : screen == "join"
               ? "Create a new LOX account"
-              : screen == "joinEmail"
-              ? "Create account with Email"
-              : screen == "joinPhone"
-              ? "Create account with Phone"
-              : screen == "loginEmail"
-              ? "Log in with Email"
-              : screen == "loginPhone"
-              ? "Log in with Phone"
-              : screen == "forgotPassEmail" || screen == "forgotPassPhone"
+              : screen == "joinEmail" || screen == "joinPhone"
+              ? `Create account with ${loginOrEmail}`
+              : screen == "loginEmail" || screen == "loginPhone"
+              ? `Log in with ${loginOrEmail}`
+              : screen.includes("forgotPass")
               ? "Forgot Password"
               : ""}
           </AlertDialogTitle>
         </AlertDialogHeader>
 
-        <div className="flex flex-col flex-1 sm:gap-3 gap-2 space-y-4 text-xs">
+        <div className="flex flex-col flex-1 sm:gap-3 gap-2 space-y-4 text-sm">
           {/* Scrollable Content */}
           {(screen === "login" || screen === "join") && loginSignupUi(screen)}
           {screen === "loginEmail" && loginEmailUi()}
           {screen === "loginPhone" && loginPhoneUi()}
           {screen === "joinEmail" && joinEmailUi()}
           {screen === "joinPhone" && joinPhoneUi()}
+          {screen === "otp" && otpUi()}
           {screen === "forgotPassEmail" && forgotPassEmailUi()}
           {screen === "forgotPassPhone" && forgotPassPhoneUi()}
         </div>

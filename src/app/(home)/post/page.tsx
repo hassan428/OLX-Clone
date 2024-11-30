@@ -8,7 +8,11 @@ import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { SentCategory, ImageItem, AdDetails, DynamicData } from "@/interfaces";
-import { categoryOptionsData, location_of_pakistan } from "@/utils";
+import {
+  categoryOptionsData,
+  formatPrice,
+  location_of_pakistan,
+} from "@/utils";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
@@ -100,6 +104,16 @@ const page = () => {
     );
   }, [category]);
 
+  const isError = (obj: any, changeCondition: boolean = false): boolean => {
+    return Object.values(obj).some((val) => {
+      if (changeCondition) {
+        return val !== undefined && val !== "" && val !== null;
+      } else {
+        return val === undefined || val === "" || val === null;
+      }
+    });
+  };
+
   const postNowHandle = () => {
     dynamicDataKeys.map((value) =>
       setDynamicErrorHandle({
@@ -141,16 +155,6 @@ const page = () => {
         : undefined,
     });
 
-    const isError = (obj: any, changeCondition: boolean = false): boolean => {
-      return Object.values(obj).some((val) => {
-        if (changeCondition) {
-          return val !== undefined && val !== "" && val !== null;
-        } else {
-          return val === undefined || val === "" || val === null;
-        }
-      });
-    };
-
     if (
       isError({ ...data, ...dynamicData }) ||
       isError({ ...error, ...dynamicError }, true)
@@ -166,20 +170,6 @@ const page = () => {
   };
 
   // console.log("dynamicDataKeys", dynamicDataKeys);
-  const formatPrice = (num: number): string => {
-    if (num >= 10000000) {
-      // Convert to Crores
-      return `${(num / 10000000).toFixed(1)} Crore`;
-    } else if (num >= 100000) {
-      // Convert to Lakhs
-      return `${(num / 100000).toFixed(1)} Lac`;
-    } else if (num >= 1000) {
-      // Convert to Thousands
-      return `${(num / 1000).toFixed(1)} Thousand`;
-    } else {
-      return num.toString(); // Keep as is for smaller numbers
-    }
-  };
 
   return (
     <>

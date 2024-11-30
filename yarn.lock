@@ -3069,6 +3069,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"input-otp@npm:latest":
+  version: 1.4.1
+  resolution: "input-otp@npm:1.4.1"
+  peerDependencies:
+    react: ^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc
+    react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc
+  checksum: c3a58d28b99268921d0fc528f5e845500be5da068ecf12b617cf3a8bf33ef2ee7226d1cffedd2e591a2dea7dc7fa5d1418a797c0db98223391ee26d640b20096
+  languageName: node
+  linkType: hard
+
 "internal-slot@npm:^1.0.4, internal-slot@npm:^1.0.7":
   version: 1.0.7
   resolution: "internal-slot@npm:1.0.7"
@@ -3609,6 +3619,7 @@ __metadata:
     embla-carousel-react: ^8.3.0
     eslint: ^8
     eslint-config-next: 14.2.5
+    input-otp: latest
     lucide-react: ^0.428.0
     next: 14.2.5
     next-themes: ^0.3.0
