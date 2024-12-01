@@ -15,8 +15,8 @@ export const TextInput = ({
   );
   return (
     <div
-      className={`border border-foreground rounded-md flex items-center justify-center w-full p-0.5 ${
-        error && "text-error border-error"
+      className={`border rounded-md flex items-center justify-center w-full p-0.5 ${
+        error ? "text-error border-error" : "border-foreground"
       } ${className}`}
     >
       <Input

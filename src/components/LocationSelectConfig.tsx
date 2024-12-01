@@ -57,8 +57,8 @@ export const LocationSelectConfig = ({
       {/* Dropdown button */}
       <button
         onClick={toggleDropdown}
-        className={`w-full border border-foreground p-3 rounded-md flex items-center justify-between shadow-sm focus:outline-none transition-all ${
-          error && "text-error border-error"
+        className={`w-full border p-3 rounded-md flex items-center justify-between shadow-sm focus:outline-none transition-all ${
+          error ? "text-error border-error" : "border-foreground"
         }`}
       >
         <h1>{selectedOption?.label || defaultSelect?.label || placeholder}</h1>

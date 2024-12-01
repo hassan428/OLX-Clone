@@ -9,9 +9,9 @@ import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { Text } from "@/components//Text";
 import { OTP_input_props } from "@/interfaces";
 
-export const OTP_input = ({ onChange, value }: OTP_input_props) => {
+export const OTP_input = ({ onChange, value, errorText }: OTP_input_props) => {
   return (
-    <div className="flex flex-col justify-center space-y-2">
+    <div className="flex flex-col gap-2 items-center">
       <InputOTP
         maxLength={6}
         value={value}
@@ -24,15 +24,17 @@ export const OTP_input = ({ onChange, value }: OTP_input_props) => {
             .fill("")
             .map((_, i) => (
               <InputOTPSlot
-                className="h-[50px] w-[50px] border border-foreground"
+                className="h-14 w-11 text-lg border border-foreground"
                 index={i}
               />
             ))}
         </InputOTPGroup>
       </InputOTP>
       <Text
+        error={!!errorText}
         text={`${
-          value ? `You entered: ${value}` : "Enter your one-time password."
+          errorText ||
+          (value ? `You entered: ${value}` : "Enter your one-time password.")
         }`}
       />
     </div>

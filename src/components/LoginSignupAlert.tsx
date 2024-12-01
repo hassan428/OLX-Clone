@@ -137,7 +137,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         <h1 className="font-bold">Email address</h1>
         <div>
           <TextInput
-            error={error?.email ? true : false}
+            error={!!error?.email}
             cut_handle={() => {
               setDataHandle({ email: "" });
               setErrorHandle({ email: "email is required!" });
@@ -178,7 +178,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
               <h1>+92</h1>
             </div>
             <TextInput
-              error={error?.phoneNumber ? true : false}
+              error={!!error?.phoneNumber}
               cut_handle={() => {
                 setDataHandle({ phoneNumber: "" });
                 setErrorHandle({
@@ -225,7 +225,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         <h1 className="font-bold">Password</h1>
         <div>
           <TextInput
-            error={error?.password ? true : false}
+            error={!!error?.password}
             cut_handle={() => {
               setDataHandle({ password: "" });
               setErrorHandle({ password: "password is required!" });
@@ -283,8 +283,36 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
   const otpUi = (): ReactNode => {
     return (
       <>
+        <h1 className="text-center text-sm">
+          You will recieve a 6 digit code through a SMS on
+          <strong> +923123456789</strong>
+        </h1>
         <OTP_input value={otp} onChange={(value: string) => setOtp(value)} />
-        {submitButtonUi({ text: "Next", onClick: navigatePasswordHandle })}
+
+        <Button
+          variant={"link"}
+          onClick={resendCodeBySMSHandle}
+          className="font-semibold hover:underline text-blue-500"
+        >
+          <AlertDialogDescription className="text-blue-500">
+            Resend Code by SMS
+          </AlertDialogDescription>
+        </Button>
+
+        <div className="flex flex-col items-center">
+          <h1 className="text-sm">
+            You will recieve a 6 digit code through a SMS on
+          </h1>
+          <Button
+            variant={"link"}
+            onClick={resendCodeByCallHandle}
+            className="font-semibold hover:underline text-blue-500"
+          >
+            <AlertDialogDescription className="text-blue-500">
+              Resend Code by Call
+            </AlertDialogDescription>
+          </Button>
+        </div>
       </>
     );
   };
@@ -394,6 +422,8 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
   const loginWithPhoneHandle = () => {};
   const navigatePasswordHandle = () => {};
   const navigateOTPVerifyHandle = () => {};
+  const resendCodeBySMSHandle = () => {};
+  const resendCodeByCallHandle = () => {};
 
   return (
     <AlertDialog>
@@ -416,6 +446,8 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
               ? `Log in with ${loginOrEmail}`
               : screen.includes("forgotPass")
               ? "Forgot Password"
+              : screen == "otp"
+              ? "Enter confirmation code"
               : ""}
           </AlertDialogTitle>
         </AlertDialogHeader>
@@ -432,7 +464,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
           {screen === "forgotPassPhone" && forgotPassPhoneUi()}
         </div>
 
-        {footer()}
+        {screen !== "otp" && footer()}
 
         {backButtonUi()}
         {/* Close Button */}

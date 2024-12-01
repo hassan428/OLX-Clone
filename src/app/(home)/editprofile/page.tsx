@@ -18,7 +18,7 @@ const page = () => {
   const nameInput = (id: string) => (
     <>
       <TextInput
-        error={error?.name ? true : false}
+        error={!!error?.name}
         cut_handle={() => {
           setDataHandle({ name: "" });
           setErrorHandle({ name: "Name is required!" });
@@ -36,9 +36,7 @@ const page = () => {
           },
         }}
       />
-      {error?.name && (
-        <Text error={error?.name ? true : false} text={error.name} />
-      )}
+      {error?.name && <Text error={!!error?.name} text={error.name} />}
     </>
   );
 
@@ -208,12 +206,12 @@ const page = () => {
                   selectValue={gender?.label || ""}
                   dropdownData={genderData}
                   selectHandle={setGender}
-                  error={error?.gender ? true : false}
+                  error={!!error?.gender}
                 />
                 {error?.gender && (
                   <Text
                     className="mt-1"
-                    error={error.gender ? true : false}
+                    error={!!error.gender}
                     text={error.gender}
                   />
                 )}
@@ -273,7 +271,7 @@ const page = () => {
                     <h1 className="">+92</h1>
                   </div>
                   <TextInput
-                    error={error?.phoneNumber ? true : false}
+                    error={!!error?.phoneNumber}
                     cut_handle={() => {
                       setDataHandle({ phoneNumber: "" });
                       setErrorHandle({
@@ -308,7 +306,7 @@ const page = () => {
                 {error?.phoneNumber && (
                   <Text
                     className="mt-1"
-                    error={error.phoneNumber ? true : false}
+                    error={!!error.phoneNumber}
                     text={error.phoneNumber}
                   />
                 )}
@@ -323,7 +321,7 @@ const page = () => {
           <div className="flex items-center gap-2">
             <div className="w-full">
               <TextInput
-                error={error?.email ? true : false}
+                error={!!error?.email}
                 cut_handle={() => {
                   setDataHandle({ email: "" });
                   setErrorHandle({
@@ -348,7 +346,7 @@ const page = () => {
               {error?.email && (
                 <Text
                   className="mt-1"
-                  error={error?.email ? true : false}
+                  error={!!error?.email}
                   text={error.email}
                 />
               )}

@@ -264,7 +264,6 @@ interface ConditionalOption {
   maxLength?: number;
   helpingText?: string;
   label?: string;
-  errorText?: string;
 }
 
 export interface NestedOptionGroup {
@@ -274,7 +273,6 @@ export interface NestedOptionGroup {
 
 export interface OptionGroup {
   label: string;
-  errorText?: string;
   values?: Option[];
   inputType?: "number" | "Text";
   helpingText?: string;
@@ -374,4 +372,5 @@ export interface SubmitButton {
 export interface OTP_input_props {
   onChange: (value: string) => void;
   value: string;
+  errorText?: string;
 }

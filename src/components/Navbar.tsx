@@ -14,6 +14,7 @@ import { isLogged } from "@/utils";
 import { ProfileRoutes } from "@/components/ProfileRoutes";
 import { Button } from "@/components/ui/button";
 import { LoginSignupAlert } from "@/components/LoginSignupAlert";
+import { BackToTopBtn } from "@/components/BackToTopBtn";
 
 export const Navbar = () => {
   const navbarRoute: NavbarRoute[] = [
@@ -80,6 +81,7 @@ export const Navbar = () => {
         </div>
 
         <Sell_btn />
+        <BackToTopBtn />
       </nav>
     </nav>
   );

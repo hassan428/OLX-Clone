@@ -75,8 +75,8 @@ export const InputAndDropdown = ({
   ) : (
     <div ref={dropdownRef} className="w-full text-sm">
       <div
-        className={`border border-foreground rounded-md capitalize ${
-          error && "border-error text-error"
+        className={`border rounded-md capitalize ${
+          error ? "border-error text-error" : "border-foreground"
         }  flex items-center cursor-pointer justify-between p-2 `}
         onClick={() => setIsOpen(!isOpen)}
       >

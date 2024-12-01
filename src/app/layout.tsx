@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "next-themes";
-import { BackToTopBtn } from "@/components/BackToTopBtn";
 import { CategoryText } from "@/components/CategoryLink";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -47,7 +46,6 @@ const RootLayout: FC<LayoutProps> = ({ children }) => {
 
             {children}
           </div>
-          <BackToTopBtn />
           <div className="">
             <Footer />
           </div>
