@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "next-themes";
 import { CategoryText } from "@/components/CategoryLink";
 import { Toaster } from "@/components/ui/toaster";
+import { Sell_btn } from "@/components/Sell_btn";
 
 const fontSans = FontSans({
   subsets: ["cyrillic-ext"],
@@ -41,6 +42,8 @@ const RootLayout: FC<LayoutProps> = ({ children }) => {
           disableTransitionOnChange
         >
           <div>
+            <Sell_btn className="fixed bottom-3 left-1/2 transform -translate-x-1/2 xmd:hidden z-50" />
+
             <Navbar />
             <CategoryText />
 

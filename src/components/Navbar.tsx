@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { Logo } from "@/components/Logo";
 import { Sell_btn } from "@/components/Sell_btn";
 import { NavScreenBtn } from "@/components/NavScreenBtn";
@@ -15,8 +16,32 @@ import { ProfileRoutes } from "@/components/ProfileRoutes";
 import { Button } from "@/components/ui/button";
 import { LoginSignupAlert } from "@/components/LoginSignupAlert";
 import { BackToTopBtn } from "@/components/BackToTopBtn";
-
 export const Navbar = () => {
+  const [isVisible, setIsVisible] = useState(true); // Navbar visibility state
+  const [lastScrollY, setLastScrollY] = useState(0); // To track previous scroll position
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        // User is scrolling down and past 50px
+        setIsVisible(false);
+      } else {
+        // User is scrolling up
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY); // Update the last scroll position
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll); // Cleanup event listener
+    };
+  }, [lastScrollY]);
+
   const navbarRoute: NavbarRoute[] = [
     {
       Icon: IoCarSportOutline,
@@ -33,7 +58,11 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="bg-background p-3 space-y-2 max-w-full sm:sticky top-0 z-50">
+    <nav
+      className={`bg-background p-3 space-y-2 max-w-full sticky top-0 z-50 transition-transform duration-300 ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
       <nav className="flex md:justify-start justify-between items-center md:gap-8 ">
         <div className="xmd:hidden">
           <NavDrawer />
@@ -69,7 +98,11 @@ export const Navbar = () => {
             <ProfileRoutes />
           ) : (
             <LoginSignupAlert
-              trigger={<Button variant={"link"}>Login</Button>}
+              trigger={
+                <Button variant={"link"} className="font-bold">
+                  Login
+                </Button>
+              }
             />
             // <NavigateButton
             //   btnText="Login"
@@ -80,9 +113,11 @@ export const Navbar = () => {
           )}
         </div>
 
-        <Sell_btn />
-        <BackToTopBtn />
+        <Sell_btn className="max-xmd:hidden" />
       </nav>
+      <div className="fixed left-1/2 -translate-x-1/2 z-50">
+        <BackToTopBtn className={!isVisible ? "mt-2" : ""} />
+      </div>
     </nav>
   );
 };

@@ -19,13 +19,14 @@ export const OTP_input = ({ onChange, value, errorText }: OTP_input_props) => {
         pattern={REGEXP_ONLY_DIGITS}
         containerClassName="w-max"
       >
-        <InputOTPGroup className="gap-2 w-full">
+        <InputOTPGroup className="gap-1 sm:gap-2 w-full">
           {Array(6)
             .fill("")
             .map((_, i) => (
               <InputOTPSlot
                 className="h-14 w-11 text-lg border border-foreground"
                 index={i}
+                key={i}
               />
             ))}
         </InputOTPGroup>

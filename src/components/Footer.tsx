@@ -26,17 +26,16 @@ const footerdata: FooterLinkSection[] = [
     ],
   },
   {
-    title: "About Us",
+    title: "About",
     data: [
       { text: "LOX Blog", href: "blog" },
-      { text: "Contact Us", href: "contact" },
+      { text: "Contact", href: "contact" },
     ],
   },
   {
     title: "LOX",
     data: [
       { text: "Help", href: "help" },
-      { text: "Terms of use", href: "terms" },
       { text: "Privacy Policy", href: "privacypolicy" },
     ],
   },
@@ -72,9 +71,9 @@ export const Footer = () => {
           ))}
         </div>
         <div>
-          <div className="md:block w-full flex justify-between items-center border-y md:border-0 border-border p-3 cursor-pointer">
+          <div className="md:flex-col w-full flex justify-between items-center border-y md:border-0 border-border py-3 px-2 cursor-pointer">
             <h1 className="text-base font-bold uppercase">Follow us</h1>
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center flex-wrap">
               {socialMediaLinks.map(({ Icon, href }, i) => (
                 <Link key={i} href={href} target="_blank">
                   <Icon size={20} />
@@ -82,7 +81,7 @@ export const Footer = () => {
               ))}
             </div>
           </div>
-          <div className="flex gap-3 p-3 items-center w-full flex-wrap justify-center">
+          <div className="flex gap-2 p-3 items-center w-full flex-wrap justify-center">
             {appImage.map(({ src, href }, i) => (
               <Link href={href} key={i} target="_blank">
                 <Image
@@ -90,7 +89,7 @@ export const Footer = () => {
                   alt={src}
                   width={150}
                   height={150}
-                  className="object-cover w-20 lg:w-28 h-auto"
+                  className="object-cover w-24 lg:w-28 h-auto"
                 />
               </Link>
             ))}
@@ -98,7 +97,7 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="p-3 text-sm bg-green-500 text-center">
+      <div className="p-3 text-xs sm:text-sm bg-green-500 text-center">
         <strong>
           Free Classifieds in Pakistan . © {new Date().getFullYear()} LOX
         </strong>

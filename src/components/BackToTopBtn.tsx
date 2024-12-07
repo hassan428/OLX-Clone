@@ -1,12 +1,15 @@
 "use client";
+import { BackToTopButtonProps } from "@/interfaces";
 import { useState, useEffect } from "react";
+import { IoIosArrowUp } from "react-icons/io";
 
-export function BackToTopBtn() {
+export const BackToTopBtn = ({ className }: BackToTopButtonProps) => {
   const [showBtn, setShowBtn] = useState<Boolean>(false);
 
   useEffect(() => {
     const showBtnHandle = () => {
-      window.scrollY >= 300 ? setShowBtn(true) : setShowBtn(false);
+      setShowBtn(window.scrollY >= 300);
+      // window.scrollY >= 300 ? setShowBtn(true) : setShowBtn(false);
     };
 
     window.addEventListener("scroll", showBtnHandle);
@@ -25,10 +28,11 @@ export function BackToTopBtn() {
     showBtn && (
       <button
         onClick={scrollToTop}
-        className="fixed bottom-5 right-5 bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 transition duration-300"
+        className={`bg-background flex items-center text-xs border hover:border-2 border-foreground px-4 py-2 rounded-full shadow-lg transition duration-300 ${className}`}
       >
-        Back to Top
+        <IoIosArrowUp size={20} />
+        <h1>Back to Top</h1>
       </button>
     )
   );
-}
+};

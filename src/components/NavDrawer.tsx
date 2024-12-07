@@ -46,18 +46,20 @@ export function NavDrawer() {
             />
 
             <div>
-              <h1 className={isLogged ? "text-base" : ""}>
+              <SheetDescription
+                className={`text-foreground ${isLogged && "text-base"}`}
+              >
                 {isLogged ? "Hello," : "Enter to your account"}
-              </h1>
-              <h1
-                className={
+              </SheetDescription>
+              <SheetDescription
+                className={`text-foreground ${
                   username
                     ? "font-bold text-lg"
                     : "underline underline-offset-2"
-                }
+                }`}
               >
                 {username || "Log in to your account"}
-              </h1>
+              </SheetDescription>
             </div>
           </div>
           {isLogged && (

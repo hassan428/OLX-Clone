@@ -27,6 +27,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { TextInput } from "@/components/Text_input";
 import { Text } from "@/components/Text";
 import { OTP_input } from "@/components/OTP_input";
+import { Loader } from "@/components/Loader";
 
 const screenRoute: LoginSignupRoute[] = [
   {
@@ -62,18 +63,19 @@ const screenRoute: LoginSignupRoute[] = [
 ];
 
 export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
-  const [screen, setScreen] = useState<LoginSignupScreenName>("otp");
+  const [screen, setScreen] = useState<LoginSignupScreenName>("login");
   const [prevScreen, setPrevScreen] = useState<LoginSignupScreenName>("login");
   const [error, setError] = useState<LoginSignup | null>(null);
   const [data, setData] = useState<LoginSignup | null>(null);
+  const [otp, setOtp] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const loginOrEmail = screen.slice(screen.length - 5);
-  const [otp, setOtp] = useState("");
 
   useEffect(() => {
     screenRoute.find(({ current, previous }) => {
       screen == current && previous && setPrevScreen(previous);
     });
-    setData(null);
+    if (screen.includes("login") || screen.includes("join")) setData(null);
   }, [screen]);
 
   const setDataHandle = (newData: LoginSignup) => {
@@ -146,7 +148,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
               type: "email",
               placeholder: "Enter email address",
               autoComplete: "email",
-              value: data?.email,
+              value: data?.email || "",
               id: "email",
               onChange: ({ target }) => {
                 setErrorHandle({
@@ -254,6 +256,43 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     );
   };
 
+  const confirmPasswordInput = (): ReactNode => {
+    return (
+      <div className="flex flex-col gap-1">
+        <h1 className="font-bold">Confirm Password</h1>
+        <div>
+          <TextInput
+            error={!!error?.confirmPassword}
+            cut_handle={() => {
+              setDataHandle({ confirmPassword: "" });
+              setErrorHandle({
+                confirmPassword: "Confirm Password is required!",
+              });
+            }}
+            inputProps={{
+              type: "password",
+              placeholder: "Enter Confirm password",
+              autoComplete: "new-password",
+              value: data?.confirmPassword,
+              id: "confirmPassword",
+              onChange: ({ target }) => {
+                setErrorHandle({
+                  [target.id]: target.value
+                    ? undefined
+                    : `confirm password is required!`,
+                });
+                setDataHandle({ [target.id]: target.value });
+              },
+            }}
+          />
+          {error?.confirmPassword && (
+            <Text error text={error.confirmPassword} className="mt-1" />
+          )}
+        </div>
+      </div>
+    );
+  };
+
   const loginEmailUi = (): ReactNode => {
     return (
       <>
@@ -284,35 +323,46 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     return (
       <>
         <h1 className="text-center text-sm">
-          You will recieve a 6 digit code through a SMS on
-          <strong> +923123456789</strong>
+          You will receive a 6-digit code through a{" "}
+          {screen === "otpEmail" ? (
+            <>
+              Email Address on <strong>{data?.email}</strong>
+            </>
+          ) : (
+            <>
+              SMS on <strong>{data?.phoneNumber}</strong>
+            </>
+          )}
         </h1>
-        <OTP_input value={otp} onChange={(value: string) => setOtp(value)} />
 
-        <Button
-          variant={"link"}
-          onClick={resendCodeBySMSHandle}
-          className="font-semibold hover:underline text-blue-500"
-        >
-          <AlertDialogDescription className="text-blue-500">
-            Resend Code by SMS
-          </AlertDialogDescription>
-        </Button>
+        <OTP_input
+          value={otp}
+          onChange={(value: string) => {
+            value.length == 6 && OTPVerifyHandle();
+            setOtp(value);
+          }}
+        />
+        {LinkButtonUi({
+          text: `Resend Code by ${
+            screen === "otpEmail" ? "Email Address" : "SMS"
+          }`,
+          onClick:
+            screen === "otpEmail"
+              ? resendCodeByEmailHandle
+              : resendCodeBySMSHandle,
+        })}
 
-        <div className="flex flex-col items-center">
-          <h1 className="text-sm">
-            You will recieve a 6 digit code through a SMS on
-          </h1>
-          <Button
-            variant={"link"}
-            onClick={resendCodeByCallHandle}
-            className="font-semibold hover:underline text-blue-500"
-          >
-            <AlertDialogDescription className="text-blue-500">
-              Resend Code by Call
-            </AlertDialogDescription>
-          </Button>
-        </div>
+        {screen !== "otpEmail" && (
+          <div className="flex flex-col items-center">
+            <h1 className="text-sm text-center">
+              If you have not recieved the code by SMS, please request
+            </h1>
+            {LinkButtonUi({
+              text: "Resend Code by Call",
+              onClick: resendCodeByCallHandle,
+            })}
+          </div>
+        )}
       </>
     );
   };
@@ -321,7 +371,10 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     return (
       <>
         {emailInput()}
-        {submitButtonUi({ text: "Next", onClick: navigatePasswordHandle })}
+        {submitButtonUi({
+          text: "Next",
+          onClick: navigatePasswordScreenHandle,
+        })}
       </>
     );
   };
@@ -330,7 +383,10 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     return (
       <>
         {phoneInput()}
-        {submitButtonUi({ text: "Next", onClick: navigatePasswordHandle })}
+        {submitButtonUi({
+          text: "Next",
+          onClick: navigatePasswordScreenHandle,
+        })}
       </>
     );
   };
@@ -344,7 +400,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         </h1>
         {emailInput()}
 
-        {submitButtonUi({ text: "Next", onClick: navigateOTPVerifyHandle })}
+        {submitButtonUi({ text: "Next", onClick: OTPEmailScreenHandle })}
       </>
     );
   };
@@ -358,7 +414,28 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         </h1>
         {phoneInput()}
 
-        {submitButtonUi({ text: "Next", onClick: navigateOTPVerifyHandle })}
+        {submitButtonUi({ text: "Next", onClick: OTPPhoneScreenHandle })}
+      </>
+    );
+  };
+
+  const createPassUi = (): ReactNode => {
+    return (
+      <>
+        <h1 className="text-sm">
+          To secure your account and log in faster, choose a strong password you
+          haven’t used before.
+        </h1>
+
+        <div className="flex flex-col gap-3 my-2">
+          {passwordInput()}
+          {confirmPasswordInput()}
+        </div>
+
+        {submitButtonUi({
+          text: "Create Account",
+          onClick: createAccountHandle,
+        })}
       </>
     );
   };
@@ -401,7 +478,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       !(screen == "join" || screen == "login") && (
         <Button
           variant={"outline"}
-          className="bg-foreground text-background absolute top-1 left-1 sm:top-4 sm:left-4 mt-2 sm:mt-0"
+          className="bg-primary text-background absolute top-1 left-1 sm:top-4 sm:left-4 mt-2 sm:mt-0"
           onClick={() => setScreen(prevScreen)}
         >
           <RiArrowLeftWideLine size={20} />
@@ -418,19 +495,48 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     );
   };
 
+  const LinkButtonUi = ({ text, onClick }: SubmitButton): ReactNode => {
+    return (
+      <Button
+        variant={"link"}
+        onClick={onClick}
+        className="font-semibold hover:underline text-blue-500"
+      >
+        <AlertDialogDescription className="text-blue-500">
+          {text}
+        </AlertDialogDescription>
+      </Button>
+    );
+  };
+
   const loginWithEmailHandle = () => {};
   const loginWithPhoneHandle = () => {};
-  const navigatePasswordHandle = () => {};
-  const navigateOTPVerifyHandle = () => {};
+  const createAccountHandle = () => {};
+  const navigatePasswordScreenHandle = () => {
+    setScreen("createPass");
+  };
+  const OTPEmailScreenHandle = () => {
+    setScreen("otpEmail");
+  };
+
+  const OTPPhoneScreenHandle = () => {
+    setScreen("otpPhone");
+  };
+  const OTPVerifyHandle = () => {
+    console.log("OTPVerifyHandle");
+  };
   const resendCodeBySMSHandle = () => {};
   const resendCodeByCallHandle = () => {};
+  const resendCodeByEmailHandle = () => {};
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
 
-      <AlertDialogContent className="flex flex-col px-2 sm:px-5 py-5  max-sm:min-h-screen sm:max-h-[30rem] overflow-y-auto w-full sm:w-2/5 rounded-lg">
+      <AlertDialogContent className="flex flex-col px-2 sm:px-5 py-5  max-sm:min-h-screen sm:max-h-[31rem] overflow-y-auto w-full sm:w-2/4 xmd:w-2/5 rounded-lg">
         {/* Header */}
+        {loading && <Loader />}
+
         <AlertDialogHeader className="sm:text-center">
           <div className="flex justify-center mb-2">
             <Logo />
@@ -446,29 +552,32 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
               ? `Log in with ${loginOrEmail}`
               : screen.includes("forgotPass")
               ? "Forgot Password"
-              : screen == "otp"
+              : screen == "createPass"
+              ? "Create a password"
+              : screen.includes("otp")
               ? "Enter confirmation code"
               : ""}
           </AlertDialogTitle>
         </AlertDialogHeader>
 
-        <div className="flex flex-col flex-1 sm:gap-3 gap-2 space-y-4 text-sm">
+        <div className="flex flex-col flex-1 sm:gap-3 gap-3 text-sm">
           {/* Scrollable Content */}
           {(screen === "login" || screen === "join") && loginSignupUi(screen)}
           {screen === "loginEmail" && loginEmailUi()}
           {screen === "loginPhone" && loginPhoneUi()}
           {screen === "joinEmail" && joinEmailUi()}
           {screen === "joinPhone" && joinPhoneUi()}
-          {screen === "otp" && otpUi()}
+          {screen.includes("otp") && otpUi()}
+          {screen === "createPass" && createPassUi()}
           {screen === "forgotPassEmail" && forgotPassEmailUi()}
           {screen === "forgotPassPhone" && forgotPassPhoneUi()}
         </div>
 
-        {screen !== "otp" && footer()}
+        {!screen.includes("otp") && footer()}
 
         {backButtonUi()}
         {/* Close Button */}
-        <AlertDialogCancel className="bg-foreground text-background absolute top-1 right-1 sm:top-4 sm:right-4">
+        <AlertDialogCancel className="bg-primary text-background absolute top-1 right-1 sm:top-4 sm:right-4">
           <IoCloseSharp size={20} />
         </AlertDialogCancel>
       </AlertDialogContent>
