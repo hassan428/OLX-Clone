@@ -20,7 +20,7 @@ const footerdata: FooterLinkSection[] = [
     title: "Trending Searches",
     data: [
       { text: "Vehicles", href: "/category/vehicles" },
-      { text: "Furniture & Home Decorator", href: "/category/furniture" },
+      { text: "Furniture", href: "/category/furniture" },
       { text: "Kids", href: "/category/kids" },
       { text: "Birds", href: "/category/birds" },
     ],
