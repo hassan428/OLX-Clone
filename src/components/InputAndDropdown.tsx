@@ -62,7 +62,7 @@ export const InputAndDropdown = ({
           <Button
             key={i}
             className={`rounded text-foreground border-4 hover:bg-background border-green-900  ${
-              option.label == selectValue && " bg-green-500 hover:bg-green-500"
+              option.label == selectValue && " bg-success hover:bg-success"
             } `}
             onClick={() => selectHandle(option)}
             variant={option.label == selectValue ? "default" : "outline"}

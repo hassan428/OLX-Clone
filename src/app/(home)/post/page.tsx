@@ -8,11 +8,8 @@ import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { SentCategory, ImageItem, AdDetails, DynamicData } from "@/interfaces";
-import {
-  categoryOptionsData,
-  formatPrice,
-  location_of_pakistan,
-} from "@/utils";
+import { formatPrice, location_of_pakistan } from "@/utils";
+import { categoryOptionsData } from "@/utils/categoryOptionsData";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 

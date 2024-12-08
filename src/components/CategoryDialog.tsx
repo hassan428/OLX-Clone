@@ -64,8 +64,8 @@ export const CategoryDialog = ({ sentCategoryData }: CategoryDialogProps) => {
                     setCategory({ ...category, main: title, src, sub: "" })
                   }
                   key={i}
-                  className={`flex h-14 items-center justify-between cursor-pointer hover:bg-green-500 sm:border-y-2 border-border p-2 ${
-                    title == category?.main && "bg-green-500"
+                  className={`flex h-14 items-center justify-between cursor-pointer hover:bg-success sm:border-y-2 border-border p-2 ${
+                    title == category?.main && "bg-success"
                   }  `}
                 >
                   <div className="flex gap-2 items-center">
@@ -93,8 +93,8 @@ export const CategoryDialog = ({ sentCategoryData }: CategoryDialogProps) => {
                 <DialogClose
                   key={i}
                   onClick={() => setCategory({ ...category, sub: title })}
-                  className={`flex h-14 items-center justify-between cursor-pointer hover:bg-green-500 border-border p-2 sm:border-y-2 ${
-                    title == category?.sub && "bg-green-500"
+                  className={`flex h-14 items-center justify-between cursor-pointer hover:bg-success border-border p-2 sm:border-y-2 ${
+                    title == category?.sub && "bg-success"
                   }`}
                 >
                   <h1 className="font-bold">{title}</h1>

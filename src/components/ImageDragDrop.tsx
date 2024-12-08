@@ -49,7 +49,7 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
       {image.preview && (
         <>
           {isFirst && (
-            <div className="absolute bottom-2 text-xs w-full text-center bg-green-500 rounded-xl">
+            <div className="absolute bottom-2 text-xs w-full text-center bg-success rounded-xl">
               <span>Cover</span>
             </div>
           )}
@@ -186,7 +186,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
               image.preview && (
                 <div className="relative rounded-xl w-16 h-16">
                   {index === 0 && (
-                    <div className="absolute bottom-2 text-xs w-full text-center bg-green-500 rounded-xl">
+                    <div className="absolute bottom-2 text-xs w-full text-center bg-success rounded-xl">
                       <span>Cover</span>
                     </div>
                   )}

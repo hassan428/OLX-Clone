@@ -385,3 +385,20 @@ export interface SellButtonProps {
 export interface BackToTopButtonProps {
   className?: string;
 }
+
+export interface PasswordRules {
+  hasMinLength?: boolean;
+  hasNumber?: boolean;
+  hasSpecialChar?: boolean;
+  hasLetter?: boolean;
+}
+
+export interface PasswordStrength {
+  text: string;
+  value: number;
+}
+
+export interface PasswordValidationData {
+  text?: string;
+  condition?: boolean;
+}

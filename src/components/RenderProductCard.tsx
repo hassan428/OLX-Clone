@@ -89,7 +89,7 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
       size: 30,
       tooltipText: "List",
       className: `${
-        !gridView && "bg-green-500 text-black rounded-full"
+        !gridView && "bg-success text-black rounded-full"
       } p-1 cursor-pointer`,
     },
     {
@@ -101,7 +101,7 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
       size: 30,
       tooltipText: "Grid",
       className: `${
-        gridView && "bg-green-500 text-black rounded-full"
+        gridView && "bg-success text-black rounded-full"
       } p-1 cursor-pointer`,
     },
   ];

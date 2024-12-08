@@ -97,7 +97,7 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="p-3 text-xs sm:text-sm bg-green-500 text-center">
+      <div className="p-3 text-xs sm:text-sm bg-success text-center">
         <strong>
           Free Classifieds in Pakistan . © {new Date().getFullYear()} LOX
         </strong>

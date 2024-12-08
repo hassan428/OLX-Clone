@@ -14,12 +14,16 @@ import {
   LoginSignupAlertProps,
   LoginSignupRoute,
   LoginSignupScreenName,
+  PasswordValidationData,
   SubmitButton,
+  PasswordRules,
+  PasswordStrength,
 } from "@/interfaces";
 import { RiArrowLeftWideLine } from "react-icons/ri";
 
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
+import { GiCheckMark } from "react-icons/gi";
 import { IoCloseSharp } from "react-icons/io5";
 import { MdOutlineEmail, MdOutlinePhone } from "react-icons/md";
 import { BsGoogle } from "react-icons/bs";
@@ -28,6 +32,8 @@ import { TextInput } from "@/components/Text_input";
 import { Text } from "@/components/Text";
 import { OTP_input } from "@/components/OTP_input";
 import { Loader } from "@/components/Loader";
+import { Progress } from "@/components/ui/progress";
+import { checkPasswordStrength, validatePassword } from "@/utils";
 
 const screenRoute: LoginSignupRoute[] = [
   {
@@ -68,8 +74,24 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
   const [error, setError] = useState<LoginSignup | null>(null);
   const [data, setData] = useState<LoginSignup | null>(null);
   const [otp, setOtp] = useState<string>("");
+  const [passwordRules, setPassWordRules] = useState<PasswordRules | null>(
+    null
+  );
+  const [passwordStrength, setPassWordStrength] =
+    useState<PasswordStrength | null>(null);
+
   const [loading, setLoading] = useState<boolean>(false);
   const loginOrEmail = screen.slice(screen.length - 5);
+
+  const PasswordValidationData: PasswordValidationData[] = [
+    { text: "8 characters", condition: passwordRules?.hasMinLength },
+    { text: "1 number", condition: passwordRules?.hasNumber },
+    {
+      text: "1 special character",
+      condition: passwordRules?.hasSpecialChar,
+    },
+    { text: "1 letter", condition: passwordRules?.hasLetter },
+  ];
 
   useEffect(() => {
     screenRoute.find(({ current, previous }) => {
@@ -236,15 +258,18 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
               type: "password",
               placeholder: "Enter password",
               autoComplete: "new-password",
-              value: data?.password,
+              value: data?.password || "",
               id: "password",
               onChange: ({ target }) => {
+                const { id, value } = target;
+
+                setPassWordRules(validatePassword(value));
+                setPassWordStrength(checkPasswordStrength(value));
+
                 setErrorHandle({
-                  [target.id]: target.value
-                    ? undefined
-                    : `${target.id} is required!`,
+                  [id]: value ? undefined : `${id} is required!`,
                 });
-                setDataHandle({ [target.id]: target.value });
+                setDataHandle({ [id]: value });
               },
             }}
           />
@@ -273,7 +298,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
               type: "password",
               placeholder: "Enter Confirm password",
               autoComplete: "new-password",
-              value: data?.confirmPassword,
+              value: data?.confirmPassword || "",
               id: "confirmPassword",
               onChange: ({ target }) => {
                 setErrorHandle({
@@ -428,7 +453,37 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         </h1>
 
         <div className="flex flex-col gap-3 my-2">
-          {passwordInput()}
+          <div>
+            {passwordInput()}
+            {!error?.password && (
+              <>
+                <Text
+                  className="mb-1 mt-2"
+                  text={passwordStrength?.text || "Password Strength"}
+                />
+                <Progress
+                  className="h-1.5"
+                  value={passwordStrength?.value || 0}
+                />
+                <div className="flex flex-col gap-2 bg-input rounded-md p-2 my-2 text-sm">
+                  <Text text="Password must contain at least:" />
+                  <div className="space-y-2 font-bold">
+                    {PasswordValidationData.map(({ text, condition }, i) => (
+                      <div className="flex items-start" key={i}>
+                        <span className="mr-3">•</span> {text}
+                        {condition ? (
+                          <GiCheckMark className="ml-2 text-success" />
+                        ) : (
+                          <IoCloseSharp className="ml-2 text-error" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
           {confirmPasswordInput()}
         </div>
 
