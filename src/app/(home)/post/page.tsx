@@ -8,7 +8,7 @@ import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { SentCategory, ImageItem, AdDetails, DynamicData } from "@/interfaces";
-import { formatPrice, location_of_pakistan } from "@/utils";
+import { formatPrice, isError, isNumber, location_of_pakistan, validatePhone } from "@/utils";
 import { categoryOptionsData } from "@/utils/categoryOptionsData";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -33,7 +33,6 @@ const page = () => {
   };
 
   const dynamicDataKeys: string[] = [];
-  const numRegix = /^[0-9]*$/;
 
   const setDataHandle = (newData: AdDetails) => {
     setData((pre) => {
@@ -101,16 +100,6 @@ const page = () => {
     );
   }, [category]);
 
-  const isError = (obj: any, changeCondition: boolean = false): boolean => {
-    return Object.values(obj).some((val) => {
-      if (changeCondition) {
-        return val !== undefined && val !== "" && val !== null;
-      } else {
-        return val === undefined || val === "" || val === null;
-      }
-    });
-  };
-
   const postNowHandle = () => {
     dynamicDataKeys.map((value) =>
       setDynamicErrorHandle({
@@ -159,6 +148,7 @@ const page = () => {
       console.log("error hain");
     } else {
       console.log("error nahi hain");
+      console.log("send data to bakend");
     }
     // console.log("data", data);
     // console.log("dynamicData", dynamicData);
@@ -302,7 +292,7 @@ const page = () => {
 
                                     if (
                                       (inputType == "number" &&
-                                        numRegix.test(value)) ||
+                                        isNumber(value)) ||
                                       inputType == "Text"
                                     ) {
                                       setDynamicErrorHandle({
@@ -435,7 +425,7 @@ const page = () => {
                                           const { value } = e.target;
                                           if (
                                             (inputType == "number" &&
-                                              numRegix.test(value)) ||
+                                              isNumber(value)) ||
                                             inputType == "Text"
                                           ) {
                                             setDynamicErrorHandle({
@@ -674,7 +664,7 @@ const page = () => {
                       onChange: (e) => {
                         const { value } = e.target;
                         const minPrice = 200;
-                        if (numRegix.test(value)) {
+                        if (isNumber(value)) {
                           setPriceInWords(formatPrice(Number(value)));
                           setErrorHandle({
                             price: !value
@@ -778,7 +768,7 @@ const page = () => {
                         maxLength: 10,
                         onChange: (e) => {
                           const { value } = e.target;
-                          if (numRegix.test(value)) {
+                          if (validatePhone(value)) {
                             setErrorHandle({
                               phoneNumber: !value
                                 ? "Phone Number is required!"

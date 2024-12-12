@@ -5,8 +5,8 @@ import { InputAndDropdown } from "@/components/InputAndDropdown";
 import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
-import { Option, UserDetails } from "@/interfaces";
-import { validateEmail } from "@/utils";
+import { Option, UserDetails, UserDetailsOpional } from "@/interfaces";
+import { genderData, isError, validateEmail } from "@/utils";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 import { HiLightBulb } from "react-icons/hi";
@@ -41,12 +41,21 @@ const page = () => {
   );
 
   const [data, setData] = useState<UserDetails | null>(null);
+  const [optionalData, setOptionalData] = useState<UserDetailsOpional | null>(
+    null
+  );
   const [error, setError] = useState<UserDetails | null>(null);
   const [gender, setGender] = useState<Option | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<any>(defaultAvatarUrl);
 
   const setDataHandle = (newData: UserDetails) => {
     setData((pre) => {
+      return { ...pre, ...newData };
+    });
+  };
+
+  const setOptionalDataHandle = (newData: UserDetailsOpional) => {
+    setOptionalData((pre) => {
       return { ...pre, ...newData };
     });
   };
@@ -84,7 +93,7 @@ const page = () => {
   const saveChangesHandle = () => {
     setError(null);
 
-    setDataHandle({
+    setOptionalDataHandle({
       avatarUrl: avatarUrl != defaultAvatarUrl ? avatarUrl : undefined,
       gender: gender?.value,
     });
@@ -104,6 +113,12 @@ const page = () => {
         ? "Please enter a valid PhoneNumber"
         : undefined,
     });
+    if (!data || isError({ ...data }) || isError({ ...error }, true)) {
+      console.log("error hain");
+    } else {
+      console.log("error nahi hain");
+      console.log("send data to bakend");
+    }
   };
 
   const deleteAccount = () => {
@@ -114,12 +129,6 @@ const page = () => {
   };
 
   console.log("data", data);
-
-  const genderData: Option[] = [
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
-    { label: "Others", value: "others" },
-  ];
 
   return (
     <div className="m-3 sm:mx-20 flex flex-col gap-10">
@@ -193,7 +202,7 @@ const page = () => {
               <h1 className="text-sm font-bold">Date of Birth</h1>
               <div>
                 <DatePicker
-                  sendDate={(birthDate) => setDataHandle({ birthDate })}
+                  sendDate={(birthDate) => setOptionalDataHandle({ birthDate })}
                 />
               </div>
             </div>
@@ -206,31 +215,23 @@ const page = () => {
                   selectValue={gender?.label || ""}
                   dropdownData={genderData}
                   selectHandle={setGender}
-                  error={!!error?.gender}
                 />
-                {error?.gender && (
-                  <Text
-                    className="mt-1"
-                    error={!!error.gender}
-                    text={error.gender}
-                  />
-                )}
               </div>
             </div>
 
             <div className="flex flex-col gap-1 w-full">
               <textarea
                 id="aboutMe"
-                className={`border border-foreground ${
-                  error?.aboutMe && "border-error text-error"
-                } resize-none outline-0 bg-background p-2 leading-5 text-sm`}
+                className={`border border-foreground resize-none outline-0 bg-background p-2 leading-5 text-sm`}
                 rows={5}
                 placeholder="About me (Optional)"
                 maxLength={200}
-                onChange={(e) => setDataHandle({ aboutMe: e.target.value })}
+                onChange={(e) =>
+                  setOptionalDataHandle({ aboutMe: e.target.value })
+                }
               />
               <div className="flex items-center justify-end">
-                <Text text={`${data?.aboutMe?.length || "0"} / 200`} />
+                <Text text={`${optionalData?.aboutMe?.length || "0"} / 200`} />
               </div>
             </div>
           </div>
@@ -264,8 +265,10 @@ const page = () => {
               <div className="w-full">
                 <div className="flex">
                   <div
-                    className={`border border-foreground rounded-l-md ${
-                      error?.phoneNumber && "border-error text-error"
+                    className={`border rounded-l-md ${
+                      error?.phoneNumber
+                        ? "border-error text-error"
+                        : "border-foreground"
                     } text-base px-2 flex items-center`}
                   >
                     <h1 className="">+92</h1>
@@ -330,7 +333,7 @@ const page = () => {
                 }}
                 inputProps={{
                   autoComplete: "email",
-                  id: "email",
+                  id: "email_address",
                   value: data?.email || "",
                   placeholder: "Email",
                   onChange: (e) => {
@@ -401,16 +404,26 @@ const page = () => {
         </div>
 
         <div className="sm:flex w-full justify-between items-center max-sm:border-b border-muted-foreground max-sm:pb-5">
-          <Button
-            className="hidden sm:flex"
-            variant={"outline"}
-            onClick={discardHandle}
-          >
-            Discard
-          </Button>
-          <Button className="max-sm:w-full" onClick={saveChangesHandle}>
-            Save Changes
-          </Button>
+          <Alert
+            trigger={
+              <Button className="hidden sm:flex" variant="outline">
+                Discard
+              </Button>
+            }
+            title="Discard Changes?"
+            description="Are you sure you want to discard all unsaved changes? This action cannot be undone."
+            doneText="Discard"
+            doneClickHandle={discardHandle}
+            cancelText="Cancel"
+          />
+          <Alert
+            trigger={<Button className="max-sm:w-full">Save Changes</Button>}
+            title="Save Changes?"
+            description="Are you sure you want to save these changes?"
+            doneText="Save"
+            doneClickHandle={saveChangesHandle}
+            cancelText="Cancel"
+          />
         </div>
       </div>
 
@@ -437,16 +450,7 @@ const page = () => {
           doneText="Delete"
           doneClickHandle={deleteAccount}
           cancelText="Cancel"
-          canceClickHandle={() => console.log("cancel")}
         />
-
-        <Button
-          className="w-max p-0 text-xs"
-          variant={"link"}
-          onClick={seeMore}
-        >
-          See more info
-        </Button>
       </div>
     </div>
   );

@@ -1,6 +1,15 @@
 import { InputProps } from "@/components/ui/input";
 import { LucideIcon } from "lucide-react";
-import { ButtonHTMLAttributes, ChangeEvent, ReactNode } from "react";
+import {
+  ButtonHTMLAttributes,
+  ChangeEvent,
+  ForwardRefExoticComponent,
+  ForwardRefRenderFunction,
+  LegacyRef,
+  MutableRefObject,
+  ReactNode,
+  RefAttributes,
+} from "react";
 import { IconType } from "react-icons";
 
 type IconComponent = IconType | LucideIcon;
@@ -167,6 +176,9 @@ export interface UserDetails {
   name?: string;
   email?: string;
   phoneNumber?: string;
+}
+
+export interface UserDetailsOpional {
   gender?: string;
   birthDate?: Date;
   aboutMe?: string;
@@ -369,6 +381,7 @@ export interface LoginSignup {
 
 export interface SubmitButton {
   text: string;
+  disabled?: boolean;
   onClick: () => void;
 }
 
@@ -399,6 +412,6 @@ export interface PasswordStrength {
 }
 
 export interface PasswordValidationData {
-  text?: string;
+  text: string;
   condition?: boolean;
 }

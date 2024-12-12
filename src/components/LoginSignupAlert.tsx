@@ -27,13 +27,18 @@ import { GiCheckMark } from "react-icons/gi";
 import { IoCloseSharp } from "react-icons/io5";
 import { MdOutlineEmail, MdOutlinePhone } from "react-icons/md";
 import { BsGoogle } from "react-icons/bs";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { TextInput } from "@/components/Text_input";
 import { Text } from "@/components/Text";
 import { OTP_input } from "@/components/OTP_input";
 import { Loader } from "@/components/Loader";
 import { Progress } from "@/components/ui/progress";
-import { checkPasswordStrength, validatePassword } from "@/utils";
+import {
+  checkPasswordStrength,
+  validateEmail,
+  validatePassword,
+  validatePhone,
+} from "@/utils";
 
 const screenRoute: LoginSignupRoute[] = [
   {
@@ -93,11 +98,20 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     { text: "1 letter", condition: passwordRules?.hasLetter },
   ];
 
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const phoneInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     screenRoute.find(({ current, previous }) => {
       screen == current && previous && setPrevScreen(previous);
     });
-    if (screen.includes("login") || screen.includes("join")) setData(null);
+    if (screen.includes("login") || screen.includes("join")) {
+      setData(null);
+      setPassWordRules(null);
+      setPassWordStrength(null);
+    }
+    setError(null);
   }, [screen]);
 
   const setDataHandle = (newData: LoginSignup) => {
@@ -155,39 +169,6 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     );
   };
 
-  const emailInput = (): ReactNode => {
-    return (
-      <div className="flex flex-col gap-1">
-        <h1 className="font-bold">Email address</h1>
-        <div>
-          <TextInput
-            error={!!error?.email}
-            cut_handle={() => {
-              setDataHandle({ email: "" });
-              setErrorHandle({ email: "email is required!" });
-            }}
-            inputProps={{
-              type: "email",
-              placeholder: "Enter email address",
-              autoComplete: "email",
-              value: data?.email || "",
-              id: "email",
-              onChange: ({ target }) => {
-                setErrorHandle({
-                  [target.id]: target.value
-                    ? undefined
-                    : `${target.id} is required!`,
-                });
-                setDataHandle({ [target.id]: target.value });
-              },
-            }}
-          />
-          {error?.email && <Text error text={error.email} className="mt-1" />}
-        </div>
-      </div>
-    );
-  };
-
   const phoneInput = (): ReactNode => {
     return (
       <div className="flex flex-col gap-1">
@@ -195,14 +176,17 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         <div>
           <div className="flex">
             <div
-              className={`border border-foreground rounded-l-md ${
-                error?.phoneNumber && "border-error text-error"
+              className={`border rounded-l-md ${
+                error?.phoneNumber
+                  ? "border-error text-error"
+                  : "border-foreground"
               } text-base px-2 flex items-center`}
             >
               <h1>+92</h1>
             </div>
             <TextInput
               error={!!error?.phoneNumber}
+              ref={phoneInputRef}
               cut_handle={() => {
                 setDataHandle({ phoneNumber: "" });
                 setErrorHandle({
@@ -236,14 +220,58 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
             />
           </div>
           {error?.phoneNumber && (
-            <Text className="mt-1" error text={error.phoneNumber} />
+            <Text
+              className="mt-1 first-letter:capitalize"
+              error
+              text={error.phoneNumber}
+            />
           )}
         </div>
       </div>
     );
   };
 
-  const passwordInput = (): ReactNode => {
+  const emailInput = (): ReactNode => {
+    return (
+      <div className="flex flex-col gap-1">
+        <h1 className="font-bold">Email address</h1>
+        <div>
+          <TextInput
+            error={!!error?.email}
+            ref={emailInputRef}
+            cut_handle={() => {
+              setDataHandle({ email: "" });
+              setErrorHandle({ email: "email is required!" });
+            }}
+            inputProps={{
+              type: "email",
+              placeholder: "Enter email address",
+              autoComplete: "email",
+              value: data?.email || "",
+              id: "email",
+              onChange: ({ target }) => {
+                setErrorHandle({
+                  [target.id]: target.value
+                    ? undefined
+                    : `${target.id} is required!`,
+                });
+                setDataHandle({ [target.id]: target.value });
+              },
+            }}
+          />
+          {error?.email && (
+            <Text
+              error
+              text={error.email}
+              className="mt-1 first-letter:capitalize"
+            />
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const passwordInput = (isLoginForm?: boolean): ReactNode => {
     return (
       <div className="flex flex-col gap-1">
         <h1 className="font-bold">Password</h1>
@@ -254,12 +282,33 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
               setDataHandle({ password: "" });
               setErrorHandle({ password: "password is required!" });
             }}
+            ref={passwordInputRef}
             inputProps={{
               type: "password",
               placeholder: "Enter password",
-              autoComplete: "new-password",
+              autoComplete: isLoginForm ? "current-password" : "new-password",
               value: data?.password || "",
               id: "password",
+
+              onFocus: () => {
+                if (!data?.email || !validateEmail(data.email)) {
+                  emailInputRef.current?.focus();
+                  setErrorHandle({
+                    email: !data?.email
+                      ? "Email is required!"
+                      : "Please enter a valid email address",
+                  });
+                }
+                if (!data?.phoneNumber || data.phoneNumber.length !== 10) {
+                  phoneInputRef.current?.focus();
+
+                  setErrorHandle({
+                    phoneNumber: !data?.phoneNumber
+                      ? "Phone Number is required!"
+                      : "Please enter a valid Phone Number",
+                  });
+                }
+              },
               onChange: ({ target }) => {
                 const { id, value } = target;
 
@@ -274,7 +323,11 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
             }}
           />
           {error?.password && (
-            <Text error text={error.password} className="mt-1" />
+            <Text
+              error
+              text={error.password}
+              className="mt-1 first-letter:capitalize"
+            />
           )}
         </div>
       </div>
@@ -296,10 +349,36 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
             }}
             inputProps={{
               type: "password",
-              placeholder: "Enter Confirm password",
+              placeholder: "Enter Password Again",
               autoComplete: "new-password",
               value: data?.confirmPassword || "",
               id: "confirmPassword",
+              onFocus: () => {
+                if (!data?.password) {
+                  passwordInputRef.current?.focus();
+                  setErrorHandle({
+                    password: !data?.password
+                      ? "Password is required!"
+                      : undefined,
+                  });
+                } else {
+                  const missingConditions: string[] = [];
+                  PasswordValidationData.filter(
+                    ({ text, condition }) =>
+                      !condition && missingConditions.push(text)
+                  );
+
+                  if (missingConditions.length > 0) {
+                    passwordInputRef.current?.focus();
+
+                    setErrorHandle({
+                      password: `Password should be at least ${missingConditions
+                        .join(", ")
+                        .replace(/, ([^,]*)$/, " & $1")}.`,
+                    });
+                  }
+                }
+              },
               onChange: ({ target }) => {
                 setErrorHandle({
                   [target.id]: target.value
@@ -311,7 +390,11 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
             }}
           />
           {error?.confirmPassword && (
-            <Text error text={error.confirmPassword} className="mt-1" />
+            <Text
+              error
+              text={error.confirmPassword}
+              className="mt-1 first-letter:capitalize"
+            />
           )}
         </div>
       </div>
@@ -323,10 +406,14 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       <>
         {emailInput()}
         <div>
-          {passwordInput()}
+          {passwordInput(true)}
           {forgotPasswordButtonUi("forgotPassEmail")}
         </div>
-        {submitButtonUi({ text: "Log in", onClick: loginWithEmailHandle })}
+        {submitButtonUi({
+          text: "Log in",
+          onClick: loginWithEmailHandle,
+          disabled: !data?.password,
+        })}
       </>
     );
   };
@@ -336,10 +423,14 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       <>
         {phoneInput()}
         <div>
-          {passwordInput()}
+          {passwordInput(true)}
           {forgotPasswordButtonUi("forgotPassPhone")}
         </div>
-        {submitButtonUi({ text: "Log in", onClick: loginWithPhoneHandle })}
+        {submitButtonUi({
+          text: "Log in",
+          onClick: loginWithPhoneHandle,
+          disabled: !passwordRules?.hasMinLength,
+        })}
       </>
     );
   };
@@ -490,6 +581,8 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         {submitButtonUi({
           text: "Create Account",
           onClick: createAccountHandle,
+          disabled:
+            !data?.confirmPassword || data?.password !== data?.confirmPassword,
         })}
       </>
     );
@@ -542,9 +635,41 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     );
   };
 
-  const submitButtonUi = ({ text, onClick }: SubmitButton): ReactNode => {
+  const commonClick = () => {
+    setErrorHandle({
+      email: !data?.email
+        ? "Email is required!"
+        : !validateEmail(data.email)
+        ? "Please enter a valid email address"
+        : undefined,
+      phoneNumber: !data?.phoneNumber
+        ? "Phone Number is required!"
+        : !validatePhone(data.phoneNumber)
+        ? // : data.phoneNumber.length !== 10
+          "Please enter a valid Phone Number ssssss"
+        : undefined,
+      password: !data?.password ? "Password is required!" : undefined,
+      confirmPassword: !data?.confirmPassword
+        ? "Confirm Password is required!"
+        : undefined,
+    });
+  };
+
+  const submitButtonUi = ({
+    text,
+    onClick,
+    disabled,
+  }: SubmitButton): ReactNode => {
+    // if (!data || isError({ ...data }) || isError({ ...error }, true))
     return (
-      <Button className="font-bold" onClick={onClick}>
+      <Button
+        className="font-bold"
+        disabled={disabled}
+        onClick={() => {
+          onClick();
+          commonClick();
+        }}
+      >
         {text}
       </Button>
     );
@@ -588,7 +713,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     <AlertDialog>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
 
-      <AlertDialogContent className="flex flex-col px-2 sm:px-5 py-5  max-sm:min-h-screen sm:max-h-[31rem] overflow-y-auto w-full sm:w-2/4 xmd:w-2/5 rounded-lg">
+      <AlertDialogContent className="flex flex-col px-2 sm:px-5 py-5 max-sm:min-h-screen max-h-screen sm:max-h-[31rem] overflow-y-auto w-full sm:w-2/4 xmd:w-2/5 rounded-lg">
         {/* Header */}
         {loading && <Loader />}
 

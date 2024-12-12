@@ -27,7 +27,7 @@ interface LayoutProps {
 
 const RootLayout: FC<LayoutProps> = ({ children }) => {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         id="top"
         className={cn(
@@ -43,13 +43,12 @@ const RootLayout: FC<LayoutProps> = ({ children }) => {
         >
           <div>
             <Sell_btn className="fixed bottom-3 left-1/2 transform -translate-x-1/2 xmd:hidden z-50" />
-
             <Navbar />
             <CategoryText />
 
             {children}
           </div>
-          <div className="">
+          <div>
             <Footer />
           </div>
         </ThemeProvider>

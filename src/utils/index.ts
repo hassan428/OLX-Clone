@@ -27,6 +27,16 @@ export const validateEmail = (email: string): boolean => {
   return emailRegex.test(email);
 };
 
+export const validatePhone = (phoneNum: string): boolean => {
+  const phoneRegex = /^3\d{9}$/;
+  return phoneRegex.test(phoneNum);
+};
+
+export const isNumber = (value: string): boolean => {
+  const numRegix = /^[0-9]*$/;
+  return numRegix.test(value);
+};
+
 export const validatePassword = (password: string): PasswordRules => {
   return {
     hasMinLength: /.{8,}/.test(password),
@@ -68,6 +78,20 @@ export const formatPrice = (num: number): string => {
     return num.toString(); // Keep as is for smaller numbers
   }
 };
+
+export const isError = (obj: any, errorObj: boolean = false): boolean => {
+  return Object.values(obj).some((val) => {
+    if (errorObj) {
+      return val !== undefined && val !== "" && val !== null;
+    } else {
+      return val === undefined || val === "" || val === null;
+    }
+  });
+};
+
+export const genderData: Option[] = ["Male", "Female", "Others"].map((label) =>
+  createOption(label)
+);
 
 export const location_of_pakistan: LocationDataProps[] = [
   {
