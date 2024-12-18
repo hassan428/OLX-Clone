@@ -6,7 +6,13 @@ import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
 import { Option, UserDetails, UserDetailsOpional } from "@/interfaces";
-import { genderData, isError, validateEmail } from "@/utils";
+import {
+  genderData,
+  isError,
+  isNumber,
+  validateEmail,
+  validatePhone,
+} from "@/utils";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 import { HiLightBulb } from "react-icons/hi";
@@ -28,6 +34,10 @@ const page = () => {
           id,
           value: data?.name || "",
           placeholder: "Enter Name",
+          onBlur: () =>
+            setErrorHandle({
+              name: errorCheck().name,
+            }),
           onChange: (e) => {
             setDataHandle({ name: e.target.value });
             setErrorHandle({
@@ -90,6 +100,22 @@ const page = () => {
     console.log("discardHandle");
   };
 
+  const errorCheck = (value?: string): UserDetails => {
+    return {
+      name: !data?.name ? "Name is required!" : undefined,
+      email: !data?.email
+        ? "Email is required!"
+        : !validateEmail(value || data.email)
+        ? "Please enter a valid email address"
+        : undefined,
+      phoneNumber: !data?.phoneNumber
+        ? "Phone Number is required!"
+        : !validatePhone(value || data.phoneNumber)
+        ? "Please enter a valid phone number"
+        : undefined,
+    };
+  };
+
   const saveChangesHandle = () => {
     setError(null);
 
@@ -100,19 +126,8 @@ const page = () => {
 
     // const phoneNumber = `+92${data?.phoneNumber}`; // update phone number on send data to backend
 
-    setErrorHandle({
-      name: !data?.name ? "Name is required!" : undefined,
-      email: !data?.email
-        ? "Email is required!"
-        : !validateEmail(data.email)
-        ? "Please enter a valid email address"
-        : undefined,
-      phoneNumber: !data?.phoneNumber
-        ? "Phone Number is required!"
-        : data.phoneNumber.length !== 10
-        ? "Please enter a valid PhoneNumber"
-        : undefined,
-    });
+    setErrorHandle(errorCheck());
+
     if (!data || isError({ ...data }) || isError({ ...error }, true)) {
       console.log("error hain");
     } else {
@@ -123,9 +138,6 @@ const page = () => {
 
   const deleteAccount = () => {
     console.log("deleteAccount");
-  };
-  const seeMore = () => {
-    console.log("seeMore");
   };
 
   console.log("data", data);
@@ -285,23 +297,26 @@ const page = () => {
                     inputProps={{
                       id: "phoneNumber",
                       value: data?.phoneNumber || "",
-                      placeholder: "Phone Number",
+                      placeholder: "Enter Phone Number",
                       maxLength: 10,
+                      onBlur: () =>
+                        setErrorHandle({
+                          phoneNumber: errorCheck().phoneNumber,
+                        }),
                       onChange: (e) => {
                         const { value } = e.target;
-                        if (value.length == 0)
-                          setDataHandle({ phoneNumber: "" });
-                        for (let i = 0; i < value.length; i++)
-                          if (!Number.isNaN(Number(value.split("")[i]))) {
-                            setDataHandle({
-                              phoneNumber: value.slice(0).split(" ").join(""),
-                            });
-                            setErrorHandle({
-                              phoneNumber: value
-                                ? undefined
-                                : "Phone Number is required!",
-                            });
-                          } else setDataHandle({});
+                        if (isNumber(value)) {
+                          setErrorHandle({
+                            phoneNumber: !value
+                              ? "Phone Number is required!"
+                              : value.length == 10
+                              ? errorCheck(value).phoneNumber
+                              : undefined,
+                          });
+                          setDataHandle({
+                            phoneNumber: value,
+                          });
+                        }
                       },
                     }}
                   />
@@ -336,12 +351,22 @@ const page = () => {
                   id: "email_address",
                   value: data?.email || "",
                   placeholder: "Email",
+                  onBlur: () =>
+                    setErrorHandle({
+                      email: errorCheck().email,
+                    }),
                   onChange: (e) => {
+                    const { value } = e.target;
+
                     setDataHandle({
-                      email: e.target.value.split(" ").join(""),
+                      email: value.split(" ").join(""),
                     });
                     setErrorHandle({
-                      email: e.target.value ? undefined : "Email is required!",
+                      email: !value
+                        ? "Email is required!"
+                        : value.length >= 25
+                        ? errorCheck(value).email
+                        : undefined,
                     });
                   },
                 }}

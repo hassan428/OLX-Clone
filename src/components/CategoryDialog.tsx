@@ -61,7 +61,12 @@ export const CategoryDialog = ({ sentCategoryData }: CategoryDialogProps) => {
               {category_link.map(({ title, src }, i) => (
                 <div
                   onClick={() =>
-                    setCategory({ ...category, main: title, src, sub: "" })
+                    setCategory({
+                      ...category,
+                      main: title,
+                      src,
+                      sub: undefined,
+                    })
                   }
                   key={i}
                   className={`flex h-14 items-center justify-between cursor-pointer hover:bg-success sm:border-y-2 border-border p-2 ${

@@ -74,6 +74,10 @@ export function NavDrawer() {
           )}
         </SheetHeader>
 
+        <SheetTitle>
+          <DarkLightModeSwitch />
+        </SheetTitle>
+
         {route_data.map(({ Icon, title, href, className }, i) => (
           <SheetTitle
             className={`p-3 w-full flex justify-between items-center border-border ${className}`}
@@ -84,15 +88,13 @@ export function NavDrawer() {
               icon={<Icon size={25} />}
               className="text-[16px] font-normal ml-2"
               href={href}
+              SheetClose={SheetClose}
             />
-
-            {title == "Dark Mode" && <DarkLightModeSwitch />}
           </SheetTitle>
         ))}
 
         <SheetFooter>
           <div className={`w-full ${isLogged && "hidden"}`}>
-            {/* <SheetClose asChild> */}
             <LoginSignupAlert
               trigger={
                 <Button className="w-full border-2 border-primary my-2">
@@ -100,8 +102,6 @@ export function NavDrawer() {
                 </Button>
               }
             />
-            {/* </SheetClose> */}
-            {/* <SheetClose asChild> */}
             <LoginSignupAlert
               trigger={
                 <Button
@@ -112,7 +112,6 @@ export function NavDrawer() {
                 </Button>
               }
             />
-            {/* </SheetClose> */}
           </div>
         </SheetFooter>
       </SheetContent>

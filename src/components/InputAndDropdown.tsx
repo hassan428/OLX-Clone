@@ -17,9 +17,11 @@ export const InputAndDropdown = ({
   onChange,
   maxLength,
   onBlur,
+  onOpen,
 }: DropDownConfigProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [hasMounted, setHasMounted] = useState<boolean>(false);
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
@@ -27,11 +29,15 @@ export const InputAndDropdown = ({
       !dropdownRef.current.contains(event.target as Node)
     ) {
       setIsOpen(false);
+      if (hasMounted && !selectValue) {
+        onBlur?.(); // Trigger the onBlurOrClose callback
+      }
     }
   };
 
   useEffect(() => {
     if (isOpen) {
+      onOpen?.();
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -42,6 +48,11 @@ export const InputAndDropdown = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+    setHasMounted(true);
+  };
 
   return !dropdownData ? (
     <TextInput
@@ -80,7 +91,7 @@ export const InputAndDropdown = ({
         className={`border rounded-md capitalize ${
           error ? "border-error text-error" : "border-foreground"
         }  flex items-center cursor-pointer justify-between p-2 `}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={toggleDropdown}
       >
         <div>{defaultSelect || selectValue || `Select ${placeholder}`}</div>
 

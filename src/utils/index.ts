@@ -6,6 +6,7 @@ import {
   PasswordStrength,
   RenderProductCardProps,
   RouteData,
+  SubCategoryType,
 } from "@/interfaces";
 import {
   IoCameraOutline,
@@ -22,8 +23,10 @@ import {
 import { Moon } from "lucide-react";
 import zxcvbn from "zxcvbn";
 
+export const minYear: number = 1950;
+
 export const validateYear = (year: string): boolean =>
-  +year >= 1950 && +year <= new Date().getFullYear();
+  +year >= minYear && +year <= new Date().getFullYear();
 
 export const validateEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -93,6 +96,53 @@ export const isError = (obj: any, errorObj: boolean = false): boolean => {
       return val === undefined || val === "" || val === null;
     }
   });
+};
+
+export const minPriceHandle = (subCategory?: SubCategoryType): number => {
+  const minPriceConfig: Record<SubCategoryType, number> = {
+    Tablets: 3000,
+    Mobiles: 1500,
+    Makeup: 100,
+    Footwear: 300,
+    "Other Fashion": 200,
+    Bikes: 8000,
+    Cars: 40000,
+    "Rickshaw & Chingchi": 25000,
+    "Living Room Furniture": 1500,
+    "Bedroom Furniture": 3000,
+    "Office Furniture": 2000,
+    "Home Decor": 50,
+    "Other Furniture": 500,
+    "Computers & Accessories": 1000,
+    Games: 200,
+    "Televisions & Accessories": 4000,
+    Audio: 800,
+    "Home Appliances": 1000,
+    "Other Electronics": 800,
+    Cats: 500,
+    Hens: 150,
+    Dogs: 2000,
+    Parrots: 400,
+    Pigeons: 150,
+    "Other Birds & Animals": 200,
+    Rabbits: 300,
+    "Buses and Vans": 15000,
+    "Other Vehicles": 8000,
+    "Kid's Fashion": 150,
+    "Women's Fashion": 300,
+    Accessories: 50,
+    Jewellery: 200,
+    Clothes: 150,
+    "Smart Watches": 1000,
+    "Tables & Dining": 1500,
+    "Garden & Outdoor": 300,
+    "Bathroom Accessories": 50,
+    "Men's Fashion": 300,
+    "Beds & Wardrobes": 2500,
+    "Sofa & Chairs": 3000,
+  };
+
+  return (subCategory && minPriceConfig[subCategory]) || 0;
 };
 
 export const genderData: Option[] = ["Male", "Female", "Others"].map((label) =>
@@ -332,19 +382,27 @@ export function createOption(label: string, value?: string): Option {
 
 export const isLogged: boolean = false;
 
+export const common_route_data: RouteData[] = [
+  {
+    title: "Start selling",
+    Icon: IoCameraOutline,
+    href: "/post",
+  },
+  {
+    title: "My ads",
+    Icon: IoNewspaperOutline,
+    href: "/myads",
+  },
+  {
+    title: "Chat",
+    Icon: IoChatbubbleOutline,
+    href: "/chat",
+  },
+];
+
 export const route_data: RouteData[] = isLogged
   ? [
-      {
-        title: "Dark Mode",
-        Icon: Moon,
-        href: "/",
-      },
-
-      {
-        title: "My ads",
-        Icon: IoNewspaperOutline,
-        href: "/myads",
-      },
+      ...common_route_data,
       {
         href: "/myfavourites",
         title: "Favourites & Saved searches",
@@ -364,12 +422,6 @@ export const route_data: RouteData[] = isLogged
         href: "/myorders",
         title: "Bought Packages & Billing",
         Icon: IoCardOutline,
-      },
-
-      {
-        title: "Chat",
-        Icon: IoChatbubbleOutline,
-        href: "/chat",
       },
       {
         title: "Notifications",
@@ -391,26 +443,7 @@ export const route_data: RouteData[] = isLogged
       { href: "/logout", title: "Logout", Icon: IoLogOutOutline },
     ]
   : [
-      {
-        title: "Dark Mode",
-        Icon: Moon,
-        href: "/",
-      },
-      {
-        title: "Start selling",
-        Icon: IoCameraOutline,
-        href: "/startselling",
-      },
-      {
-        title: "My ads",
-        Icon: IoNewspaperOutline,
-        href: "/myads",
-      },
-      {
-        title: "Chat",
-        Icon: IoChatbubbleOutline,
-        href: "/chat",
-      },
+      ...common_route_data,
       {
         title: "Help",
         Icon: IoHelpCircleOutline,

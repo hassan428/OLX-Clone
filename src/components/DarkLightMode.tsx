@@ -35,8 +35,8 @@ export function DarkLightModeBtn() {
           >
             {themesName}
             {theme == themesName && (
-             <CheckCircle className="mr-2 text-green-500" />
-            )} 
+              <CheckCircle className="mr-2 text-green-500" />
+            )}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
@@ -46,15 +46,25 @@ export function DarkLightModeBtn() {
 
 export function DarkLightModeSwitch() {
   const { setTheme, resolvedTheme } = useTheme();
+  const isDarkMode = resolvedTheme === "dark";
+
+  const toggleTheme = () => setTheme(isDarkMode ? "light" : "dark");
 
   return (
-    <Switch
-      defaultChecked={resolvedTheme == "dark"}
-      id="dark"
-      className="data-[state=unchecked]:bg-gray-400 data-[state=checked]:bg-green-400"
-      onCheckedChange={(val: boolean) =>
-        val ? setTheme("dark") : setTheme("light")
-      }
-    />
+    <div className="p-3 w-full flex justify-between items-center border-border">
+      <div
+        onClick={toggleTheme}
+        className="flex gap-2 items-center hover:text-blue-400 cursor-pointer"
+      >
+        <Moon size={25} />
+        <p className="text-[16px] font-normal ml-2">Dark Mode</p>
+      </div>
+      <Switch
+        checked={isDarkMode}
+        id="dark"
+        className="data-[state=unchecked]:bg-gray-400 data-[state=checked]:bg-green-400"
+        onCheckedChange={(val) => setTheme(val ? "dark" : "light")}
+      />
+    </div>
   );
 }

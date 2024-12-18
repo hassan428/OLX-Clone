@@ -1,15 +1,7 @@
 import { InputProps } from "@/components/ui/input";
+import { DialogCloseProps } from "@radix-ui/react-dialog";
 import { LucideIcon } from "lucide-react";
-import {
-  ButtonHTMLAttributes,
-  ChangeEvent,
-  ForwardRefExoticComponent,
-  ForwardRefRenderFunction,
-  LegacyRef,
-  MutableRefObject,
-  ReactNode,
-  RefAttributes,
-} from "react";
+import { ButtonHTMLAttributes, ChangeEvent, ReactNode } from "react";
 import { IconType } from "react-icons";
 
 type IconComponent = IconType | LucideIcon;
@@ -28,6 +20,8 @@ export interface LocationSelectProps {
   options: LocationDataProps[];
   placeholder: string;
   onSelect: (value: Option) => void;
+  onBlurOrClose?: () => void;
+  onOpen?: () => void;
   isDefaultSelect?: boolean;
   error?: boolean;
 }
@@ -86,6 +80,9 @@ export interface NavScreenBtnProps {
   href: string;
   icon: ReactNode;
   className?: string;
+  SheetClose?: React.ForwardRefExoticComponent<
+    DialogCloseProps & React.RefAttributes<HTMLButtonElement>
+  >;
 }
 
 export interface FooterLink {
@@ -112,11 +109,17 @@ export interface SliderSrc {
   src: string;
 }
 
+export interface SubCategoryLink {
+  href: string;
+  src?: string;
+  title: SubCategoryType;
+}
+
 export interface CategoryLink {
   href: string;
   src?: string;
-  title: string;
-  subCategories?: CategoryLink[]; // Optional since not all categories will have subcategories
+  title: MainCategoryType;
+  subCategories?: SubCategoryLink[];
 }
 
 export interface ProductOtherDetails {
@@ -160,8 +163,8 @@ export interface CardDetailsImage {
 }
 
 export interface MoreProductCardDataProps {
-  mainCategory: string;
-  subCategory: string;
+  mainCategory: MainCategoryType;
+  subCategory: SubCategoryType;
 }
 
 export interface DetailProductCardDataProps {
@@ -203,6 +206,7 @@ export interface DropDownConfigProps {
   cut_handle?: () => void;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
+  onOpen?: () => void;
 }
 
 export interface TextProps {
@@ -251,7 +255,7 @@ export interface DatePickerProps {
 export interface SentCategory {
   src?: string;
   main?: string;
-  sub?: string;
+  sub?: SubCategoryType;
 }
 
 export interface CategoryDialogProps {
@@ -260,7 +264,7 @@ export interface CategoryDialogProps {
 
 export interface AdDetails {
   mainCategory?: string;
-  subCategory?: string;
+  subCategory?: SubCategoryType;
   image?: string[];
   adTitle?: string;
   description?: string;
@@ -270,18 +274,6 @@ export interface AdDetails {
   phoneNumber?: string;
   showMyPhNum?: boolean;
 }
-
-export type AdDetailsKeys =
-  | "mainCategory"
-  | "subCategory"
-  | "image"
-  | "adTitle"
-  | "description"
-  | "location"
-  | "price"
-  | "name"
-  | "phoneNumber"
-  | "showMyPhNum";
 
 interface ConditionalOption {
   condition: string[];
@@ -297,6 +289,58 @@ export interface NestedOptionGroup {
   conditionalOptions?: ConditionalOption[];
 }
 
+export type MainCategoryType =
+  | "allcategories"
+  | "Mobiles & Tablets"
+  | "Fashion & Beauty"
+  | "Vehicles"
+  | "Birds & Animals"
+  | "Electronics & Home Appliances"
+  | "Furniture & Home Decorator"
+  | undefined;
+
+export type SubCategoryType =
+  | "Tablets"
+  | "Mobiles"
+  | "Makeup"
+  | "Footwear"
+  | "Other Fashion"
+  | "Bikes"
+  | "Cars"
+  | "Rickshaw & Chingchi"
+  | "Living Room Furniture"
+  | "Bedroom Furniture"
+  | "Office Furniture"
+  | "Home Decor"
+  | "Other Furniture"
+  | "Computers & Accessories"
+  | "Games"
+  | "Televisions & Accessories"
+  | "Audio"
+  | "Home Appliances"
+  | "Other Electronics"
+  | "Cats"
+  | "Hens"
+  | "Dogs"
+  | "Parrots"
+  | "Pigeons"
+  | "Other Birds & Animals"
+  | "Rabbits"
+  | "Buses and Vans"
+  | "Other Vehicles"
+  | "Kid's Fashion"
+  | "Women's Fashion"
+  | "Accessories"
+  | "Jewellery"
+  | "Clothes"
+  | "Smart Watches"
+  | "Tables & Dining"
+  | "Garden & Outdoor"
+  | "Bathroom Accessories"
+  | "Men's Fashion"
+  | "Beds & Wardrobes"
+  | "Sofa & Chairs";
+
 export interface OptionGroup {
   label: string;
   values?: Option[];
@@ -308,47 +352,7 @@ export interface OptionGroup {
 
 export interface CategoryOptions {
   groups: OptionGroup[];
-  subCategory:
-    | "Tablets"
-    | "Mobiles"
-    | "Makeup"
-    | "Footwear"
-    | "Other Fashion"
-    | "Bikes"
-    | "Cars"
-    | "Rickshaw & Chingchi"
-    | "Living Room Furniture"
-    | "Bedroom Furniture"
-    | "Office Furniture"
-    | "Home Decor"
-    | "Other Furniture"
-    | "Computers & Accessories"
-    | "Games"
-    | "Televisions & Accessories"
-    | "Audio"
-    | "Home Appliances"
-    | "Other Electronics"
-    | "Cats"
-    | "Hens"
-    | "Dogs"
-    | "Parrots"
-    | "Pigeons"
-    | "Other Birds & Animals"
-    | "Rabbits"
-    | "Buses and Vans"
-    | "Other Vehicles"
-    | "Kid's Fashion"
-    | "Women's Fashion"
-    | "Accessories"
-    | "Jewellery"
-    | "Clothes"
-    | "Smart Watches"
-    | "Tables & Dining"
-    | "Garden & Outdoor"
-    | "Bathroom Accessories"
-    | "Men's Fashion"
-    | "Beds & Wardrobes"
-    | "Sofa & Chairs";
+  subCategory: SubCategoryType;
 }
 
 export interface DropDownConfigProps {

@@ -7,14 +7,16 @@ export const NavScreenBtn = ({
   icon,
   className,
   href,
+  SheetClose,
 }: NavScreenBtnProps) => {
+  const Tag = SheetClose || "p";
   return (
     <Link
       href={href}
       className="flex gap-2 items-center justify-center hover:text-blue-400 cursor-pointer"
     >
       {icon}
-      <p className={`font-bold text-sm ${className}`}>{text}</p>
+      <Tag className={`font-bold text-sm ${className}`}>{text}</Tag>
     </Link>
   );
 };

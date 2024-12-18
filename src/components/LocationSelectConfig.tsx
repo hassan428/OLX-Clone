@@ -15,12 +15,15 @@ export const LocationSelectConfig = ({
   options,
   placeholder,
   onSelect,
+  onBlurOrClose,
+  onOpen,
   error,
   isDefaultSelect,
 }: LocationSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<Option | null>(null);
-  const [defaultSelect, setDefaultSelect] = useState<Option | null>(null); // Use state for defaultSelect
+  const [defaultSelect, setDefaultSelect] = useState<Option | null>(null);
+  const [hasMounted, setHasMounted] = useState<boolean>(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -38,11 +41,17 @@ export const LocationSelectConfig = ({
         !dropdownRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
+
+        // Only trigger onBlurOrClose after initial mount
+        if (hasMounted && !selectedOption) {
+          onBlurOrClose?.(); // Trigger the onBlurOrClose callback
+        }
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [selectedOption, onBlurOrClose, hasMounted]);
 
   const handleOptionClick = (option: Option) => {
     setSelectedOption(option);
@@ -50,10 +59,17 @@ export const LocationSelectConfig = ({
     setIsOpen(false);
   };
 
-  const toggleDropdown = () => setIsOpen(!isOpen);
+  useEffect(() => {
+    isOpen && onOpen?.();
+  }, [isOpen]);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+    setHasMounted(true);
+  };
 
   return (
-    <div className="relative w-full " ref={dropdownRef}>
+    <div className="relative w-full" ref={dropdownRef}>
       {/* Dropdown button */}
       <button
         onClick={toggleDropdown}

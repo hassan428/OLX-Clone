@@ -7,18 +7,14 @@ import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import {
-  SentCategory,
-  ImageItem,
-  AdDetails,
-  DynamicData,
-  AdDetailsKeys,
-} from "@/interfaces";
+import { SentCategory, ImageItem, AdDetails, DynamicData } from "@/interfaces";
 import {
   formatPrice,
   isError,
   isNumber,
   location_of_pakistan,
+  minPriceHandle,
+  minYear,
   validatePhone,
   validateYear,
 } from "@/utils";
@@ -34,6 +30,7 @@ const page = () => {
   const [dynamicData, setDynamicData] = useState<DynamicData | null>(null);
   const [dynamicError, setDynamicError] = useState<DynamicData | null>(null);
   const [priceInWords, setPriceInWords] = useState<string>("");
+  const [minPrice, setMinPrice] = useState<number>(0);
 
   // Function to handle sorted images passed from the child component
   const handleSortedImages = (images: ImageItem[]) => {
@@ -46,7 +43,6 @@ const page = () => {
   };
 
   const dynamicDataKeys: string[] = [];
-  const minPrice = 200;
 
   const setDataHandle = (newData: AdDetails) => {
     setData((pre) => {
@@ -107,6 +103,9 @@ const page = () => {
       mainCategory: category?.main,
       subCategory: category?.sub,
     });
+
+    setMinPrice(minPriceHandle(category?.sub));
+
     dynamicDataKeys.map((value) =>
       setDynamicDataHandle({
         [value]: undefined,
@@ -297,6 +296,11 @@ const page = () => {
                                     dynamicData?.[label]?.label ||
                                     dynamicData?.[label]
                                   }
+                                  onOpen={() =>
+                                    setDynamicErrorHandle({
+                                      [label]: undefined,
+                                    })
+                                  }
                                   cut_handle={() => {
                                     setDynamicErrorHandle({
                                       [label]: `${label} is required!`,
@@ -311,7 +315,7 @@ const page = () => {
                                         ? `${label} is required!`
                                         : label === "Year" &&
                                           !validateYear(dynamicData?.[label])
-                                        ? `Please enter a valid year between 1950 and ${new Date().getFullYear()}.`
+                                        ? `Please enter a valid year between ${minYear} and ${new Date().getFullYear()}.`
                                         : undefined,
                                     });
                                   }}
@@ -329,7 +333,7 @@ const page = () => {
                                           : label === "Year" &&
                                             value.length == 4 &&
                                             !validateYear(value)
-                                          ? `Please enter a valid year between 1950 and ${new Date().getFullYear()}.`
+                                          ? `Please enter a valid year between ${minYear} and ${new Date().getFullYear()}.`
                                           : undefined,
                                       });
                                       setDynamicDataHandle({
@@ -417,6 +421,11 @@ const page = () => {
                                         }
                                         maxLength={maxLength}
                                         id={key}
+                                        onOpen={() =>
+                                          setDynamicErrorHandle({
+                                            [key]: undefined,
+                                          })
+                                        }
                                         cut_handle={() => {
                                           setDynamicErrorHandle({
                                             [key]: `${key} is required!`,
@@ -619,6 +628,10 @@ const page = () => {
                         setDataHandle({ location: val.value });
                         setErrorHandle({ location: undefined });
                       }}
+                      onBlurOrClose={() =>
+                        setErrorHandle({ location: errorCheck().location })
+                      }
+                      onOpen={() => setErrorHandle({ location: undefined })}
                       isDefaultSelect={false}
                       error={!!error?.location}
                     />
