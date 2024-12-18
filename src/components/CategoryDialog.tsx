@@ -77,7 +77,9 @@ export const CategoryDialog = ({ sentCategoryData }: CategoryDialogProps) => {
                       className="rounded-full w-10 h-10"
                       priority={true}
                     />
-                    <h1 className="font-bold text-left">{title}</h1>
+                    <DialogDescription className="font-bold text-left text-foreground">
+                      {title}
+                    </DialogDescription>
                   </div>
                   <RiArrowRightWideLine size={20} />
                 </div>
@@ -97,7 +99,9 @@ export const CategoryDialog = ({ sentCategoryData }: CategoryDialogProps) => {
                     title == category?.sub && "bg-success"
                   }`}
                 >
-                  <h1 className="font-bold">{title}</h1>
+                  <DialogDescription className="font-bold text-foreground">
+                    {title}
+                  </DialogDescription>
                 </DialogClose>
               ))}
             </div>

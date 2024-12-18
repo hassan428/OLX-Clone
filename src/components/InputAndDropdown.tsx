@@ -16,6 +16,7 @@ export const InputAndDropdown = ({
   cut_handle,
   onChange,
   maxLength,
+  onBlur,
 }: DropDownConfigProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -53,6 +54,7 @@ export const InputAndDropdown = ({
         value: selectValue || "",
         placeholder: `Enter ${placeholder}`,
         onChange,
+        onBlur,
       }}
     />
   ) : dropdownData.length <= 3 ? (

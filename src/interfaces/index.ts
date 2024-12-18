@@ -25,7 +25,7 @@ export interface LocationDataProps {
 }
 
 export interface LocationSelectProps {
-  options: LocationDataProps[]; // Array of provinces with optional cities
+  options: LocationDataProps[];
   placeholder: string;
   onSelect: (value: Option) => void;
   isDefaultSelect?: boolean;
@@ -202,6 +202,7 @@ export interface DropDownConfigProps {
   id?: string;
   cut_handle?: () => void;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: () => void;
 }
 
 export interface TextProps {
@@ -269,6 +270,19 @@ export interface AdDetails {
   phoneNumber?: string;
   showMyPhNum?: boolean;
 }
+
+export type AdDetailsKeys =
+  | "mainCategory"
+  | "subCategory"
+  | "image"
+  | "adTitle"
+  | "description"
+  | "location"
+  | "price"
+  | "name"
+  | "phoneNumber"
+  | "showMyPhNum";
+
 interface ConditionalOption {
   condition: string[];
   values?: Option[];

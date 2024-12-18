@@ -22,6 +22,9 @@ import {
 import { Moon } from "lucide-react";
 import zxcvbn from "zxcvbn";
 
+export const validateYear = (year: string): boolean =>
+  +year >= 1950 && +year <= new Date().getFullYear();
+
 export const validateEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
@@ -29,6 +32,9 @@ export const validateEmail = (email: string): boolean => {
 
 export const validatePhone = (phoneNum: string): boolean => {
   const phoneRegex = /^3\d{9}$/;
+  console.log("phoneNum", phoneNum);
+  console.log("phoneRegex", phoneRegex);
+  console.log("phoneRegex.test(phoneNum)", phoneRegex.test(phoneNum));
   return phoneRegex.test(phoneNum);
 };
 

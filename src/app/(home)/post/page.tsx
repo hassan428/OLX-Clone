@@ -7,8 +7,21 @@ import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { SentCategory, ImageItem, AdDetails, DynamicData } from "@/interfaces";
-import { formatPrice, isError, isNumber, location_of_pakistan, validatePhone } from "@/utils";
+import {
+  SentCategory,
+  ImageItem,
+  AdDetails,
+  DynamicData,
+  AdDetailsKeys,
+} from "@/interfaces";
+import {
+  formatPrice,
+  isError,
+  isNumber,
+  location_of_pakistan,
+  validatePhone,
+  validateYear,
+} from "@/utils";
 import { categoryOptionsData } from "@/utils/categoryOptionsData";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -33,6 +46,7 @@ const page = () => {
   };
 
   const dynamicDataKeys: string[] = [];
+  const minPrice = 200;
 
   const setDataHandle = (newData: AdDetails) => {
     setData((pre) => {
@@ -100,17 +114,8 @@ const page = () => {
     );
   }, [category]);
 
-  const postNowHandle = () => {
-    dynamicDataKeys.map((value) =>
-      setDynamicErrorHandle({
-        [value]:
-          !dynamicData || !dynamicData[value]
-            ? `${value} is required!`
-            : undefined,
-      })
-    );
-
-    setErrorHandle({
+  const errorCheck = (value?: string): AdDetails => {
+    return {
       name: !data?.name ? "Name is required!" : undefined,
       location: !data?.location ? "Location is required!" : undefined,
       mainCategory: !category?.main
@@ -130,16 +135,29 @@ const page = () => {
 
       price: !data?.price
         ? "Price is required!"
-        : parseInt(data.price) < 200
-        ? "The minimum allowed value is PKR 200"
+        : Number(data.price) < minPrice
+        ? `The minimum allowed value is PKR ${minPrice}`
         : undefined,
 
       phoneNumber: !data?.phoneNumber
         ? "Phone Number is required!"
-        : data.phoneNumber.length !== 10
+        : !validatePhone(value || data.phoneNumber)
         ? "Please enter a valid phone number"
         : undefined,
-    });
+    };
+  };
+
+  const postNowHandle = () => {
+    dynamicDataKeys.map((value) =>
+      setDynamicErrorHandle({
+        [value]:
+          !dynamicData || !dynamicData[value]
+            ? `${value} is required!`
+            : undefined,
+      })
+    );
+
+    setErrorHandle(errorCheck());
 
     if (
       isError({ ...data, ...dynamicData }) ||
@@ -164,7 +182,7 @@ const page = () => {
       <div className="sm:flex gap-2 p-1 items-start w-full">
         <div className="flex flex-col gap-5 sm:w-3/4">
           <div className="border-2 border-border rounded-xl m-2">
-            {/* first Section */}
+            {/* select category Section */}
             <div className="flex flex-col sm:flex-row gap-2 items-center border-b-2 border-border p-2 sm:p-5 text-xs sm:text-sm">
               <h1
                 className={`w-full sm:w-1/4 font-bold ${
@@ -210,7 +228,7 @@ const page = () => {
               </div>
             </div>
 
-            {/* second Section */}
+            {/* select image Section */}
 
             <div className="flex flex-col sm:flex-row gap-2 items-center border-b-2 border-border p-2 sm:p-5  text-xs sm:text-sm">
               <h1
@@ -234,7 +252,7 @@ const page = () => {
               </div>
             </div>
 
-            {/* third Section */}
+            {/* dynamic option Section */}
 
             {categoryOptionsData.map(({ subCategory, groups }, i) => {
               if (subCategory !== category?.sub) {
@@ -287,6 +305,16 @@ const page = () => {
                                       [label]: "",
                                     });
                                   }}
+                                  onBlur={() => {
+                                    setDynamicErrorHandle({
+                                      [label]: !dynamicData?.[label]
+                                        ? `${label} is required!`
+                                        : label === "Year" &&
+                                          !validateYear(dynamicData?.[label])
+                                        ? `Please enter a valid year between 1950 and ${new Date().getFullYear()}.`
+                                        : undefined,
+                                    });
+                                  }}
                                   onChange={(e) => {
                                     const { value } = e.target;
 
@@ -298,27 +326,16 @@ const page = () => {
                                       setDynamicErrorHandle({
                                         [label]: !value
                                           ? `${label} is required!`
+                                          : label === "Year" &&
+                                            value.length == 4 &&
+                                            !validateYear(value)
+                                          ? `Please enter a valid year between 1950 and ${new Date().getFullYear()}.`
                                           : undefined,
                                       });
                                       setDynamicDataHandle({
                                         [label]: value,
                                       });
                                     }
-
-                                    setDynamicErrorHandle({
-                                      [label]:
-                                        label === "Year" &&
-                                        (value.length < 1 ||
-                                          value.length > 4 ||
-                                          !(
-                                            +value >= 1950 &&
-                                            +value <= new Date().getFullYear()
-                                          ))
-                                          ? `Please enter a valid year between 1950 and ${new Date().getFullYear()}.`
-                                          : !value
-                                          ? `${label} is required!`
-                                          : undefined,
-                                    });
                                   }}
                                   dropdownData={values}
                                   selectHandle={(selectOption) => {
@@ -373,7 +390,9 @@ const page = () => {
                               ) {
                                 return null;
                               }
-                              dynamicDataKeys.push(label || nestedGroup.title);
+
+                              const key = label || nestedGroup.title;
+                              dynamicDataKeys.push(key);
 
                               return (
                                 <div
@@ -382,43 +401,35 @@ const page = () => {
                                 >
                                   <h1
                                     className={`w-full sm:w-1/4 font-bold capitalize ${
-                                      dynamicError?.[
-                                        label || nestedGroup.title
-                                      ] && "text-error"
+                                      dynamicError?.[key] && "text-error"
                                     }`}
                                   >
-                                    {label || nestedGroup.title}*
+                                    {key}*
                                   </h1>
                                   <div className="w-full sm:w-3/4">
                                     <div>
                                       <InputAndDropdown
-                                        error={
-                                          !!(
-                                            (label || nestedGroup.title) &&
-                                            dynamicError?.[
-                                              label || nestedGroup.title
-                                            ]
-                                          )
-                                        }
-                                        placeholder={label || nestedGroup.title}
+                                        error={!!(key && dynamicError?.[key])}
+                                        placeholder={key}
                                         selectValue={
-                                          dynamicData[
-                                            label || nestedGroup.title
-                                          ]?.label ||
-                                          dynamicData[
-                                            label || nestedGroup.title
-                                          ]
+                                          dynamicData[key]?.label ||
+                                          dynamicData[key]
                                         }
                                         maxLength={maxLength}
-                                        id={label || nestedGroup.title}
+                                        id={key}
                                         cut_handle={() => {
                                           setDynamicErrorHandle({
-                                            [label || nestedGroup.title]: `${
-                                              label || nestedGroup.title
-                                            } is required!`,
+                                            [key]: `${key} is required!`,
                                           });
                                           setDynamicDataHandle({
-                                            [label || nestedGroup.title]: "",
+                                            [key]: "",
+                                          });
+                                        }}
+                                        onBlur={() => {
+                                          setDynamicErrorHandle({
+                                            [key]: !dynamicData?.[key]
+                                              ? `${key} is required!`
+                                              : undefined,
                                           });
                                         }}
                                         onChange={(e) => {
@@ -429,44 +440,32 @@ const page = () => {
                                             inputType == "Text"
                                           ) {
                                             setDynamicErrorHandle({
-                                              [label || nestedGroup.title]:
-                                                !value
-                                                  ? `${
-                                                      label || nestedGroup.title
-                                                    } is required!`
-                                                  : undefined,
+                                              [key]: !value
+                                                ? `${key} is required!`
+                                                : undefined,
                                             });
                                             setDynamicDataHandle({
-                                              [label || nestedGroup.title]:
-                                                value,
+                                              [key]: value,
                                             });
                                           }
                                         }}
                                         dropdownData={values}
                                         selectHandle={(selectOption) => {
                                           setDynamicDataHandle({
-                                            [label || nestedGroup.title]:
-                                              selectOption,
+                                            [key]: selectOption,
                                           });
 
                                           setDynamicErrorHandle({
-                                            [label || nestedGroup.title]:
-                                              undefined,
+                                            [key]: undefined,
                                           });
                                         }}
                                       />
 
-                                      {dynamicError?.[
-                                        label || nestedGroup.title
-                                      ] ? (
+                                      {dynamicError?.[key] ? (
                                         <Text
                                           className="mt-1"
                                           error
-                                          text={
-                                            dynamicError[
-                                              label || nestedGroup.title
-                                            ]
-                                          }
+                                          text={dynamicError[key]}
                                         />
                                       ) : (
                                         helpingText && (
@@ -490,7 +489,7 @@ const page = () => {
               );
             })}
 
-            {/* fourth Section */}
+            {/* title, desc & location Section */}
 
             <div className="flex flex-col p-2 sm:p-5 text-xs sm:text-sm">
               <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
@@ -514,6 +513,10 @@ const page = () => {
                       id: "title",
                       value: data?.adTitle || "",
                       placeholder: "Enter Title",
+                      onBlur: () =>
+                        setErrorHandle({
+                          adTitle: errorCheck().adTitle,
+                        }),
                       onChange: (e) => {
                         setErrorHandle({
                           adTitle: !e.target.value
@@ -564,6 +567,11 @@ const page = () => {
                     rows={5}
                     placeholder="Describe the item you're selling"
                     maxLength={5000}
+                    onBlur={() =>
+                      setErrorHandle({
+                        description: errorCheck().description,
+                      })
+                    }
                     onChange={(e) => {
                       setErrorHandle({
                         description: !e.target.value
@@ -627,7 +635,7 @@ const page = () => {
             </div>
           </div>
 
-          {/* fifth Section */}
+          {/* price Section */}
 
           <div className="border-2 border-border rounded-xl m-2">
             <div className="flex flex-col sm:flex-row gap-2 items-center p-2 sm:p-5 text-xs sm:text-sm">
@@ -661,17 +669,16 @@ const page = () => {
                       value: data?.price || "",
                       placeholder: "Enter Price",
                       maxLength: 10,
+                      onBlur: () =>
+                        setErrorHandle({
+                          price: errorCheck().price,
+                        }),
                       onChange: (e) => {
                         const { value } = e.target;
-                        const minPrice = 200;
                         if (isNumber(value)) {
                           setPriceInWords(formatPrice(Number(value)));
                           setErrorHandle({
-                            price: !value
-                              ? "Price is required!"
-                              : Number(value) < minPrice
-                              ? `Price should be greater than ${minPrice}`
-                              : undefined,
+                            price: !value ? "Price is required!" : undefined,
                           });
                           setDataHandle({
                             price: value,
@@ -692,7 +699,7 @@ const page = () => {
             </div>
           </div>
 
-          {/* sixth Section */}
+          {/* name & price section*/}
 
           <div className="border-2 border-border rounded-xl m-2">
             <div className="flex flex-col border-b-2 border-border p-2 sm:p-5 text-xs sm:text-sm">
@@ -717,6 +724,10 @@ const page = () => {
                       id: "name",
                       value: data?.name || "",
                       placeholder: "Enter Name",
+                      onBlur: () =>
+                        setErrorHandle({
+                          name: errorCheck().name,
+                        }),
                       onChange: (e) => {
                         setErrorHandle({
                           name: !e.target.value
@@ -766,12 +777,18 @@ const page = () => {
                         value: data?.phoneNumber || "",
                         placeholder: "Enter Phone Number",
                         maxLength: 10,
+                        onBlur: () =>
+                          setErrorHandle({
+                            phoneNumber: errorCheck().phoneNumber,
+                          }),
                         onChange: (e) => {
                           const { value } = e.target;
-                          if (validatePhone(value)) {
+                          if (isNumber(value)) {
                             setErrorHandle({
                               phoneNumber: !value
                                 ? "Phone Number is required!"
+                                : value.length == 10
+                                ? errorCheck(value).phoneNumber
                                 : undefined,
                             });
                             setDataHandle({
