@@ -14,7 +14,7 @@ import {
   validatePhone,
 } from "@/utils";
 import Image from "next/image";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { HiLightBulb } from "react-icons/hi";
 import { IoCameraReverseOutline, IoCloseOutline } from "react-icons/io5";
 
@@ -57,6 +57,12 @@ const page = () => {
   const [error, setError] = useState<UserDetails | null>(null);
   const [gender, setGender] = useState<Option | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<any>(defaultAvatarUrl);
+
+  useEffect(() => {
+    ["name", "email", "phoneNumber"].map((key) =>
+      setDataHandle({ [key]: undefined })
+    );
+  }, []);
 
   const setDataHandle = (newData: UserDetails) => {
     setData((pre) => {

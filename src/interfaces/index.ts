@@ -391,6 +391,7 @@ export interface LoginSignupRoute {
 }
 
 export interface LoginSignup {
+  name?: string;
   email?: string;
   phoneNumber?: string;
   password?: string;

@@ -167,10 +167,10 @@ const page = () => {
       console.log("error nahi hain");
       console.log("send data to bakend");
     }
-    // console.log("data", data);
-    // console.log("dynamicData", dynamicData);
-    // console.log("dynamicError", dynamicError);
-    // console.log("error", error);
+    console.log("data", data);
+    console.log("dynamicData", dynamicData);
+    console.log("dynamicError", dynamicError);
+    console.log("error", error);
   };
 
   // console.log("dynamicDataKeys", dynamicDataKeys);

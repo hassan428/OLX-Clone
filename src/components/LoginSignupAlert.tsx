@@ -35,6 +35,8 @@ import { Loader } from "@/components/Loader";
 import { Progress } from "@/components/ui/progress";
 import {
   checkPasswordStrength,
+  isError,
+  isNumber,
   validateEmail,
   validatePassword,
   validatePhone,
@@ -98,16 +100,20 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     { text: "1 letter", condition: passwordRules?.hasLetter },
   ];
 
+  const nameInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const phoneInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
+  const confirmPassInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     screenRoute.find(({ current, previous }) => {
       screen == current && previous && setPrevScreen(previous);
     });
     if (screen.includes("login") || screen.includes("join")) {
-      setData(null);
+      ["name", "email", "phoneNumber", "password", "confirmPassword"].map(
+        (key) => setDataHandle({ [key]: undefined })
+      );
       setPassWordRules(null);
       setPassWordStrength(null);
     }
@@ -134,459 +140,525 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     console.log("joinWithGoogle");
   };
 
-  const loginSignupUi = (logOrjoin: "login" | "join"): ReactNode => {
-    return (
-      <div className="flex-1 overflow-y-auto space-y-4">
-        {/* Social Login Buttons */}
-        <Button
-          onClick={logOrjoin == "login" ? loginWithGoogle : joinWithGoogle}
-          variant="outline"
-          className="w-full border-2 border-primary capitalize flex gap-2 items-center justify-center font-semibold"
-        >
-          <BsGoogle size={20} /> {` ${logOrjoin} with Google`}
-        </Button>
+  const errorCheck = (value?: string): LoginSignup => ({
+    name: !data?.name
+      ? "Name is required!"
+      : !validatePassword(value || data.name).hasLetter
+      ? "Name must contain at least one alphabet"
+      : undefined,
+    email: !data?.email
+      ? "Email is required!"
+      : !validateEmail(value || data.email)
+      ? "Please enter a valid email address"
+      : undefined,
+    phoneNumber: !data?.phoneNumber
+      ? "Phone Number is required!"
+      : !validatePhone(value || data.phoneNumber)
+      ? "Please enter a valid phone number"
+      : undefined,
+  });
 
-        <h1 className="text-center text-muted-foreground">OR</h1>
+  const loginSignupUi = (logOrjoin: "login" | "join"): ReactNode => (
+    <div className="flex-1 overflow-y-auto space-y-4">
+      {/* Social Login Buttons */}
+      <Button
+        onClick={logOrjoin == "login" ? loginWithGoogle : joinWithGoogle}
+        variant="outline"
+        className="w-full border-2 border-primary capitalize flex gap-2 items-center justify-center font-semibold"
+      >
+        <BsGoogle size={20} /> {` ${logOrjoin} with Google`}
+      </Button>
 
-        {/* Email and Phone Login Buttons */}
-        <Button
-          onClick={() => setScreen(`${logOrjoin}Email`)}
-          variant="outline"
-          className="w-full border-2 border-primary capitalize flex gap-2 items-center justify-center font-semibold"
-        >
-          <MdOutlineEmail size={20} /> {` ${logOrjoin} with Email`}
-        </Button>
+      <h1 className="text-center text-muted-foreground">OR</h1>
 
-        <Button
-          onClick={() => setScreen(`${logOrjoin}Phone`)}
-          variant="outline"
-          className="w-full border-2 border-primary capitalize flex gap-2 items-center justify-center font-semibold"
-        >
-          <MdOutlinePhone size={20} />
-          {` ${logOrjoin} with Phone`}
-        </Button>
-      </div>
-    );
-  };
+      {/* Email and Phone Login Buttons */}
+      <Button
+        onClick={() => setScreen(`${logOrjoin}Email`)}
+        variant="outline"
+        className="w-full border-2 border-primary capitalize flex gap-2 items-center justify-center font-semibold"
+      >
+        <MdOutlineEmail size={20} /> {` ${logOrjoin} with Email`}
+      </Button>
 
-  const phoneInput = (): ReactNode => {
-    return (
-      <div className="flex flex-col gap-1">
-        <h1 className="font-bold">Phone number</h1>
-        <div>
-          <div className="flex">
-            <div
-              className={`border rounded-l-md ${
-                error?.phoneNumber
-                  ? "border-error text-error"
-                  : "border-foreground"
-              } text-base px-2 flex items-center`}
-            >
-              <h1>+92</h1>
-            </div>
-            <TextInput
-              error={!!error?.phoneNumber}
-              ref={phoneInputRef}
-              cut_handle={() => {
-                setDataHandle({ phoneNumber: "" });
-                setErrorHandle({
-                  phoneNumber: "Phone number is required!",
-                });
-              }}
-              className="rounded-l-none"
-              inputProps={{
-                id: "phoneNumber",
-                value: data?.phoneNumber || "",
-                placeholder: "Enter Phone number",
-                maxLength: 10,
-                onChange: (e) => {
-                  const { value } = e.target;
-                  if (value.length == 0) {
-                    setDataHandle({ phoneNumber: "" });
-                    setErrorHandle({
-                      phoneNumber: "Phone number is required!",
-                    });
-                  }
+      <Button
+        onClick={() => setScreen(`${logOrjoin}Phone`)}
+        variant="outline"
+        className="w-full border-2 border-primary capitalize flex gap-2 items-center justify-center font-semibold"
+      >
+        <MdOutlinePhone size={20} />
+        {` ${logOrjoin} with Phone`}
+      </Button>
+    </div>
+  );
 
-                  for (let i = 0; i < value.length; i++)
-                    if (!Number.isNaN(Number(value.split("")[i]))) {
-                      setErrorHandle({ phoneNumber: undefined });
-                      setDataHandle({
-                        phoneNumber: value.slice(0).split(" ").join(""),
-                      });
-                    } else setDataHandle({});
-                },
-              }}
-            />
+  const phoneInput = (): ReactNode => (
+    <div className="flex flex-col gap-1">
+      <h1
+        onClick={() => phoneInputRef.current?.focus()}
+        className="font-bold cursor-pointer"
+      >
+        Phone number
+      </h1>
+      <div>
+        <div className="flex">
+          <div
+            className={`border rounded-l-md ${
+              error?.phoneNumber
+                ? "border-error text-error"
+                : "border-foreground"
+            } text-base px-2 flex items-center`}
+          >
+            <h1>+92</h1>
           </div>
-          {error?.phoneNumber && (
-            <Text
-              className="mt-1 first-letter:capitalize"
-              error
-              text={error.phoneNumber}
-            />
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  const emailInput = (): ReactNode => {
-    return (
-      <div className="flex flex-col gap-1">
-        <h1 className="font-bold">Email address</h1>
-        <div>
           <TextInput
-            error={!!error?.email}
-            ref={emailInputRef}
+            error={!!error?.phoneNumber}
+            ref={phoneInputRef}
             cut_handle={() => {
-              setDataHandle({ email: "" });
-              setErrorHandle({ email: "email is required!" });
-            }}
-            inputProps={{
-              type: "email",
-              placeholder: "Enter email address",
-              autoComplete: "email",
-              value: data?.email || "",
-              id: "email",
-              onChange: ({ target }) => {
-                setErrorHandle({
-                  [target.id]: target.value
-                    ? undefined
-                    : `${target.id} is required!`,
-                });
-                setDataHandle({ [target.id]: target.value });
-              },
-            }}
-          />
-          {error?.email && (
-            <Text
-              error
-              text={error.email}
-              className="mt-1 first-letter:capitalize"
-            />
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  const passwordInput = (isLoginForm?: boolean): ReactNode => {
-    return (
-      <div className="flex flex-col gap-1">
-        <h1 className="font-bold">Password</h1>
-        <div>
-          <TextInput
-            error={!!error?.password}
-            cut_handle={() => {
-              setDataHandle({ password: "" });
-              setErrorHandle({ password: "password is required!" });
-            }}
-            ref={passwordInputRef}
-            inputProps={{
-              type: "password",
-              placeholder: "Enter password",
-              autoComplete: isLoginForm ? "current-password" : "new-password",
-              value: data?.password || "",
-              id: "password",
-
-              onFocus: () => {
-                if (!data?.email || !validateEmail(data.email)) {
-                  emailInputRef.current?.focus();
-                  setErrorHandle({
-                    email: !data?.email
-                      ? "Email is required!"
-                      : "Please enter a valid email address",
-                  });
-                }
-                if (!data?.phoneNumber || data.phoneNumber.length !== 10) {
-                  phoneInputRef.current?.focus();
-
-                  setErrorHandle({
-                    phoneNumber: !data?.phoneNumber
-                      ? "Phone Number is required!"
-                      : "Please enter a valid Phone Number",
-                  });
-                }
-              },
-              onChange: ({ target }) => {
-                const { id, value } = target;
-
-                setPassWordRules(validatePassword(value));
-                setPassWordStrength(checkPasswordStrength(value));
-
-                setErrorHandle({
-                  [id]: value ? undefined : `${id} is required!`,
-                });
-                setDataHandle({ [id]: value });
-              },
-            }}
-          />
-          {error?.password && (
-            <Text
-              error
-              text={error.password}
-              className="mt-1 first-letter:capitalize"
-            />
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  const confirmPasswordInput = (): ReactNode => {
-    return (
-      <div className="flex flex-col gap-1">
-        <h1 className="font-bold">Confirm Password</h1>
-        <div>
-          <TextInput
-            error={!!error?.confirmPassword}
-            cut_handle={() => {
-              setDataHandle({ confirmPassword: "" });
+              setDataHandle({ phoneNumber: "" });
               setErrorHandle({
-                confirmPassword: "Confirm Password is required!",
+                phoneNumber: "Phone number is required!",
               });
             }}
+            className="rounded-l-none"
             inputProps={{
-              type: "password",
-              placeholder: "Enter Password Again",
-              autoComplete: "new-password",
-              value: data?.confirmPassword || "",
-              id: "confirmPassword",
-              onFocus: () => {
-                if (!data?.password) {
-                  passwordInputRef.current?.focus();
+              id: "phoneNumber",
+              value: data?.phoneNumber || "",
+              placeholder: "Enter Phone Number",
+              maxLength: 10,
+              onBlur: () =>
+                setErrorHandle({
+                  phoneNumber: errorCheck().phoneNumber,
+                }),
+              onChange: (e) => {
+                const { value } = e.target;
+                if (isNumber(value)) {
                   setErrorHandle({
-                    password: !data?.password
-                      ? "Password is required!"
+                    phoneNumber: !value
+                      ? "Phone Number is required!"
+                      : value.length == 10
+                      ? errorCheck(value).phoneNumber
                       : undefined,
                   });
-                } else {
-                  const missingConditions: string[] = [];
-                  PasswordValidationData.filter(
-                    ({ text, condition }) =>
-                      !condition && missingConditions.push(text)
-                  );
-
-                  if (missingConditions.length > 0) {
-                    passwordInputRef.current?.focus();
-
-                    setErrorHandle({
-                      password: `Password should be at least ${missingConditions
-                        .join(", ")
-                        .replace(/, ([^,]*)$/, " & $1")}.`,
-                    });
-                  }
+                  setDataHandle({
+                    phoneNumber: value,
+                  });
                 }
-              },
-              onChange: ({ target }) => {
-                setErrorHandle({
-                  [target.id]: target.value
-                    ? undefined
-                    : `confirm password is required!`,
-                });
-                setDataHandle({ [target.id]: target.value });
               },
             }}
           />
-          {error?.confirmPassword && (
-            <Text
-              error
-              text={error.confirmPassword}
-              className="mt-1 first-letter:capitalize"
-            />
-          )}
         </div>
+        {error?.phoneNumber && (
+          <Text
+            className="mt-1 first-letter:capitalize"
+            error
+            text={error.phoneNumber}
+          />
+        )}
       </div>
-    );
-  };
+    </div>
+  );
 
-  const loginEmailUi = (): ReactNode => {
-    return (
-      <>
-        {emailInput()}
-        <div>
-          {passwordInput(true)}
-          {forgotPasswordButtonUi("forgotPassEmail")}
-        </div>
-        {submitButtonUi({
-          text: "Log in",
-          onClick: loginWithEmailHandle,
-          disabled: !data?.password,
-        })}
-      </>
-    );
-  };
+  const nameInput = () => (
+    <div className="flex flex-col gap-1">
+      <h1
+        onClick={() => nameInputRef.current?.focus()}
+        className="font-bold cursor-pointer"
+      >
+        Name
+      </h1>
+      <div>
+        <TextInput
+          error={!!error?.name}
+          cut_handle={() => {
+            setDataHandle({ name: "" });
+            setErrorHandle({ name: "Name is required!" });
+          }}
+          ref={nameInputRef}
+          inputProps={{
+            autoComplete: "name",
+            id: "name",
+            value: data?.name || "",
+            placeholder: "Enter Name",
+            onBlur: () =>
+              setErrorHandle({
+                name: errorCheck().name,
+              }),
+            onChange: (e) => {
+              const { value } = e.target;
 
-  const loginPhoneUi = (): ReactNode => {
-    return (
-      <>
-        {phoneInput()}
-        <div>
-          {passwordInput(true)}
-          {forgotPasswordButtonUi("forgotPassPhone")}
-        </div>
-        {submitButtonUi({
-          text: "Log in",
-          onClick: loginWithPhoneHandle,
-          disabled: !passwordRules?.hasMinLength,
-        })}
-      </>
-    );
-  };
-
-  const otpUi = (): ReactNode => {
-    return (
-      <>
-        <h1 className="text-center text-sm">
-          You will receive a 6-digit code through a{" "}
-          {screen === "otpEmail" ? (
-            <>
-              Email Address on <strong>{data?.email}</strong>
-            </>
-          ) : (
-            <>
-              SMS on <strong>{data?.phoneNumber}</strong>
-            </>
-          )}
-        </h1>
-
-        <OTP_input
-          value={otp}
-          onChange={(value: string) => {
-            value.length == 6 && OTPVerifyHandle();
-            setOtp(value);
+              setDataHandle({ name: value });
+              setErrorHandle({
+                name: !value
+                  ? "Name is required!"
+                  : value.length == 2
+                  ? errorCheck(value).name
+                  : undefined,
+              });
+            },
           }}
         />
-        {LinkButtonUi({
-          text: `Resend Code by ${
-            screen === "otpEmail" ? "Email Address" : "SMS"
-          }`,
-          onClick:
-            screen === "otpEmail"
-              ? resendCodeByEmailHandle
-              : resendCodeBySMSHandle,
-        })}
-
-        {screen !== "otpEmail" && (
-          <div className="flex flex-col items-center">
-            <h1 className="text-sm text-center">
-              If you have not recieved the code by SMS, please request
-            </h1>
-            {LinkButtonUi({
-              text: "Resend Code by Call",
-              onClick: resendCodeByCallHandle,
-            })}
-          </div>
+        {error?.name && (
+          <Text
+            error
+            text={error.name}
+            className="mt-1 first-letter:capitalize"
+          />
         )}
-      </>
-    );
-  };
+      </div>
+    </div>
+  );
 
-  const joinEmailUi = (): ReactNode => {
-    return (
-      <>
-        {emailInput()}
-        {submitButtonUi({
-          text: "Next",
-          onClick: navigatePasswordScreenHandle,
-        })}
-      </>
-    );
-  };
+  const emailInput = (): ReactNode => (
+    <div className="flex flex-col gap-1">
+      <h1
+        onClick={() => emailInputRef.current?.focus()}
+        className="font-bold cursor-pointer"
+      >
+        Email address
+      </h1>
+      <div>
+        <TextInput
+          error={!!error?.email}
+          ref={emailInputRef}
+          cut_handle={() => {
+            setDataHandle({ email: "" });
+            setErrorHandle({ email: "email is required!" });
+          }}
+          inputProps={{
+            autoComplete: "email",
+            id: "email_address",
+            value: data?.email || "",
+            placeholder: "Enter Email",
+            onBlur: () =>
+              setErrorHandle({
+                email: errorCheck().email,
+              }),
+            onChange: (e) => {
+              const { value } = e.target;
+              setDataHandle({
+                email: value.split(" ").join(""),
+              });
+              setErrorHandle({
+                email: !value
+                  ? "Email is required!"
+                  : value.length >= 25
+                  ? errorCheck(value).email
+                  : undefined,
+              });
+            },
+          }}
+        />
+        {error?.email && (
+          <Text
+            error
+            text={error.email}
+            className="mt-1 first-letter:capitalize"
+          />
+        )}
+      </div>
+    </div>
+  );
 
-  const joinPhoneUi = (): ReactNode => {
-    return (
-      <>
-        {phoneInput()}
-        {submitButtonUi({
-          text: "Next",
-          onClick: navigatePasswordScreenHandle,
-        })}
-      </>
-    );
-  };
+  const passwordInput = (isLoginForm?: boolean): ReactNode => (
+    <div className="flex flex-col gap-1">
+      <h1
+        onClick={() => passwordInputRef.current?.focus()}
+        className="font-bold cursor-pointer"
+      >
+        Password
+      </h1>
+      <div>
+        <TextInput
+          error={!!error?.password}
+          cut_handle={() => {
+            setDataHandle({ password: "" });
+            setErrorHandle({ password: "password is required!" });
+          }}
+          ref={passwordInputRef}
+          inputProps={{
+            type: "password",
+            placeholder: "Enter password",
+            autoComplete: isLoginForm ? "current-password" : "new-password",
+            value: data?.password || "",
+            id: "password",
+            onFocus: () => {
+              if (!data?.email || !validateEmail(data.email)) {
+                emailInputRef.current?.focus();
+                setErrorHandle({
+                  email: errorCheck().email,
+                });
+              }
+              if (!data?.phoneNumber || !validatePhone(data.phoneNumber)) {
+                phoneInputRef.current?.focus();
+                setErrorHandle({
+                  phoneNumber: errorCheck().phoneNumber,
+                });
+              }
+            },
+            onChange: ({ target }) => {
+              const { id, value } = target;
 
-  const forgotPassEmailUi = (): ReactNode => {
-    return (
-      <>
-        <h1 className="text-sm">
-          We'll send a verification code to this email address if it matches an
-          existing account
-        </h1>
-        {emailInput()}
+              setPassWordRules(validatePassword(value));
+              setPassWordStrength(checkPasswordStrength(value));
 
-        {submitButtonUi({ text: "Next", onClick: OTPEmailScreenHandle })}
-      </>
-    );
-  };
+              setErrorHandle({
+                [id]: value ? undefined : `${id} is required!`,
+              });
+              setDataHandle({ [id]: value });
+            },
+          }}
+        />
+        {error?.password && (
+          <Text
+            error
+            text={error.password}
+            className="mt-1 first-letter:capitalize"
+          />
+        )}
+      </div>
+    </div>
+  );
 
-  const forgotPassPhoneUi = (): ReactNode => {
-    return (
-      <>
-        <h1 className="text-sm">
-          We’ll send a verification code to this phone number if it matches an
-          existing account
-        </h1>
-        {phoneInput()}
+  const confirmPasswordInput = (): ReactNode => (
+    <div className="flex flex-col gap-1">
+      <h1
+        onClick={() => confirmPassInputRef.current?.focus()}
+        className="font-bold cursor-pointer"
+      >
+        Confirm Password
+      </h1>
+      <div>
+        <TextInput
+          error={!!error?.confirmPassword}
+          cut_handle={() => {
+            setDataHandle({ confirmPassword: "" });
+            setErrorHandle({
+              confirmPassword: "Confirm Password is required!",
+            });
+          }}
+          ref={confirmPassInputRef}
+          inputProps={{
+            type: "password",
+            placeholder: "Enter Password Again",
+            autoComplete: "new-password",
+            value: data?.confirmPassword || "",
+            id: "confirmPassword",
+            onFocus: () => {
+              if (!data?.password) {
+                passwordInputRef.current?.focus();
+              } else {
+                const missingConditions: string[] = [];
+                PasswordValidationData.filter(
+                  ({ text, condition }) =>
+                    !condition && missingConditions.push(text)
+                );
 
-        {submitButtonUi({ text: "Next", onClick: OTPPhoneScreenHandle })}
-      </>
-    );
-  };
+                if (missingConditions.length > 0) {
+                  passwordInputRef.current?.focus();
 
-  const createPassUi = (): ReactNode => {
-    return (
-      <>
-        <h1 className="text-sm">
-          To secure your account and log in faster, choose a strong password you
-          haven’t used before.
-        </h1>
+                  setErrorHandle({
+                    password: `Password should be at least ${missingConditions
+                      .join(", ")
+                      .replace(/, ([^,]*)$/, " & $1")}.`,
+                  });
+                }
+              }
+            },
+            onChange: ({ target }) => {
+              setErrorHandle({
+                [target.id]: target.value
+                  ? undefined
+                  : `confirm password is required!`,
+              });
+              setDataHandle({ [target.id]: target.value });
+            },
+          }}
+        />
+        {error?.confirmPassword && (
+          <Text
+            error
+            text={error.confirmPassword}
+            className="mt-1 first-letter:capitalize"
+          />
+        )}
+      </div>
+    </div>
+  );
 
-        <div className="flex flex-col gap-3 my-2">
-          <div>
-            {passwordInput()}
-            {!error?.password && (
-              <>
-                <Text
-                  className="mb-1 mt-2"
-                  text={passwordStrength?.text || "Password Strength"}
-                />
-                <Progress
-                  className="h-1.5"
-                  value={passwordStrength?.value || 0}
-                />
-                <div className="flex flex-col gap-2 bg-input rounded-md p-2 my-2 text-sm">
-                  <Text text="Password must contain at least:" />
-                  <div className="space-y-2 font-bold">
-                    {PasswordValidationData.map(({ text, condition }, i) => (
-                      <div className="flex items-start" key={i}>
-                        <span className="mr-3">•</span> {text}
-                        {condition ? (
-                          <GiCheckMark className="ml-2 text-success" />
-                        ) : (
-                          <IoCloseSharp className="ml-2 text-error" />
-                        )}
-                      </div>
-                    ))}
-                  </div>
+  const loginEmailUi = (): ReactNode => (
+    <>
+      {emailInput()}
+      <div>
+        {passwordInput(true)}
+        {forgotPasswordButtonUi("forgotPassEmail")}
+      </div>
+      {submitButtonUi({
+        text: "Log in",
+        onClick: loginWithEmailHandle,
+        disabled: !passwordRules?.hasMinLength,
+      })}
+    </>
+  );
+
+  const loginPhoneUi = (): ReactNode => (
+    <>
+      {phoneInput()}
+      <div>
+        {passwordInput(true)}
+        {forgotPasswordButtonUi("forgotPassPhone")}
+      </div>
+      {submitButtonUi({
+        text: "Log in",
+        onClick: loginWithPhoneHandle,
+        disabled: !passwordRules?.hasMinLength,
+      })}
+    </>
+  );
+
+  const otpUi = (): ReactNode => (
+    <>
+      <h1 className="text-center text-sm">
+        You will receive a 6-digit code through a{" "}
+        {screen === "otpEmail" ? (
+          <>
+            Email Address on <strong>{data?.email}</strong>
+          </>
+        ) : (
+          <>
+            SMS on <strong>{data?.phoneNumber}</strong>
+          </>
+        )}
+      </h1>
+
+      <OTP_input
+        value={otp}
+        onChange={(value: string) => {
+          value.length == 6 && OTPVerifyHandle();
+          setOtp(value);
+        }}
+      />
+      {LinkButtonUi({
+        text: `Resend Code by ${
+          screen === "otpEmail" ? "Email Address" : "SMS"
+        }`,
+        onClick:
+          screen === "otpEmail"
+            ? resendCodeByEmailHandle
+            : resendCodeBySMSHandle,
+      })}
+
+      {screen !== "otpEmail" && (
+        <div className="flex flex-col items-center">
+          <h1 className="text-sm text-center">
+            If you have not recieved the code by SMS, please request
+          </h1>
+          {LinkButtonUi({
+            text: "Resend Code by Call",
+            onClick: resendCodeByCallHandle,
+          })}
+        </div>
+      )}
+    </>
+  );
+
+  const joinEmailUi = (): ReactNode => (
+    <>
+      {nameInput()}
+      {emailInput()}
+      {submitButtonUi({
+        text: "Next",
+        onClick: navigatePasswordScreenHandle,
+        disabled: isError({ ...data }) || isError({ ...error }, true),
+      })}
+    </>
+  );
+
+  const joinPhoneUi = (): ReactNode => (
+    <>
+      {nameInput()}
+      {phoneInput()}
+      {submitButtonUi({
+        text: "Next",
+        onClick: navigatePasswordScreenHandle,
+        disabled: isError({ ...data }) || isError({ ...error }, true),
+      })}
+    </>
+  );
+
+  const forgotPassEmailUi = (): ReactNode => (
+    <>
+      <h1 className="text-sm">
+        We'll send a verification code to this email address if it matches an
+        existing account
+      </h1>
+      {emailInput()}
+
+      {submitButtonUi({ text: "Next", onClick: OTPEmailScreenHandle })}
+    </>
+  );
+
+  const forgotPassPhoneUi = (): ReactNode => (
+    <>
+      <h1 className="text-sm">
+        We’ll send a verification code to this phone number if it matches an
+        existing account
+      </h1>
+      {phoneInput()}
+
+      {submitButtonUi({ text: "Next", onClick: OTPPhoneScreenHandle })}
+    </>
+  );
+
+  const createPassUi = (): ReactNode => (
+    <>
+      <h1 className="text-sm">
+        To secure your account and log in faster, choose a strong password you
+        haven’t used before.
+      </h1>
+
+      <div className="flex flex-col gap-3 my-2">
+        <div>
+          {passwordInput()}
+          {!error?.password && (
+            <>
+              <Text
+                className="mb-1 mt-2"
+                text={passwordStrength?.text || "Password Strength"}
+              />
+              <Progress
+                className="h-1.5"
+                value={passwordStrength?.value || 0}
+              />
+              <div className="flex flex-col gap-2 bg-input rounded-md p-2 my-2 text-sm">
+                <Text text="Password must contain at least:" />
+                <div className="space-y-2 font-bold">
+                  {PasswordValidationData.map(({ text, condition }, i) => (
+                    <div className="flex items-start" key={i}>
+                      <span className="mr-3">•</span> {text}
+                      {condition ? (
+                        <GiCheckMark className="ml-2 text-success" />
+                      ) : (
+                        <IoCloseSharp className="ml-2 text-error" />
+                      )}
+                    </div>
+                  ))}
                 </div>
-              </>
-            )}
-          </div>
-
-          {confirmPasswordInput()}
+              </div>
+            </>
+          )}
         </div>
 
-        {submitButtonUi({
-          text: "Create Account",
-          onClick: createAccountHandle,
-          disabled:
-            !data?.confirmPassword || data?.password !== data?.confirmPassword,
-        })}
-      </>
-    );
-  };
+        {confirmPasswordInput()}
+      </div>
+
+      {submitButtonUi({
+        text: "Create Account",
+        onClick: createAccountHandle,
+        disabled:
+          !data?.confirmPassword || data?.password !== data?.confirmPassword,
+      })}
+    </>
+  );
 
   const footer = (): ReactNode => {
     const isLoginScreen: boolean = screen.includes("login");
@@ -609,31 +681,26 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
   const forgotPasswordButtonUi = (
     screenName: LoginSignupScreenName
-  ): ReactNode => {
-    return (
+  ): ReactNode => (
+    <Button
+      variant={"link"}
+      className="text-blue-500 justify-start p-0 font-bold"
+      onClick={() => setScreen(screenName)}
+    >
+      Forgot your Password?
+    </Button>
+  );
+
+  const backButtonUi = (): ReactNode =>
+    !(screen == "join" || screen == "login") && (
       <Button
-        variant={"link"}
-        className="text-blue-500 justify-start p-0 font-bold"
-        onClick={() => setScreen(screenName)}
+        variant={"outline"}
+        className="bg-primary text-background absolute top-1 left-1 sm:top-4 sm:left-4 mt-2 sm:mt-0"
+        onClick={() => setScreen(prevScreen)}
       >
-        Forgot your Password?
+        <RiArrowLeftWideLine size={20} />
       </Button>
     );
-  };
-
-  const backButtonUi = (): ReactNode => {
-    return (
-      !(screen == "join" || screen == "login") && (
-        <Button
-          variant={"outline"}
-          className="bg-primary text-background absolute top-1 left-1 sm:top-4 sm:left-4 mt-2 sm:mt-0"
-          onClick={() => setScreen(prevScreen)}
-        >
-          <RiArrowLeftWideLine size={20} />
-        </Button>
-      )
-    );
-  };
 
   const commonClick = () => {
     setErrorHandle({
@@ -659,35 +726,30 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     text,
     onClick,
     disabled,
-  }: SubmitButton): ReactNode => {
-    // if (!data || isError({ ...data }) || isError({ ...error }, true))
-    return (
-      <Button
-        className="font-bold"
-        disabled={disabled}
-        onClick={() => {
-          onClick();
-          commonClick();
-        }}
-      >
-        {text}
-      </Button>
-    );
-  };
+  }: SubmitButton): ReactNode => (
+    <Button
+      className="font-bold"
+      disabled={disabled}
+      onClick={() => {
+        if (!(isError({ ...data }) || isError({ ...error }, true))) onClick();
+        commonClick();
+      }}
+    >
+      {text}
+    </Button>
+  );
 
-  const LinkButtonUi = ({ text, onClick }: SubmitButton): ReactNode => {
-    return (
-      <Button
-        variant={"link"}
-        onClick={onClick}
-        className="font-semibold hover:underline text-blue-500"
-      >
-        <AlertDialogDescription className="text-blue-500">
-          {text}
-        </AlertDialogDescription>
-      </Button>
-    );
-  };
+  const LinkButtonUi = ({ text, onClick }: SubmitButton): ReactNode => (
+    <Button
+      variant={"link"}
+      onClick={onClick}
+      className="font-semibold hover:underline text-blue-500"
+    >
+      <AlertDialogDescription className="text-blue-500">
+        {text}
+      </AlertDialogDescription>
+    </Button>
+  );
 
   const loginWithEmailHandle = () => {};
   const loginWithPhoneHandle = () => {};
