@@ -23,6 +23,7 @@ import { LoginSignupAlert } from "@/components/LoginSignupAlert";
 const username: string = "Hassan Hanif";
 
 export function NavDrawer() {
+  console.log("NavDrawer");
   return (
     <Sheet>
       <SheetTrigger asChild>

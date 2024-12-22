@@ -270,7 +270,7 @@ export interface AdDetails {
   description?: string;
   location?: string;
   price?: string;
-  name?: string;
+  // name?: string;
   phoneNumber?: string;
   showMyPhNum?: boolean;
 }
@@ -433,4 +433,9 @@ export interface PasswordStrength {
 export interface PasswordValidationData {
   text: string;
   condition?: boolean;
+}
+
+export interface TimerProps {
+  duration: number; // Timer duration in seconds
+  onComplete: () => void; // Function to call when timer completes
 }

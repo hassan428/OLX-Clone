@@ -11,6 +11,7 @@ import {
   isError,
   isNumber,
   validateEmail,
+  validatePassword,
   validatePhone,
 } from "@/utils";
 import Image from "next/image";
@@ -20,35 +21,6 @@ import { IoCameraReverseOutline, IoCloseOutline } from "react-icons/io5";
 
 const page = () => {
   const defaultAvatarUrl = "/assets/images/load_avatar.png";
-
-  const nameInput = (id: string) => (
-    <>
-      <TextInput
-        error={!!error?.name}
-        cut_handle={() => {
-          setDataHandle({ name: "" });
-          setErrorHandle({ name: "Name is required!" });
-        }}
-        inputProps={{
-          autoComplete: "name",
-          id,
-          value: data?.name || "",
-          placeholder: "Enter Name",
-          onBlur: () =>
-            setErrorHandle({
-              name: errorCheck().name,
-            }),
-          onChange: (e) => {
-            setDataHandle({ name: e.target.value });
-            setErrorHandle({
-              name: e.target.value ? undefined : "Name is required!",
-            });
-          },
-        }}
-      />
-      {error?.name && <Text error={!!error?.name} text={error.name} />}
-    </>
-  );
 
   const [data, setData] = useState<UserDetails | null>(null);
   const [optionalData, setOptionalData] = useState<UserDetailsOpional | null>(
@@ -108,17 +80,24 @@ const page = () => {
 
   const errorCheck = (value?: string): UserDetails => {
     return {
-      name: !data?.name ? "Name is required!" : undefined,
-      email: !data?.email
-        ? "Email is required!"
-        : !validateEmail(value || data.email)
-        ? "Please enter a valid email address"
-        : undefined,
-      phoneNumber: !data?.phoneNumber
-        ? "Phone Number is required!"
-        : !validatePhone(value || data.phoneNumber)
-        ? "Please enter a valid phone number"
-        : undefined,
+      name:
+        !value && !data?.name
+          ? "Name is required!"
+          : !validatePassword(value || data?.name).hasLetter
+          ? "Name must contain at least one alphabet"
+          : undefined,
+      email:
+        !value && !data?.email
+          ? "Email is required!"
+          : !validateEmail(value || data?.email)
+          ? "Please enter a valid email address"
+          : undefined,
+      phoneNumber:
+        !value && !data?.phoneNumber
+          ? "Phone Number is required!"
+          : !validatePhone(value || data?.phoneNumber)
+          ? "Please enter a valid phone number"
+          : undefined,
     };
   };
 
@@ -146,7 +125,41 @@ const page = () => {
     console.log("deleteAccount");
   };
 
-  console.log("data", data);
+  // console.log("data", data);
+
+  const nameInput = (id: string) => (
+    <>
+      <TextInput
+        error={!!error?.name}
+        cut_handle={() => {
+          setDataHandle({ name: "" });
+          setErrorHandle({ name: "Name is required!" });
+        }}
+        inputProps={{
+          autoComplete: "name",
+          id,
+          value: data?.name || "",
+          placeholder: "Enter Name",
+          onBlur: () =>
+            setErrorHandle({
+              name: errorCheck().name,
+            }),
+          onChange: (e) => {
+            const { value } = e.target;
+            setDataHandle({ name: value });
+            setErrorHandle({
+              name: !value
+                ? "Name is required!"
+                : value.length >= 2
+                ? errorCheck(value).name
+                : undefined,
+            });
+          },
+        }}
+      />
+      {error?.name && <Text error={!!error?.name} text={error.name} />}
+    </>
+  );
 
   return (
     <div className="m-3 sm:mx-20 flex flex-col gap-10">

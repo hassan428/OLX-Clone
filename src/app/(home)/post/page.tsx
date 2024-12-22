@@ -115,19 +115,19 @@ const page = () => {
 
   const errorCheck = (value?: string): AdDetails => {
     return {
-      name: !data?.name ? "Name is required!" : undefined,
+      // name: !data?.name ? "Name is required!" : undefined,
       location: !data?.location ? "Location is required!" : undefined,
       mainCategory: !category?.main
         ? "Please select a category to proceed."
         : undefined,
       image: sortedImages.length == 0 ? ["true"] : undefined,
       adTitle: !data?.adTitle
-        ? "Ad Title is requird!"
+        ? "Ad Title is required!"
         : data.adTitle.length < 5
         ? "A minimum length of 5 characters is allowed."
         : undefined,
       description: !data?.description
-        ? "Description is requird!"
+        ? "Description is required!"
         : data.description.length < 10
         ? "Description should contain at least 10 alphanumeric characters."
         : undefined,
@@ -138,11 +138,12 @@ const page = () => {
         ? `The minimum allowed value is PKR ${minPrice}`
         : undefined,
 
-      phoneNumber: !data?.phoneNumber
-        ? "Phone Number is required!"
-        : !validatePhone(value || data.phoneNumber)
-        ? "Please enter a valid phone number"
-        : undefined,
+      phoneNumber:
+        !value && !data?.phoneNumber
+          ? "Phone Number is required!"
+          : !validatePhone(value || data?.phoneNumber)
+          ? "Please enter a valid phone number"
+          : undefined,
     };
   };
 
@@ -514,7 +515,7 @@ const page = () => {
                     error={!!error?.adTitle}
                     cut_handle={() => {
                       setDataHandle({ adTitle: "" });
-                      setErrorHandle({ adTitle: "Ad Title is requird!" });
+                      setErrorHandle({ adTitle: "Ad Title is required!" });
                     }}
                     inputProps={{
                       autoComplete: "title",
@@ -529,7 +530,7 @@ const page = () => {
                       onChange: (e) => {
                         setErrorHandle({
                           adTitle: !e.target.value
-                            ? "Ad Title is requird!"
+                            ? "Ad Title is required!"
                             : undefined,
                         });
                         setDataHandle({ adTitle: e.target.value });
@@ -584,7 +585,7 @@ const page = () => {
                     onChange={(e) => {
                       setErrorHandle({
                         description: !e.target.value
-                          ? "Description is requird!"
+                          ? "Description is required!"
                           : undefined,
                       });
                       setDataHandle({ description: e.target.value });
@@ -712,11 +713,11 @@ const page = () => {
             </div>
           </div>
 
-          {/* name & price section*/}
+          {/* name & price Section*/}
 
           <div className="border-2 border-border rounded-xl m-2">
             <div className="flex flex-col border-b-2 border-border p-2 sm:p-5 text-xs sm:text-sm">
-              <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
+              {/* <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
                 <h1
                   className={`w-full sm:w-1/4 font-bold ${
                     error?.name && "text-error"
@@ -742,12 +743,15 @@ const page = () => {
                           name: errorCheck().name,
                         }),
                       onChange: (e) => {
+                        const { value } = e.target;
+                        setDataHandle({ name: value });
                         setErrorHandle({
-                          name: !e.target.value
-                            ? "Name is requird!"
+                          name: !value
+                            ? "Name is required!"
+                            : value.length >= 2
+                            ? errorCheck(value).name
                             : undefined,
                         });
-                        setDataHandle({ name: e.target.value });
                       },
                     }}
                   />
@@ -755,7 +759,7 @@ const page = () => {
                     <Text className="mt-1" error={true} text={error.name} />
                   )}
                 </div>
-              </div>
+              </div> */}
 
               <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
                 <h1

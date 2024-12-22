@@ -32,6 +32,7 @@ import { TextInput } from "@/components/Text_input";
 import { Text } from "@/components/Text";
 import { OTP_input } from "@/components/OTP_input";
 import { Loader } from "@/components/Loader";
+import { Timer } from "@/components/Timer";
 import { Progress } from "@/components/ui/progress";
 import {
   checkPasswordStrength,
@@ -81,6 +82,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
   const [error, setError] = useState<LoginSignup | null>(null);
   const [data, setData] = useState<LoginSignup | null>(null);
   const [otp, setOtp] = useState<string>("");
+  const [timeUp, setTimeUp] = useState<boolean>(false);
   const [passwordRules, setPassWordRules] = useState<PasswordRules | null>(
     null
   );
@@ -114,6 +116,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       ["name", "email", "phoneNumber", "password", "confirmPassword"].map(
         (key) => setDataHandle({ [key]: undefined })
       );
+      setTimeUp(false);
       setPassWordRules(null);
       setPassWordStrength(null);
     }
@@ -131,6 +134,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       return { ...pre, ...newError };
     });
   };
+  console.log("data", data);
 
   const loginWithGoogle = async () => {
     console.log("loginWithGoogle");
@@ -141,21 +145,24 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
   };
 
   const errorCheck = (value?: string): LoginSignup => ({
-    name: !data?.name
-      ? "Name is required!"
-      : !validatePassword(value || data.name).hasLetter
-      ? "Name must contain at least one alphabet"
-      : undefined,
-    email: !data?.email
-      ? "Email is required!"
-      : !validateEmail(value || data.email)
-      ? "Please enter a valid email address"
-      : undefined,
-    phoneNumber: !data?.phoneNumber
-      ? "Phone Number is required!"
-      : !validatePhone(value || data.phoneNumber)
-      ? "Please enter a valid phone number"
-      : undefined,
+    name:
+      !value && !data?.name
+        ? "Name is required!"
+        : !validatePassword(value || data?.name).hasLetter
+        ? "Name must contain at least one alphabet"
+        : undefined,
+    email:
+      !value && !data?.email
+        ? "Email is required!"
+        : !validateEmail(value || data?.email)
+        ? "Please enter a valid email address"
+        : undefined,
+    phoneNumber:
+      !value && !data?.phoneNumber
+        ? "Phone Number is required!"
+        : !validatePhone(value || data?.phoneNumber)
+        ? "Please enter a valid phone number"
+        : undefined,
   });
 
   const loginSignupUi = (logOrjoin: "login" | "join"): ReactNode => (
@@ -285,12 +292,11 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
               }),
             onChange: (e) => {
               const { value } = e.target;
-
               setDataHandle({ name: value });
               setErrorHandle({
                 name: !value
                   ? "Name is required!"
-                  : value.length == 2
+                  : value.length >= 2
                   ? errorCheck(value).name
                   : undefined,
               });
@@ -382,13 +388,13 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
             value: data?.password || "",
             id: "password",
             onFocus: () => {
-              if (!data?.email || !validateEmail(data.email)) {
+              if (!validateEmail(data?.email)) {
                 emailInputRef.current?.focus();
                 setErrorHandle({
                   email: errorCheck().email,
                 });
               }
-              if (!data?.phoneNumber || !validatePhone(data.phoneNumber)) {
+              if (!validatePhone(data?.phoneNumber)) {
                 phoneInputRef.current?.focus();
                 setErrorHandle({
                   phoneNumber: errorCheck().phoneNumber,
@@ -537,14 +543,21 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
           setOtp(value);
         }}
       />
+
+      {!timeUp && (
+        <div className="text-center font-bold">
+          <h1>Hurry up! OTP will expire in </h1>
+          <Timer duration={150} onComplete={() => setTimeUp(true)} />.
+        </div>
+      )}
+
       {LinkButtonUi({
-        text: `Resend Code by ${
-          screen === "otpEmail" ? "Email Address" : "SMS"
-        }`,
+        text: `Resend Code ${screen === "otpPhone" ? "by SMS" : ""}`,
         onClick:
-          screen === "otpEmail"
-            ? resendCodeByEmailHandle
-            : resendCodeBySMSHandle,
+          screen === "otpPhone"
+            ? resendCodeBySMSHandle
+            : resendCodeByEmailHandle,
+        disabled: !timeUp,
       })}
 
       {screen !== "otpEmail" && (
@@ -555,6 +568,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
           {LinkButtonUi({
             text: "Resend Code by Call",
             onClick: resendCodeByCallHandle,
+            disabled: !timeUp,
           })}
         </div>
       )}
@@ -563,24 +577,32 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
   const joinEmailUi = (): ReactNode => (
     <>
-      {nameInput()}
-      {emailInput()}
+      <div className="flex flex-col gap-3 my-2">
+        {nameInput()}
+        {emailInput()}
+      </div>
       {submitButtonUi({
         text: "Next",
         onClick: navigatePasswordScreenHandle,
-        disabled: isError({ ...data }) || isError({ ...error }, true),
+        disabled:
+          isError({ name: data?.name, email: data?.email }) ||
+          isError({ name: error?.name, email: error?.email }, true),
       })}
     </>
   );
 
   const joinPhoneUi = (): ReactNode => (
     <>
-      {nameInput()}
-      {phoneInput()}
+      <div className="flex flex-col gap-3 my-2">
+        {nameInput()}
+        {phoneInput()}
+      </div>
       {submitButtonUi({
         text: "Next",
         onClick: navigatePasswordScreenHandle,
-        disabled: isError({ ...data }) || isError({ ...error }, true),
+        disabled:
+          isError({ name: data?.name, phoneNumber: data?.phoneNumber }) ||
+          isError({ name: error?.name, phoneNumber: error?.phoneNumber }, true),
       })}
     </>
   );
@@ -593,7 +615,13 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       </h1>
       {emailInput()}
 
-      {submitButtonUi({ text: "Next", onClick: OTPEmailScreenHandle })}
+      {submitButtonUi({
+        text: "Next",
+        onClick: OTPEmailScreenHandle,
+        disabled:
+          isError({ email: data?.email }) ||
+          isError({ email: error?.email }, true),
+      })}
     </>
   );
 
@@ -605,7 +633,13 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       </h1>
       {phoneInput()}
 
-      {submitButtonUi({ text: "Next", onClick: OTPPhoneScreenHandle })}
+      {submitButtonUi({
+        text: "Next",
+        onClick: OTPPhoneScreenHandle,
+        disabled:
+          isError({ phoneNumber: data?.phoneNumber }) ||
+          isError({ phoneNumber: error?.phoneNumber }, true),
+      })}
     </>
   );
 
@@ -702,26 +736,6 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       </Button>
     );
 
-  const commonClick = () => {
-    setErrorHandle({
-      email: !data?.email
-        ? "Email is required!"
-        : !validateEmail(data.email)
-        ? "Please enter a valid email address"
-        : undefined,
-      phoneNumber: !data?.phoneNumber
-        ? "Phone Number is required!"
-        : !validatePhone(data.phoneNumber)
-        ? // : data.phoneNumber.length !== 10
-          "Please enter a valid Phone Number ssssss"
-        : undefined,
-      password: !data?.password ? "Password is required!" : undefined,
-      confirmPassword: !data?.confirmPassword
-        ? "Confirm Password is required!"
-        : undefined,
-    });
-  };
-
   const submitButtonUi = ({
     text,
     onClick,
@@ -731,18 +745,22 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       className="font-bold"
       disabled={disabled}
       onClick={() => {
-        if (!(isError({ ...data }) || isError({ ...error }, true))) onClick();
-        commonClick();
+        onClick();
       }}
     >
       {text}
     </Button>
   );
 
-  const LinkButtonUi = ({ text, onClick }: SubmitButton): ReactNode => (
+  const LinkButtonUi = ({
+    text,
+    onClick,
+    disabled,
+  }: SubmitButton): ReactNode => (
     <Button
       variant={"link"}
       onClick={onClick}
+      disabled={disabled}
       className="font-semibold hover:underline text-blue-500"
     >
       <AlertDialogDescription className="text-blue-500">
@@ -755,15 +773,31 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
   const loginWithPhoneHandle = () => {};
   const createAccountHandle = () => {};
   const navigatePasswordScreenHandle = () => {
-    setScreen("createPass");
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setScreen("createPass");
+    }, 2000);
   };
+
   const OTPEmailScreenHandle = () => {
-    setScreen("otpEmail");
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setScreen("otpEmail");
+      // timerHandle();
+    }, 2000);
   };
 
   const OTPPhoneScreenHandle = () => {
-    setScreen("otpPhone");
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setScreen("otpPhone");
+      // timerHandle();
+    }, 2000);
   };
+
   const OTPVerifyHandle = () => {
     console.log("OTPVerifyHandle");
   };

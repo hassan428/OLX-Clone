@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { throttle } from "lodash";
 import { Logo } from "@/components/Logo";
 import { Sell_btn } from "@/components/Sell_btn";
 import { NavScreenBtn } from "@/components/NavScreenBtn";
@@ -21,26 +22,47 @@ export const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0); // To track previous scroll position
 
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll = throttle(() => {
       const currentScrollY = window.scrollY;
 
-      if (currentScrollY > lastScrollY && currentScrollY > 150) {
-        // User is scrolling down and past 50px
-        setIsVisible(false);
+      if (!isVisible && currentScrollY > lastScrollY && currentScrollY > 150) {
+        setIsVisible(false); // Hide Navbar on scroll down
       } else {
-        // User is scrolling up
-        setIsVisible(true);
+        setIsVisible(true); // Show Navbar on scroll up
       }
 
-      setLastScrollY(currentScrollY); // Update the last scroll position
-    };
+      setLastScrollY(currentScrollY);
+    }, 200); // Trigger every 200ms
 
     window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll); // Cleanup event listener
+      window.removeEventListener("scroll", handleScroll); // Cleanup
     };
   }, [lastScrollY]);
+
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const currentScrollY = window.scrollY;
+
+  //     if (currentScrollY > lastScrollY && currentScrollY > 150) {
+  //       // User is scrolling down and past 50px
+  //       setIsVisible(false);
+  //     } else {
+  //       // User is scrolling up
+  //       setIsVisible(true);
+  //     }
+
+  //     setLastScrollY(currentScrollY); // Update the last scroll position
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll); // Cleanup event listener
+  //   };
+  // }, [lastScrollY]);
+  console.log("abcd");
 
   const navbarRoute: NavbarRoute[] = [
     {

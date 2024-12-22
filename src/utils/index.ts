@@ -27,14 +27,14 @@ export const minYear: number = 1950;
 export const validateYear = (year: string): boolean =>
   +year >= minYear && +year <= new Date().getFullYear();
 
-export const validateEmail = (email: string): boolean => {
+export const validateEmail = (email?: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+  return !!email && emailRegex.test(email);
 };
 
-export const validatePhone = (phoneNum: string): boolean => {
+export const validatePhone = (phoneNum?: string): boolean => {
   const phoneRegex = /^3\d{9}$/;
-  return phoneRegex.test(phoneNum);
+  return !!phoneNum && phoneRegex.test(phoneNum);
 };
 
 export const isNumber = (value: string): boolean => {
@@ -42,12 +42,12 @@ export const isNumber = (value: string): boolean => {
   return numRegix.test(value);
 };
 
-export const validatePassword = (password: string): PasswordRules => {
+export const validatePassword = (password?: string): PasswordRules => {
   return {
-    hasMinLength: /.{8,}/.test(password),
-    hasNumber: /\d/.test(password),
-    hasSpecialChar: /[\W_]/.test(password),
-    hasLetter: /[a-zA-Z]/.test(password),
+    hasMinLength: !!password && /.{8,}/.test(password),
+    hasNumber: !!password && /\d/.test(password),
+    hasSpecialChar: !!password && /[\W_]/.test(password),
+    hasLetter: !!password && /[a-zA-Z]/.test(password),
   };
 };
 
