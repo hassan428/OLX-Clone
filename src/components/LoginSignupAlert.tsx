@@ -37,10 +37,12 @@ import { Progress } from "@/components/ui/progress";
 import {
   checkPasswordStrength,
   isError,
+  isLogged,
   isNumber,
   validateEmail,
   validatePassword,
   validatePhone,
+  verifiedData,
 } from "@/utils";
 
 const screenRoute: LoginSignupRoute[] = [
@@ -74,10 +76,21 @@ const screenRoute: LoginSignupRoute[] = [
     current: "forgotPassEmail",
     previous: "loginEmail",
   },
+  {
+    current: "otpEmail",
+    previous: isLogged ? "verifyEmail" : "forgotPassEmail",
+  },
+  {
+    current: "otpPhone",
+    previous: isLogged ? "verifyPhone" : "forgotPassPhone",
+  },
 ];
 
 export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
-  const [screen, setScreen] = useState<LoginSignupScreenName>("login");
+  const [screen, setScreen] = useState<LoginSignupScreenName>(
+    isLogged ? "verifyEmail" : "login" // get data with (Redux Toolkit)
+  );
+
   const [prevScreen, setPrevScreen] = useState<LoginSignupScreenName>("login");
   const [error, setError] = useState<LoginSignup | null>(null);
   const [data, setData] = useState<LoginSignup | null>(null);
@@ -90,7 +103,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     useState<PasswordStrength | null>(null);
 
   const [loading, setLoading] = useState<boolean>(false);
-  const loginOrEmail = screen.slice(screen.length - 5);
+  const loginOrEmailString: string = screen.slice(screen.length - 5);
 
   const PasswordValidationData: PasswordValidationData[] = [
     { text: "8 characters", condition: passwordRules?.hasMinLength },
@@ -120,21 +133,24 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       setPassWordRules(null);
       setPassWordStrength(null);
     }
+    if (screen.includes("verify")) {
+      setDataHandle(verifiedData);
+      setTimeUp(false);
+    }
     setError(null);
   }, [screen]);
 
-  const setDataHandle = (newData: LoginSignup) => {
+  const setDataHandle = (newData: LoginSignup): void => {
     setData((pre) => {
       return { ...pre, ...newData };
     });
   };
 
-  const setErrorHandle = (newError: LoginSignup) => {
+  const setErrorHandle = (newError: LoginSignup): void => {
     setError((pre) => {
       return { ...pre, ...newError };
     });
   };
-  console.log("data", data);
 
   const loginWithGoogle = async () => {
     console.log("loginWithGoogle");
@@ -161,6 +177,12 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       !value && !data?.phoneNumber
         ? "Phone Number is required!"
         : !validatePhone(value || data?.phoneNumber)
+        ? "Please enter a valid phone number"
+        : undefined,
+    password:
+      !value && !data?.password
+        ? "Passwordr is required!"
+        : !validatePhone(value || data?.password)
         ? "Please enter a valid phone number"
         : undefined,
   });
@@ -620,7 +642,8 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         onClick: OTPEmailScreenHandle,
         disabled:
           isError({ email: data?.email }) ||
-          isError({ email: error?.email }, true),
+          isError({ email: error?.email }, true) ||
+          verifiedData.email == data?.email,
       })}
     </>
   );
@@ -638,7 +661,8 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         onClick: OTPPhoneScreenHandle,
         disabled:
           isError({ phoneNumber: data?.phoneNumber }) ||
-          isError({ phoneNumber: error?.phoneNumber }, true),
+          isError({ phoneNumber: error?.phoneNumber }, true) ||
+          verifiedData.phoneNumber == data?.phoneNumber,
       })}
     </>
   );
@@ -726,7 +750,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
   );
 
   const backButtonUi = (): ReactNode =>
-    !(screen == "join" || screen == "login") && (
+    !(screen == "join" || screen == "login" || screen.includes("verify")) && (
       <Button
         variant={"outline"}
         className="bg-primary text-background absolute top-1 left-1 sm:top-4 sm:left-4 mt-2 sm:mt-0"
@@ -823,9 +847,11 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
               : screen == "join"
               ? "Create a new LOX account"
               : screen == "joinEmail" || screen == "joinPhone"
-              ? `Create account with ${loginOrEmail}`
+              ? `Create account with ${loginOrEmailString}`
+              : screen.includes("verify")
+              ? `Verify ${loginOrEmailString}`
               : screen == "loginEmail" || screen == "loginPhone"
-              ? `Log in with ${loginOrEmail}`
+              ? `Log in with ${loginOrEmailString}`
               : screen.includes("forgotPass")
               ? "Forgot Password"
               : screen == "createPass"
@@ -845,6 +871,8 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
           {screen === "joinPhone" && joinPhoneUi()}
           {screen.includes("otp") && otpUi()}
           {screen === "createPass" && createPassUi()}
+          {screen === "verifyEmail" && forgotPassEmailUi()}
+          {screen === "verifyPhone" && forgotPassPhoneUi()}
           {screen === "forgotPassEmail" && forgotPassEmailUi()}
           {screen === "forgotPassPhone" && forgotPassPhoneUi()}
         </div>

@@ -36,6 +36,7 @@ export const ProductCardUI = ({
             width={250}
             height={250}
             className="h-full w-full"
+            priority
           />
           {/* <Button className="w-max p-3 absolute top-1 left-1">Featured</Button> */}
         </CardHeader>
@@ -77,6 +78,7 @@ export const MoreProductCardUI = ({
             width={250}
             height={250}
             className="h-full w-full"
+            priority
           />
         </CardHeader>
         <div className="w-2/3 flex flex-col justify-between border-l-2 p-2 sm:p-5 border-border">

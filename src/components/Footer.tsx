@@ -21,8 +21,8 @@ const footerdata: FooterLinkSection[] = [
     data: [
       { text: "Vehicles", href: "/category/vehicles" },
       { text: "Furniture", href: "/category/furniture" },
-      { text: "Kids", href: "/category/kids" },
-      { text: "Birds", href: "/category/birds" },
+      { text: "Kids", href: "/category/fashion/kids" },
+      { text: "Birds", href: "/category/birds-animals" },
     ],
   },
   {

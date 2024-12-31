@@ -2,11 +2,12 @@ import { MoreProductCardData } from "@/components/ProductsData";
 import { PageProps } from "@/interfaces";
 
 const page = ({ params }: PageProps) => {
+  const { categoryName } = params;
   return (
-    params.categoryName && (
+    categoryName && (
       <MoreProductCardData
-        mainCategory={params.categoryName[0]}
-        subCategory={params.categoryName[1]}
+        mainCategory={categoryName[0]}
+        subCategory={categoryName[1]}
       />
     )
   );

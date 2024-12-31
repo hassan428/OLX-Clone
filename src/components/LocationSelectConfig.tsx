@@ -94,7 +94,7 @@ export const LocationSelectConfig = ({
                 <div
                   key={i}
                   onClick={() => handleOptionClick(province)}
-                  className={`flex items-center gap-2 px-3 py-4 border-b-2 border-background cursor-pointer  ${
+                  className={`flex items-center gap-2 px-2 py-4 border-b-2 border-background cursor-pointer  ${
                     [selectedOption?.label, defaultSelect?.label].includes(
                       province.label
                     )
@@ -114,7 +114,7 @@ export const LocationSelectConfig = ({
               ) : (
                 <AccordionItem key={i} value={`items-${i}`}>
                   <AccordionTrigger
-                    className={`text-left border-b-2 border-background px-3 ${
+                    className={`text-left border-b-2 border-background px-2 ${
                       [selectedOption?.label, defaultSelect?.label].includes(
                         province.label
                       ) ||
@@ -143,18 +143,18 @@ export const LocationSelectConfig = ({
                       {province.label}
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent className="flex flex-col p-0 bg-border mb-1">
+                  <AccordionContent className="flex flex-col p-0 bg-background mb-1 border-b-2 border-background">
                     {cities?.map((city) => (
                       <div
                         key={city.value}
                         onClick={() => handleOptionClick(city)}
-                        className={`cursor-pointer pl-5 p-3 hover:font-bold hover:border-y border-border rounded flex items-center gap-2 ${
+                        className={`cursor-pointer ml-5 p-3 mr-2 my-1 rounded-md hover:font-bold border-b border-background flex items-center gap-2 ${
                           [
                             selectedOption?.label,
                             defaultSelect?.label,
                           ].includes(city.label)
                             ? "bg-green-300 text-green-900 hover:bg-green-300 font-semibold"
-                            : "hover:bg-input hover:font-semibold"
+                            : "hover:bg-border hover:font-semibold"
                         }`}
                       >
                         {[selectedOption?.label, defaultSelect?.label].includes(

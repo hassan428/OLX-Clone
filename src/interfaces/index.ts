@@ -34,7 +34,7 @@ export interface InputValue {
 }
 
 export interface Params {
-  categoryName?: string;
+  categoryName?: MainCategoryType;
   profileID?: string;
 }
 
@@ -163,8 +163,8 @@ export interface CardDetailsImage {
 }
 
 export interface MoreProductCardDataProps {
-  mainCategory: MainCategoryType;
-  subCategory: SubCategoryType;
+  mainCategory: MainCategoryType | string;
+  subCategory: SubCategoryType | string;
 }
 
 export interface DetailProductCardDataProps {
@@ -382,6 +382,8 @@ export type LoginSignupScreenName =
   | "otpEmail"
   | "otpPhone"
   | "createPass"
+  | "verifyPhone"
+  | "verifyEmail"
   | "forgotPassPhone"
   | "forgotPassEmail";
 

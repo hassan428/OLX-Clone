@@ -2,6 +2,7 @@
 import { Alert } from "@/components/Alert";
 import { DatePicker } from "@/components/DatePicker";
 import { InputAndDropdown } from "@/components/InputAndDropdown";
+import { LoginSignupAlert } from "@/components/LoginSignupAlert";
 import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
@@ -13,9 +14,10 @@ import {
   validateEmail,
   validatePassword,
   validatePhone,
+  verifiedData,
 } from "@/utils";
 import Image from "next/image";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import { HiLightBulb } from "react-icons/hi";
 import { IoCameraReverseOutline, IoCloseOutline } from "react-icons/io5";
 
@@ -31,9 +33,7 @@ const page = () => {
   const [avatarUrl, setAvatarUrl] = useState<any>(defaultAvatarUrl);
 
   useEffect(() => {
-    ["name", "email", "phoneNumber"].map((key) =>
-      setDataHandle({ [key]: undefined })
-    );
+    setDataHandle(verifiedData); // get data with Redux Toolkit & set data
   }, []);
 
   const setDataHandle = (newData: UserDetails) => {
@@ -127,8 +127,11 @@ const page = () => {
 
   // console.log("data", data);
 
-  const nameInput = (id: string) => (
-    <>
+  const nameInput = (id: string, className?: string): ReactNode => (
+    <div className={`flex flex-col w-full sm:gap-2 ${className}`}>
+      <h1 className={`text-sm font-bold ${error?.name && "text-error"}`}>
+        Name
+      </h1>
       <TextInput
         error={!!error?.name}
         cut_handle={() => {
@@ -158,7 +161,105 @@ const page = () => {
         }}
       />
       {error?.name && <Text error={!!error?.name} text={error.name} />}
-    </>
+    </div>
+  );
+
+  const phoneInput = (): ReactNode => (
+    <div className="sm:flex items-center gap-2">
+      <div className="w-full">
+        <div className="flex">
+          <div
+            className={`border rounded-l-md ${
+              error?.phoneNumber
+                ? "border-error text-error"
+                : "border-foreground"
+            } text-base px-2 flex items-center`}
+          >
+            <h1 className="">+92</h1>
+          </div>
+          <TextInput
+            error={!!error?.phoneNumber}
+            className="rounded-l-none"
+            inputProps={{
+              id: "phoneNumber",
+              value: data?.phoneNumber || "",
+              placeholder: "Enter Phone Number",
+              maxLength: 10,
+              onBlur: () =>
+                setErrorHandle({
+                  phoneNumber: errorCheck().phoneNumber,
+                }),
+              onChange: (e) => {
+                const { value } = e.target;
+                if (isNumber(value)) {
+                  setErrorHandle({
+                    phoneNumber: !value
+                      ? "Phone Number is required!"
+                      : value.length == 10
+                      ? errorCheck(value).phoneNumber
+                      : undefined,
+                  });
+                  setDataHandle({
+                    phoneNumber: value,
+                  });
+                }
+              },
+            }}
+          />
+        </div>
+        {error?.phoneNumber && (
+          <Text
+            className="mt-1"
+            error={!!error.phoneNumber}
+            text={error.phoneNumber}
+          />
+        )}
+      </div>
+      <h1 className="hidden sm:inline w-full text-xs text-muted-foreground">
+        This is the number for buyers contacts, reminders, and other
+        notifications.
+      </h1>
+    </div>
+  );
+
+  const emailInput = (): ReactNode => (
+    <div className="flex items-center gap-2">
+      <div className="w-full">
+        <TextInput
+          error={!!error?.email}
+          inputProps={{
+            autoComplete: "email",
+            id: "email_address",
+            value: data?.email || "",
+            placeholder: "Email",
+            onBlur: () =>
+              setErrorHandle({
+                email: errorCheck().email,
+              }),
+            onChange: (e) => {
+              const { value } = e.target;
+
+              setDataHandle({
+                email: value.split(" ").join(""),
+              });
+              setErrorHandle({
+                email: !value
+                  ? "Email is required!"
+                  : value.length >= 25
+                  ? errorCheck(value).email
+                  : undefined,
+              });
+            },
+          }}
+        />
+        {error?.email && (
+          <Text className="mt-1" error={!!error?.email} text={error.email} />
+        )}
+      </div>
+      <h1 className="hidden sm:inline w-full text-xs text-muted-foreground">
+        We won't reveal your email to anyone else not use it to send you spam
+      </h1>
+    </div>
   );
 
   return (
@@ -209,25 +310,13 @@ const page = () => {
               </Button>
               <h1 className="text-xs">JPG, JPEG, PNG </h1>
             </div>
-            <div className="flex sm:hidden flex-col w-full">
-              <h1 className="text-sm font-bold">Name</h1>
-              {nameInput("name")} {/* input id   */}
-            </div>
+            {nameInput("name", "sm:hidden")}
           </div>
         </div>
 
         <div className="sm:flex w-full gap-2 items-start sm:border-b border-muted-foreground">
           <div className="flex w-full flex-col gap-5 sm:pb-5">
-            <div className="hidden sm:flex flex-col gap-2">
-              <h1
-                className={`text-sm font-bold ${error?.name && "text-error"}`}
-              >
-                Name
-              </h1>
-              <div>
-                {nameInput("Name")} {/* input id   */}
-              </div>
-            </div>
+            {nameInput("name", "hidden sm:flex")}
 
             <div className="flex flex-col gap-2 w-full">
               <h1 className="text-sm font-bold">Date of Birth</h1>
@@ -292,116 +381,8 @@ const page = () => {
               Contact
             </h1>
 
-            <div className="sm:flex items-center gap-2">
-              <div className="w-full">
-                <div className="flex">
-                  <div
-                    className={`border rounded-l-md ${
-                      error?.phoneNumber
-                        ? "border-error text-error"
-                        : "border-foreground"
-                    } text-base px-2 flex items-center`}
-                  >
-                    <h1 className="">+92</h1>
-                  </div>
-                  <TextInput
-                    error={!!error?.phoneNumber}
-                    cut_handle={() => {
-                      setDataHandle({ phoneNumber: "" });
-                      setErrorHandle({
-                        phoneNumber: "Phone Number is required!",
-                      });
-                    }}
-                    className="rounded-l-none"
-                    inputProps={{
-                      id: "phoneNumber",
-                      value: data?.phoneNumber || "",
-                      placeholder: "Enter Phone Number",
-                      maxLength: 10,
-                      onBlur: () =>
-                        setErrorHandle({
-                          phoneNumber: errorCheck().phoneNumber,
-                        }),
-                      onChange: (e) => {
-                        const { value } = e.target;
-                        if (isNumber(value)) {
-                          setErrorHandle({
-                            phoneNumber: !value
-                              ? "Phone Number is required!"
-                              : value.length == 10
-                              ? errorCheck(value).phoneNumber
-                              : undefined,
-                          });
-                          setDataHandle({
-                            phoneNumber: value,
-                          });
-                        }
-                      },
-                    }}
-                  />
-                </div>
-                {error?.phoneNumber && (
-                  <Text
-                    className="mt-1"
-                    error={!!error.phoneNumber}
-                    text={error.phoneNumber}
-                  />
-                )}
-              </div>
-              <h1 className="hidden sm:inline w-full text-xs text-muted-foreground">
-                This is the number for buyers contacts, reminders, and other
-                notifications.
-              </h1>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <div className="w-full">
-              <TextInput
-                error={!!error?.email}
-                cut_handle={() => {
-                  setDataHandle({ email: "" });
-                  setErrorHandle({
-                    email: "Email is required!",
-                  });
-                }}
-                inputProps={{
-                  autoComplete: "email",
-                  id: "email_address",
-                  value: data?.email || "",
-                  placeholder: "Email",
-                  onBlur: () =>
-                    setErrorHandle({
-                      email: errorCheck().email,
-                    }),
-                  onChange: (e) => {
-                    const { value } = e.target;
-
-                    setDataHandle({
-                      email: value.split(" ").join(""),
-                    });
-                    setErrorHandle({
-                      email: !value
-                        ? "Email is required!"
-                        : value.length >= 25
-                        ? errorCheck(value).email
-                        : undefined,
-                    });
-                  },
-                }}
-              />
-              {error?.email && (
-                <Text
-                  className="mt-1"
-                  error={!!error?.email}
-                  text={error.email}
-                />
-              )}
-            </div>
-            <h1 className="hidden sm:inline w-full text-xs text-muted-foreground">
-              We won't reveal your email to anyone else not use it to send you
-              spam
-            </h1>
+            <LoginSignupAlert trigger={phoneInput()} />
+            <LoginSignupAlert trigger={emailInput()} />
           </div>
         </div>
 

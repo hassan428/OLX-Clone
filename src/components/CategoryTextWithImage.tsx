@@ -11,23 +11,6 @@ import {
 } from "@/components/ui/carousel";
 import { category_link } from "@/utils";
 
-export const CategoryText = () => {
-  return (
-    <div className="hidden md:flex justify-start items-center gap-5 p-2 text-sm">
-      <Link href={"/allcategories"}>
-        <strong className="hover:font-extrabold">All Categories</strong>
-      </Link>
-      {category_link.map(({ href, title }, i) => {
-        return (
-          <Link href={`/category/${href}`} key={i}>
-            <h1 className="hover:font-bold">{title.split(" ")[0]}</h1>
-          </Link>
-        );
-      })}
-    </div>
-  );
-};
-
 export const CategoryTextWithImage = () => {
   const renderData = ({ href, src, title }: CategoryLink, i: number) => (
     <Link
@@ -37,7 +20,7 @@ export const CategoryTextWithImage = () => {
     >
       <Image
         src={`/assets/images/category/${src}`}
-        alt={title}
+        alt={title || ""}
         width={80}
         height={80}
         priority

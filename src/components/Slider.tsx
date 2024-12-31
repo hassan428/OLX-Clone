@@ -44,7 +44,7 @@ export function Slider() {
                 height={1000}
                 alt="sliderImage"
                 priority={true}
-                className="w-full h-32 sm:h-48 xl:h-56 object-fill"
+                className="w-full h-32 sm:h-52 xl:h-56 object-fill"
               />
             </div>
           </CarouselItem>

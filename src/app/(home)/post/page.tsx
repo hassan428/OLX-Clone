@@ -115,7 +115,6 @@ const page = () => {
 
   const errorCheck = (value?: string): AdDetails => {
     return {
-      // name: !data?.name ? "Name is required!" : undefined,
       location: !data?.location ? "Location is required!" : undefined,
       mainCategory: !category?.main
         ? "Please select a category to proceed."

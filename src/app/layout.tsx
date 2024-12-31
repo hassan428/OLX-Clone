@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "next-themes";
-import { CategoryText } from "@/components/CategoryLink";
+import { CategoryText } from "@/components/CategoryText";
 import { Toaster } from "@/components/ui/toaster";
 import { Sell_btn } from "@/components/Sell_btn";
 
@@ -45,7 +45,6 @@ const RootLayout: FC<LayoutProps> = ({ children }) => {
             <Sell_btn className="fixed bottom-3 left-1/2 transform -translate-x-1/2 xmd:hidden z-50" />
             <Navbar />
             <CategoryText />
-
             {children}
           </div>
           <div>

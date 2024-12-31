@@ -1,5 +1,6 @@
 "use client";
 import { BackToTopButtonProps } from "@/interfaces";
+import { scrollToTop } from "@/utils";
 import { useState, useEffect } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 
@@ -17,12 +18,6 @@ export const BackToTopBtn = ({ className }: BackToTopButtonProps) => {
       window.removeEventListener("scroll", showBtnHandle);
     };
   }, []);
-
-  const scrollToTop = () => {
-    document.getElementById("top")?.scrollIntoView({
-      behavior: "smooth",
-    });
-  };
 
   return (
     showBtn && (

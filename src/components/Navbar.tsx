@@ -1,15 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { throttle } from "lodash";
 import { Logo } from "@/components/Logo";
 import { Sell_btn } from "@/components/Sell_btn";
 import { NavScreenBtn } from "@/components/NavScreenBtn";
 import { Location_select } from "@/components/Location_select";
 import { Search_input } from "@/components/Search_input";
 import { IoCarSportOutline } from "react-icons/io5";
-import { BsBuildings } from "react-icons/bs";
+import { FaMobileScreen } from "react-icons/fa6";
 import { DarkLightModeBtn } from "@/components/DarkLightMode";
-import { NavigateButton } from "@/components/NavigateButton";
 import { NavDrawer } from "@/components/NavDrawer";
 import { NavbarRoute } from "@/interfaces";
 import { isLogged } from "@/utils";
@@ -22,60 +20,37 @@ export const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0); // To track previous scroll position
 
   useEffect(() => {
-    const handleScroll = throttle(() => {
+    const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      if (!isVisible && currentScrollY > lastScrollY && currentScrollY > 150) {
-        setIsVisible(false); // Hide Navbar on scroll down
+      if (currentScrollY > lastScrollY && currentScrollY > 150) {
+        // User is scrolling down and past 50px
+        setIsVisible(false);
       } else {
-        setIsVisible(true); // Show Navbar on scroll up
+        // User is scrolling up
+        setIsVisible(true);
       }
 
-      setLastScrollY(currentScrollY);
-    }, 200); // Trigger every 200ms
+      setLastScrollY(currentScrollY); // Update the last scroll position
+    };
 
     window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll); // Cleanup
+      window.removeEventListener("scroll", handleScroll); // Cleanup event listener
     };
   }, [lastScrollY]);
-
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const currentScrollY = window.scrollY;
-
-  //     if (currentScrollY > lastScrollY && currentScrollY > 150) {
-  //       // User is scrolling down and past 50px
-  //       setIsVisible(false);
-  //     } else {
-  //       // User is scrolling up
-  //       setIsVisible(true);
-  //     }
-
-  //     setLastScrollY(currentScrollY); // Update the last scroll position
-  //   };
-
-  //   window.addEventListener("scroll", handleScroll);
-
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll); // Cleanup event listener
-  //   };
-  // }, [lastScrollY]);
-  console.log("abcd");
 
   const navbarRoute: NavbarRoute[] = [
     {
       Icon: IoCarSportOutline,
-      title: "Motors",
-      className: "",
-      href: "motors",
+      title: "Vehicles",
+      href: "vehicles",
     },
     {
-      Icon: BsBuildings,
-      title: "Property",
-      className: "",
-      href: "property",
+      Icon: FaMobileScreen,
+      title: "Mobiles",
+      href: "mobiles-tablets",
     },
   ];
 
@@ -95,7 +70,7 @@ export const Navbar = () => {
           <NavScreenBtn
             icon={<Icon size={25} />}
             text={title}
-            href={href}
+            href={`/category/${href}`}
             className={`max-sm:hidden ${className}`}
             key={i}
           />
@@ -126,12 +101,6 @@ export const Navbar = () => {
                 </Button>
               }
             />
-            // <NavigateButton
-            //   btnText="Login"
-            //   variant="link"
-            //   method="push"
-            //   pageName="/login"
-            // />
           )}
         </div>
 

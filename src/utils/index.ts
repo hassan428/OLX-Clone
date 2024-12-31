@@ -7,6 +7,7 @@ import {
   RenderProductCardProps,
   RouteData,
   SubCategoryType,
+  UserDetails,
 } from "@/interfaces";
 import {
   IoCameraOutline,
@@ -23,6 +24,20 @@ import {
 import zxcvbn from "zxcvbn";
 
 export const minYear: number = 1950;
+
+export const verifiedData: UserDetails = {
+  email: "example@gmail.com",
+  name: undefined,
+  phoneNumber: undefined,
+}; // get data with (Redux Toolkit)
+
+export const isLogged: boolean = true; // get data with (Redux Toolkit)
+
+export const scrollToTop = () => {
+  document.getElementById("top")?.scrollIntoView({
+    behavior: "smooth",
+  });
+};
 
 export const validateYear = (year: string): boolean =>
   +year >= minYear && +year <= new Date().getFullYear();
@@ -248,7 +263,7 @@ export const category_link: CategoryLink[] = [
         title: "Cars",
       },
       {
-        href: "rickshaw-&-chingchi",
+        href: "rickshaw-chingchi",
         title: "Rickshaw & Chingchi",
       },
       {
@@ -271,15 +286,15 @@ export const category_link: CategoryLink[] = [
         title: "Living Room Furniture",
       },
       {
-        href: "sofa-&-chairs",
+        href: "sofa-chairs",
         title: "Sofa & Chairs",
       },
       {
-        href: "beds-&-wardrobes",
+        href: "beds-wardrobes",
         title: "Beds & Wardrobes",
       },
       {
-        href: "garden-&-outdoor",
+        href: "garden-outdoor",
         title: "Garden & Outdoor",
       },
       {
@@ -287,7 +302,7 @@ export const category_link: CategoryLink[] = [
         title: "Bathroom Accessories",
       },
       {
-        href: "tables-&-dining",
+        href: "tables-dining",
         title: "Tables & Dining",
       },
       {
@@ -310,7 +325,7 @@ export const category_link: CategoryLink[] = [
     title: "Electronics & Home Appliances",
     subCategories: [
       {
-        href: "computers-&-accessories",
+        href: "computers-accessories",
         title: "Computers & Accessories",
       },
       {
@@ -318,7 +333,7 @@ export const category_link: CategoryLink[] = [
         title: "Games",
       },
       {
-        href: "televisions-&-accessories",
+        href: "televisions-accessories",
         title: "Televisions & Accessories",
       },
       {
@@ -337,7 +352,7 @@ export const category_link: CategoryLink[] = [
   },
   {
     src: "birds.png",
-    href: "birds-&-animals",
+    href: "birds-animals",
     title: "Birds & Animals",
     subCategories: [
       {
@@ -365,7 +380,7 @@ export const category_link: CategoryLink[] = [
         title: "Pigeons",
       },
       {
-        href: "other-birds-&-animals",
+        href: "other-birds-animals",
         title: "Other Birds & Animals",
       },
     ],
@@ -375,8 +390,6 @@ export const category_link: CategoryLink[] = [
 export function createOption(label: string, value?: string): Option {
   return { label, value: value || label.split(" ").join("_").toLowerCase() };
 }
-
-export const isLogged: boolean = false;
 
 export const common_route_data: RouteData[] = [
   {
@@ -726,6 +739,66 @@ export const data: RenderProductCardProps[] = [
         time: "3 weeks ago",
         productOtherDetails: { condition: "Used" },
         title: "Vivo y100 5G",
+        id: (id++).toString(),
+      },
+    ],
+  },
+  {
+    href: "birds-animals",
+    heading: "Birds & Animals",
+    cardData: [
+      {
+        location: "Clifton Karachi",
+        price: "Rs. 3,500",
+        src: ["/assets/images/products/mobile.jfif"],
+        description:
+          "title Lorem ipsum dolor sit amet consectetr Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Accusantium dolorum reprehenderitodit dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
+
+        time: "3 days ago",
+        productOtherDetails: { condition: "Used" },
+        title: "Men's Leather Jacket",
+        id: (id++).toString(),
+      },
+      {
+        location: "DHA Karachi",
+        price: "Rs. 1,500",
+        src: ["/assets/images/products/mobile.jfif"],
+        description:
+          "title Lorem ipsum dolor sit amet consectetr Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Accusantium dolorum reprehenderitodit dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
+
+        time: "1 week ago",
+        productOtherDetails: { condition: "Used" },
+        title: "Women's Casual Dress",
+        id: (id++).toString(),
+      },
+      {
+        location: "Saddar Karachi",
+        price: "Rs. 800",
+        src: [
+          "/assets/images/logo/Loxlight.png",
+          "/assets/images/products/mobile.jfif",
+        ],
+        description:
+          "title Lorem ipsum dolor sit amet consectetr Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Accusantium dolorum reprehenderitodit dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
+
+        time: "2 weeks ago",
+        productOtherDetails: { condition: "Used" },
+        title: "Kids Winter Sweater",
+        id: (id++).toString(),
+      },
+      {
+        location: "Gulshan Karachi",
+        price: "Rs. 1,000",
+        src: [
+          "/assets/images/logo/Loxlight.png",
+          "/assets/images/products/mobile.jfif",
+        ],
+        description:
+          "title Lorem ipsum dolor sit amet consectetr Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Accusantium dolorum reprehenderitodit dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
+
+        time: "3 weeks ago",
+        productOtherDetails: { condition: "Used" },
+        title: "Ladies Shawl Collection",
         id: (id++).toString(),
       },
     ],

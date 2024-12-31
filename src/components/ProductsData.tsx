@@ -20,13 +20,14 @@ export const MoreProductCardData = ({
   mainCategory,
 }: MoreProductCardDataProps) => {
   // Data Fetch
-  const moreProductData = data.find((value) => value.href == mainCategory)!;
+  const specificCategory = data.find((value) => value.href == mainCategory)!;
 
-  // console.log("moreProductData", moreProductData);
-  return mainCategory == "allcategories" ? (
-    data.map((value) => <RenderMoreProductCard {...value?.cardData} />)
-  ) : (
-    <RenderMoreProductCard {...moreProductData?.cardData} />
+  const allCategories =
+    mainCategory == "allcategories" &&
+    data.map((value) => value.cardData).flat();
+
+  return (
+    <RenderMoreProductCard {...(allCategories || specificCategory?.cardData)} />
   );
 };
 
