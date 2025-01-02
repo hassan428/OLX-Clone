@@ -8,7 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { LocationSelectProps, Option } from "@/interfaces";
+import { LocationSelectProps } from "@/interfaces";
 import { locationStrogeName } from "@/utils/constant";
 
 export const LocationSelectConfig = ({
@@ -21,18 +21,17 @@ export const LocationSelectConfig = ({
   isDefaultSelect,
 }: LocationSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<Option | null>(null);
-  const [defaultSelect, setDefaultSelect] = useState<Option | null>(null);
+  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+  const [defaultSelect, setDefaultSelect] = useState<string | null>(null);
   const [hasMounted, setHasMounted] = useState<boolean>(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const val = localStorage.getItem(locationStrogeName);
-    const realValue: Option = val && JSON.parse(val);
-    isDefaultSelect && setDefaultSelect(realValue);
-    selectedOption && setDefaultSelect(null);
-  }, [selectedOption]);
+    isDefaultSelect && setDefaultSelect(val);
+    selectedValue && setDefaultSelect(null);
+  }, [selectedValue]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -43,7 +42,7 @@ export const LocationSelectConfig = ({
         setIsOpen(false);
 
         // Only trigger onBlurOrClose after initial mount
-        if (hasMounted && !selectedOption) {
+        if (hasMounted && !selectedValue) {
           onBlurOrClose?.(); // Trigger the onBlurOrClose callback
         }
       }
@@ -51,11 +50,11 @@ export const LocationSelectConfig = ({
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [selectedOption, onBlurOrClose, hasMounted]);
+  }, [selectedValue, onBlurOrClose, hasMounted]);
 
-  const handleOptionClick = (option: Option) => {
-    setSelectedOption(option);
-    onSelect(option);
+  const selectClickHandle = (value: string) => {
+    setSelectedValue(value);
+    onSelect(value);
     setIsOpen(false);
   };
 
@@ -77,7 +76,7 @@ export const LocationSelectConfig = ({
           error ? "text-error border-error" : "border-foreground"
         }`}
       >
-        <h1>{selectedOption?.label || defaultSelect?.label || placeholder}</h1>
+        <h1>{selectedValue || defaultSelect || placeholder}</h1>
 
         <RiArrowDownWideLine
           className={`transition-all ${isOpen ? "rotate-180" : "rotate-0"} `}
@@ -90,81 +89,66 @@ export const LocationSelectConfig = ({
         <div className="absolute z-10 bg-border w-full border rounded-md mt-2 shadow-lg">
           <Accordion type="single" collapsible className="w-full">
             {options.map(({ province, cities }, i) => {
-              return province.value === "all" ? (
+              return province === "Over All, Pakistan" ? (
                 <div
                   key={i}
-                  onClick={() => handleOptionClick(province)}
+                  onClick={() => selectClickHandle(province)}
                   className={`flex items-center gap-2 px-2 py-4 border-b-2 border-background cursor-pointer  ${
-                    [selectedOption?.label, defaultSelect?.label].includes(
-                      province.label
-                    )
+                    [selectedValue, defaultSelect].includes(province)
                       ? "bg-green-300 text-green-900 hover:bg-green-300 font-semibold"
                       : "hover:bg-input hover:font-semibold"
                   }`}
                 >
-                  {[selectedOption?.label, defaultSelect?.label].includes(
-                    province.label
-                  ) ? (
+                  {[selectedValue, defaultSelect].includes(province) ? (
                     <IoLocation size={20} />
                   ) : (
                     <IoLocationOutline size={20} />
                   )}
-                  {province.label}
+                  {province}
                 </div>
               ) : (
                 <AccordionItem key={i} value={`items-${i}`}>
                   <AccordionTrigger
                     className={`text-left border-b-2 border-background px-2 ${
-                      [selectedOption?.label, defaultSelect?.label].includes(
-                        province.label
-                      ) ||
+                      [selectedValue, defaultSelect].includes(province) ||
                       cities?.some(
                         (city) =>
-                          city.label === selectedOption?.label ||
-                          city.label === defaultSelect?.label
+                          city === selectedValue || city === defaultSelect
                       )
                         ? "bg-green-300 border-b-2 text-green-900 hover:bg-green-300 font-semibold"
                         : "hover:bg-input hover:font-semibold"
                     }`}
                   >
                     <div className="flex items-center gap-2 ">
-                      {[selectedOption?.label, defaultSelect?.label].includes(
-                        province.label
-                      ) ||
+                      {[selectedValue, defaultSelect].includes(province) ||
                       cities?.some(
                         (city) =>
-                          city.label === selectedOption?.label ||
-                          city.label === defaultSelect?.label
+                          city === selectedValue || city === defaultSelect
                       ) ? (
                         <IoLocation size={20} />
                       ) : (
                         <IoLocationOutline size={20} />
                       )}
-                      {province.label}
+                      {province}
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="flex flex-col p-0 bg-background mb-1 border-b-2 border-background">
                     {cities?.map((city) => (
                       <div
-                        key={city.value}
-                        onClick={() => handleOptionClick(city)}
+                        key={city}
+                        onClick={() => selectClickHandle(city)}
                         className={`cursor-pointer ml-5 p-3 mr-2 my-1 rounded-md hover:font-bold border-b border-background flex items-center gap-2 ${
-                          [
-                            selectedOption?.label,
-                            defaultSelect?.label,
-                          ].includes(city.label)
+                          [selectedValue, defaultSelect].includes(city)
                             ? "bg-green-300 text-green-900 hover:bg-green-300 font-semibold"
                             : "hover:bg-border hover:font-semibold"
                         }`}
                       >
-                        {[selectedOption?.label, defaultSelect?.label].includes(
-                          city.label
-                        ) ? (
+                        {[selectedValue, defaultSelect].includes(city) ? (
                           <IoLocation size={20} />
                         ) : (
                           <IoLocationOutline size={20} />
                         )}
-                        {city.label}
+                        {city}
                       </div>
                     ))}
                   </AccordionContent>

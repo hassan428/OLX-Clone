@@ -9,6 +9,8 @@ import { ThemeProvider } from "next-themes";
 import { CategoryText } from "@/components/CategoryText";
 import { Toaster } from "@/components/ui/toaster";
 import { Sell_btn } from "@/components/Sell_btn";
+import { Provider } from "react-redux";
+import { makeStore, AppStore } from "@/lib/store";
 
 const fontSans = FontSans({
   subsets: ["cyrillic-ext"],
@@ -35,23 +37,25 @@ const RootLayout: FC<LayoutProps> = ({ children }) => {
           fontSans.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div>
-            <Sell_btn className="fixed bottom-3 left-1/2 transform -translate-x-1/2 xmd:hidden z-50" />
-            <Navbar />
-            <CategoryText />
-            {children}
-          </div>
-          <div>
-            <Footer />
-          </div>
-        </ThemeProvider>
-        <Toaster />
+        <Provider store={AppStore}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div>
+              <Sell_btn className="fixed bottom-3 left-1/2 transform -translate-x-1/2 xmd:hidden z-50" />
+              <Navbar />
+              <CategoryText />
+              {children}
+            </div>
+            <div>
+              <Footer />
+            </div>
+          </ThemeProvider>
+          <Toaster />
+        </Provider>
       </body>
     </html>
   );

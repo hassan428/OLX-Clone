@@ -63,6 +63,7 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
             alt={`Image ${index}`}
             width={80}
             height={80}
+            priority
             className="w-full h-full object-cover rounded-xl"
           />
         </>
@@ -199,6 +200,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
                     alt={`Image ${index}`}
                     width={80}
                     height={80}
+                    priority
                     className="w-full h-full object-cover rounded-xl"
                   />
                 </div>

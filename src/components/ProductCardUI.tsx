@@ -31,7 +31,7 @@ export const ProductCardUI = ({
       <Link href={`/products/${id}`}>
         <CardHeader className="p-0 h-40">
           <Image
-            src={src[0]}
+            src={src?.[0]}
             alt="led"
             width={250}
             height={250}
@@ -73,7 +73,7 @@ export const MoreProductCardUI = ({
       <Card className="cursor-pointer hover:bg-border h-36 sm:h-52 flex my-2 sm:m-2 border-2 border-border">
         <CardHeader className="p-0 w-28 sm:w-52">
           <Image
-            src={src[0]}
+            src={src?.[0]}
             alt="led"
             width={250}
             height={250}

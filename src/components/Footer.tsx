@@ -89,6 +89,7 @@ export const Footer = () => {
                   alt={src}
                   width={150}
                   height={150}
+                  priority
                   className="object-cover w-24 lg:w-28 h-auto"
                 />
               </Link>

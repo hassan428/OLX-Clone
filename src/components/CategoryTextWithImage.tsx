@@ -31,7 +31,7 @@ export const CategoryTextWithImage = () => {
   );
   return (
     <div className="p-2 text-xl border-b border-border">
-      <Link href={"/allcategories"}>
+      <Link href={"/category/allcategories"}>
         <strong className="hover:font-extrabold">All Categories</strong>
       </Link>
       <div className="hidden sm:grid grid-cols-6 xl:grid-cols-8">

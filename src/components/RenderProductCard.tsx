@@ -44,13 +44,13 @@ export function RenderProductCard({
         </Link>
       </div>
       <div className="hidden xmd:flex space-x-3">
-        {cardData.map(
+        {cardData?.map(
           (data, i) => i < 4 && <ProductCardUI key={data.id} {...data} />
         )}
       </div>
       <ScrollArea className="xmd:hidden">
         <div className="flex w-max space-x-3">
-          {cardData.map((data) => (
+          {cardData?.map((data) => (
             <figure key={data.id}>
               <ProductCardUI {...data} />
             </figure>

@@ -624,8 +624,8 @@ const page = () => {
                     <LocationSelectConfig
                       options={location_of_pakistan.slice(1)}
                       placeholder={"Select Location"}
-                      onSelect={(val) => {
-                        setDataHandle({ location: val.value });
+                      onSelect={(location) => {
+                        setDataHandle({ location });
                         setErrorHandle({ location: undefined });
                       }}
                       onBlurOrClose={() =>

@@ -12,14 +12,19 @@ export interface Option {
 }
 
 export interface LocationDataProps {
-  province: Option;
-  cities?: Option[];
+  province:
+    | "Over All, Pakistan"
+    | "Sindh"
+    | "Punjab"
+    | "Balochistan"
+    | "Khyber Pakhtunkhwa";
+  cities?: string[];
 }
 
 export interface LocationSelectProps {
   options: LocationDataProps[];
   placeholder: string;
-  onSelect: (value: Option) => void;
+  onSelect: (value: string) => void;
   onBlurOrClose?: () => void;
   onOpen?: () => void;
   isDefaultSelect?: boolean;

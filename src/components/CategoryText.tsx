@@ -6,10 +6,9 @@ import { usePathname } from "next/navigation";
 
 export const CategoryText = () => {
   const pathname = usePathname().split("/");
-  console.log("pathname", pathname);
   return (
     <div className="hidden md:flex justify-start items-center gap-5 p-2 text-sm">
-      <Link href={"/allcategories"}>
+      <Link href={"/category/allcategories"}>
         <strong className="hover:font-black">All Categories</strong>
       </Link>
       {category_link.map(({ href, title, subCategories }, i) => {

@@ -162,27 +162,23 @@ export const genderData: Option[] = ["Male", "Female", "Others"].map((label) =>
 
 export const location_of_pakistan: LocationDataProps[] = [
   {
-    province: createOption("Over All, Pakistan", "all"),
+    province: "Over All, Pakistan",
   },
   {
-    province: createOption("Sindh"),
-    cities: ["Karachi", "Hyderabad", "Sukkur"].map((label) =>
-      createOption(label)
-    ),
+    province: "Sindh",
+    cities: ["Karachi", "Hyderabad", "Sukkur"],
   },
   {
-    province: createOption("Punjab"),
-    cities: ["Lahore", "Rawalpindi", "Faisalabad"].map((label) =>
-      createOption(label)
-    ),
+    province: "Punjab",
+    cities: ["Lahore", "Rawalpindi", "Faisalabad"],
   },
   {
-    province: createOption("Balochistan"),
-    cities: ["Quetta", "Gwadar"].map((label) => createOption(label)),
+    province: "Balochistan",
+    cities: ["Quetta", "Gwadar"],
   },
   {
-    province: createOption("Khyber Pakhtunkhwa", "kpk"),
-    cities: ["Peshawar", "Abbottabad"].map((label) => createOption(label)),
+    province: "Khyber Pakhtunkhwa",
+    cities: ["Peshawar", "Abbottabad"],
   },
 ];
 
@@ -486,7 +482,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "Bahria Town Karachi",
+        location: "Hyderabad",
         price: "Rs. 900,000",
         src: [
           "/assets/images/products/mobileportrait.jfif",
@@ -501,7 +497,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "Bahria Town Karachi",
+        location: "Hyderabad",
         price: "Rs. 900,000",
         src: [
           "/assets/images/products/mobile.jfif",
@@ -516,7 +512,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "Gulshan Karachi",
+        location: "Sukkur",
         price: "Rs. 600,000",
         src: ["/assets/images/sliderImage.jfif"],
         description:
@@ -528,7 +524,84 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "North Nazimabad Karachi",
+        location: "Rawalpindi",
+        price: "Rs. 2,000,000",
+        src: ["/assets/images/logo/Loxlight.png"],
+        description:
+          "title Lorem ipsum dolor sit amet consectetr Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Accusantium dolorum reprehenderitodit dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
+
+        time: "3 weeks ago",
+        productOtherDetails: { condition: "Used" },
+        title: "Toyota Fortuner 2021 Model For Sale",
+        id: (id++).toString(),
+      },
+    ],
+  },
+  {
+    heading: "Men's Fashion",
+    href: "men",
+    cardData: [
+      {
+        location: "Karimabad Karachi",
+        price: "Rs. 1,800,000",
+        src: [
+          "/assets/images/logo/Loxlight.png",
+          "/assets/images/products/mobile.jfif",
+          "/assets/images/products/mobileportrait.jfif",
+          "/assets/images/sliderImage.jfif",
+        ],
+        description:
+          "Toyota Corolla 2018 Model For Sale consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimuToyota Corolla 2018 Model For Sale dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
+        time: "2 days ago",
+        productOtherDetails: { condition: "Used" },
+
+        title: "Men's Fashion",
+        id: (id++).toString(),
+      },
+      {
+        location: "Hyderabad",
+        price: "Rs. 900,000",
+        src: [
+          "/assets/images/products/mobileportrait.jfif",
+          "/assets/images/sliderImage.jfif",
+        ],
+        description:
+          "Honda Civic 2016 For Sale sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Honda Civic 2016 For Saleexercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
+
+        time: "1 week ago",
+        productOtherDetails: { condition: "New", type: "other" },
+        title: "Men's Fashion",
+        id: (id++).toString(),
+      },
+      {
+        location: "Hyderabad",
+        price: "Rs. 900,000",
+        src: [
+          "/assets/images/products/mobile.jfif",
+          "/assets/images/products/mobileportrait.jfif",
+        ],
+        description:
+          "title Lorem ipsum dolor sit amet consectetr Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Accusantium dolorum reprehenderitodit dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
+
+        time: "1 week ago",
+        productOtherDetails: { condition: "low", type: "best" },
+        title: "Honda Civic 2016 For Sale",
+        id: (id++).toString(),
+      },
+      {
+        location: "Sukkur",
+        price: "Rs. 600,000",
+        src: ["/assets/images/sliderImage.jfif"],
+        description:
+          "title Lorem ipsum dolor sit amet consectetr Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Accusantium dolorum reprehenderitodit dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
+
+        time: "2 months ago",
+        productOtherDetails: { condition: "Used" },
+        title: "Suzuki Mehran 2008 For Sale",
+        id: (id++).toString(),
+      },
+      {
+        location: "Rawalpindi",
         price: "Rs. 2,000,000",
         src: ["/assets/images/logo/Loxlight.png"],
         description:
@@ -546,7 +619,7 @@ export const data: RenderProductCardProps[] = [
     href: "furniture",
     cardData: [
       {
-        location: "Gulshan Karachi",
+        location: "Sukkur",
         price: "Rs. 25,000",
         src: [
           "/assets/images/logo/Loxlight.png",
@@ -561,7 +634,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "Clifton Karachi",
+        location: "Quetta",
         price: "Rs. 15,000",
         src: [
           "/assets/images/logo/Loxlight.png",
@@ -576,7 +649,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "DHA Karachi",
+        location: "Lahore",
         price: "Rs. 8,000",
         src: ["/assets/images/products/mobile.jfif"],
         description:
@@ -588,7 +661,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "DHA Karachi",
+        location: "Lahore",
         price: "Rs. 8,000",
         src: ["/assets/images/products/mobileportrait.jfif"],
         description:
@@ -622,7 +695,7 @@ export const data: RenderProductCardProps[] = [
     href: "electronics",
     cardData: [
       {
-        location: "Bahria Town Karachi",
+        location: "Hyderabad",
         price: "Rs. 55,000",
         src: ["/assets/images/products/mobile.jfif"],
         description:
@@ -634,7 +707,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "Gulshan Karachi",
+        location: "Sukkur",
         price: "Rs. 35,000",
         src: [
           "/assets/images/logo/Loxlight.png",
@@ -649,7 +722,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "Nazimabad Karachi",
+        location: "Gwadar",
         price: "Rs. 12,000",
         src: ["/assets/images/products/mobile.jfif"],
         description:
@@ -661,7 +734,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "Clifton Karachi",
+        location: "Quetta",
         price: "Rs. 40,000",
         src: [
           "/assets/images/logo/Loxlight.png",
@@ -682,7 +755,7 @@ export const data: RenderProductCardProps[] = [
     heading: "Mobiles & Tablets",
     cardData: [
       {
-        location: "Clifton Karachi",
+        location: "Faisalabad",
         price: "Rs. 3,500",
         src: [
           "/assets/images/logo/Loxlight.png",
@@ -697,7 +770,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "DHA Karachi",
+        location: "Lahore",
         price: "Rs. 1,500",
         src: [
           "/assets/images/logo/Loxlight.png",
@@ -712,7 +785,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "Saddar Karachi",
+        location: "Peshawar",
         price: "Rs. 800",
         src: [
           "/assets/images/logo/Loxlight.png",
@@ -748,7 +821,7 @@ export const data: RenderProductCardProps[] = [
     heading: "Birds & Animals",
     cardData: [
       {
-        location: "Clifton Karachi",
+        location: "Faisalabad",
         price: "Rs. 3,500",
         src: ["/assets/images/products/mobile.jfif"],
         description:
@@ -760,7 +833,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "DHA Karachi",
+        location: "Abbottabad",
         price: "Rs. 1,500",
         src: ["/assets/images/products/mobile.jfif"],
         description:
@@ -772,7 +845,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "Saddar Karachi",
+        location: "Peshawar",
         price: "Rs. 800",
         src: [
           "/assets/images/logo/Loxlight.png",
@@ -808,7 +881,7 @@ export const data: RenderProductCardProps[] = [
     heading: "Fashion & Beauty",
     cardData: [
       {
-        location: "Clifton Karachi",
+        location: "Faisalabad",
         price: "Rs. 3,500",
         src: ["/assets/images/products/mobile.jfif"],
         description:
@@ -820,7 +893,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "DHA Karachi",
+        location: "Abbottabad",
         price: "Rs. 1,500",
         src: ["/assets/images/products/mobile.jfif"],
         description:
@@ -832,7 +905,7 @@ export const data: RenderProductCardProps[] = [
         id: (id++).toString(),
       },
       {
-        location: "Saddar Karachi",
+        location: "Peshawar",
         price: "Rs. 800",
         src: [
           "/assets/images/logo/Loxlight.png",
