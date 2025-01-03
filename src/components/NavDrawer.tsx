@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
-import { LuMenuSquare } from "react-icons/lu";
+import { TiThListOutline } from "react-icons/ti";
+import { PiListDuotone } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
 import { NavScreenBtn } from "@/components/NavScreenBtn";
 import { DarkLightModeSwitch } from "@/components/DarkLightMode";
@@ -27,7 +28,7 @@ export function NavDrawer() {
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="default" size={"icon"}>
-          <LuMenuSquare />
+          <PiListDuotone size={20} />
         </Button>
       </SheetTrigger>
       <SheetContent

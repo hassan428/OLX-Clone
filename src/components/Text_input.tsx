@@ -19,7 +19,9 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         <Input
           {...inputProps}
           ref={ref}
-          type={inputProps.type == "password" ? passwordInput : inputProps.type}
+          type={
+            inputProps.type === "password" ? passwordInput : inputProps.type
+          }
           className="focus-visible:ring-0 placeholder:capitalize outline-0 border-0 rounded-r-none text-sm m-[1px]"
         />
         {inputProps.value && !inputProps.disabled && (
@@ -29,8 +31,8 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             onClick={cut_handle}
           />
         )}
-        {inputProps.type == "password" &&
-          (passwordInput == "password" ? (
+        {inputProps.type === "password" &&
+          (passwordInput === "password" ? (
             <IoEye
               size={20}
               className="cursor-pointer mr-1"
@@ -49,3 +51,5 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     );
   }
 );
+
+TextInput.displayName = "TextInput";

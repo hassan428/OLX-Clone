@@ -41,6 +41,7 @@ export interface InputValue {
 export interface Params {
   categoryName?: MainCategoryType;
   profileID?: string;
+  id?: string;
 }
 
 export interface LayoutProps {
@@ -173,7 +174,7 @@ export interface MoreProductCardDataProps {
 }
 
 export interface DetailProductCardDataProps {
-  productID: string;
+  productID?: string;
 }
 
 export interface DetailProductCardProps {

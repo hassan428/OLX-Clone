@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -9,8 +9,7 @@ import { ThemeProvider } from "next-themes";
 import { CategoryText } from "@/components/CategoryText";
 import { Toaster } from "@/components/ui/toaster";
 import { Sell_btn } from "@/components/Sell_btn";
-import { Provider } from "react-redux";
-import { makeStore, AppStore } from "@/lib/store";
+import { LayoutProps } from "@/interfaces";
 
 const fontSans = FontSans({
   subsets: ["cyrillic-ext"],
@@ -23,10 +22,6 @@ export const metadata: Metadata = {
   keywords: "LOX, Buy, Sell, Products, Pakistan",
 };
 
-interface LayoutProps {
-  children: ReactNode;
-}
-
 const RootLayout: FC<LayoutProps> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -37,25 +32,23 @@ const RootLayout: FC<LayoutProps> = ({ children }) => {
           fontSans.variable
         )}
       >
-        <Provider store={AppStore}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div>
-              <Sell_btn className="fixed bottom-3 left-1/2 transform -translate-x-1/2 xmd:hidden z-50" />
-              <Navbar />
-              <CategoryText />
-              {children}
-            </div>
-            <div>
-              <Footer />
-            </div>
-          </ThemeProvider>
-          <Toaster />
-        </Provider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div>
+            <Sell_btn className="fixed bottom-3 left-1/2 transform -translate-x-1/2 xmd:hidden z-50" />
+            <Navbar />
+            <CategoryText />
+            {children}
+          </div>
+          <div>
+            <Footer />
+          </div>
+        </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

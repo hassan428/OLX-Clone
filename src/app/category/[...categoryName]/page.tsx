@@ -1,7 +1,7 @@
 import { MoreProductCardData } from "@/components/ProductsData";
 import { PageProps } from "@/interfaces";
 
-const page = ({ params }: PageProps) => {
+const MoreProductPage = ({ params }: PageProps) => {
   const { categoryName } = params;
   return (
     categoryName && (
@@ -13,4 +13,4 @@ const page = ({ params }: PageProps) => {
   );
 };
 
-export default page;
+export default MoreProductPage;

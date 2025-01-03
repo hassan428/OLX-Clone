@@ -70,6 +70,7 @@ export const ProfileRoutes = () => {
                   <div
                     className={`border-border hover:bg-border rounded-md hover:font-bold p-2 mt-1  ${className}`}
                     onClick={() => setIsOpen(false)}
+                    key={i}
                   >
                     <NavScreenBtn
                       text={title}

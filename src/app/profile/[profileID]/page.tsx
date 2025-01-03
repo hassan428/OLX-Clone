@@ -6,7 +6,7 @@ import Image from "next/image";
 import React from "react";
 import { IoLocationOutline } from "react-icons/io5";
 
-const page = ({ params }: PageProps) => {
+const ProfilePage = ({ params }: PageProps) => {
   const moreProductData = data.find((value) => value.cardData)!;
 
   return (
@@ -54,4 +54,4 @@ const page = ({ params }: PageProps) => {
   );
 };
 
-export default page;
+export default ProfilePage;

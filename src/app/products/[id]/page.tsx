@@ -2,7 +2,7 @@ import { DetailProductCardData } from "@/components/ProductsData";
 import { PageProps } from "@/interfaces";
 import * as React from "react";
 
-const page = ({ params }: PageProps) => {
+const ProductDetailsPage = ({ params }: PageProps) => {
   return (
     <div className="flex items-center">
       <DetailProductCardData productID={params.id} />
@@ -10,4 +10,4 @@ const page = ({ params }: PageProps) => {
   );
 };
 
-export default page;
+export default ProductDetailsPage;

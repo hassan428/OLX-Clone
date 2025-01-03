@@ -23,6 +23,36 @@ export const InputAndDropdown = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [hasMounted, setHasMounted] = useState<boolean>(false);
 
+  //  // Memoize the function to avoid unnecessary re-renders
+  //  const handleClickOutside = useCallback(
+  //   (event: MouseEvent) => {
+  //     if (
+  //       dropdownRef.current &&
+  //       !dropdownRef.current.contains(event.target as Node)
+  //     ) {
+  //       setIsOpen(false);
+  //       if (hasMounted && !selectValue) {
+  //         onBlur?.(); // Trigger the onBlurOrClose callback
+  //       }
+  //     }
+  //   },
+  //   [ selectValue, onBlur] // Removed `isOpen` from dependencies
+  // );
+
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     onOpen?.();
+  //     document.addEventListener("mousedown", handleClickOutside);
+  //   } else {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   }
+  //   setHasMounted(true);
+  //   // Cleanup listener on unmount
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [isOpen, handleClickOutside, onOpen]); // Proper dependency management
+
   const handleClickOutside = (event: MouseEvent) => {
     if (
       dropdownRef.current &&

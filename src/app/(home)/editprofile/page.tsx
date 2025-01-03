@@ -21,7 +21,7 @@ import React, { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import { HiLightBulb } from "react-icons/hi";
 import { IoCameraReverseOutline, IoCloseOutline } from "react-icons/io5";
 
-const page = () => {
+const EditProfilePage = () => {
   const defaultAvatarUrl = "/assets/images/load_avatar.png";
 
   const [data, setData] = useState<UserDetails | null>(null);
@@ -257,7 +257,9 @@ const page = () => {
         )}
       </div>
       <h1 className="hidden sm:inline w-full text-xs text-muted-foreground">
-        We won't reveal your email to anyone else not use it to send you spam
+        {
+          "We won't reveal your email to anyone else not use it to send you spam"
+        }
       </h1>
     </div>
   );
@@ -481,4 +483,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default EditProfilePage;

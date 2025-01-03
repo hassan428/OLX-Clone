@@ -20,9 +20,9 @@ import {
 } from "@/utils";
 import { categoryOptionsData } from "@/utils/categoryOptionsData";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 
-const page = () => {
+const PostPage = () => {
   const [sortedImages, setSortedImages] = useState<File[]>([]);
   const [category, setCategory] = useState<SentCategory | null>(null);
   const [data, setData] = useState<AdDetails | null>(null);
@@ -42,7 +42,9 @@ const page = () => {
     });
   };
 
-  const dynamicDataKeys: string[] = [];
+  const dynamicDataKeys = useMemo(() => {
+    return ["key1", "key2", "key3"]; // Replace with your actual dynamic keys
+  }, []);
 
   const setDataHandle = (newData: AdDetails) => {
     setData((pre) => {
@@ -68,7 +70,7 @@ const page = () => {
     });
   };
 
-  const adsImageHandle = () => {
+  const adsImageHandle = useCallback(() => {
     Promise.all(
       sortedImages.map(
         (file) =>
@@ -85,13 +87,13 @@ const page = () => {
         })
       )
       .catch((error) => console.error("Error reading files", error));
-  };
+  }, [sortedImages]);
 
   useEffect(() => {
     if (sortedImages.length > 0) {
       adsImageHandle();
     }
-  }, [sortedImages]);
+  }, [sortedImages, adsImageHandle]);
 
   useEffect(() => {
     // setDynamicData(null);
@@ -111,7 +113,7 @@ const page = () => {
         [value]: undefined,
       })
     );
-  }, [category]);
+  }, [category, dynamicDataKeys]); // dynamicDataKeys added to the dependency array
 
   const errorCheck = (value?: string): AdDetails => {
     return {
@@ -863,4 +865,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default PostPage;
