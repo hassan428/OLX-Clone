@@ -2,29 +2,21 @@
 import { useEffect } from "react";
 import { LocationSelectConfig } from "@/components/LocationSelectConfig";
 import { Option } from "@/interfaces";
-import { locationStrogeName } from "@/utils/constant";
+import { LOCATION_KEY } from "@/utils/constant";
 import { location_of_pakistan } from "@/utils";
+import axios from "axios";
 
 export function Location_select() {
   useEffect(() => {
-    const val = localStorage.getItem(locationStrogeName);
+    const val = localStorage.getItem(LOCATION_KEY);
   }, []);
 
-  const handleSelect = (value: string) => {
-    getData(value);
-    localStorage.setItem(locationStrogeName, value);
-  };
-
-  const getData = async (value: string) => {
-    const location = localStorage.getItem(locationStrogeName);
+  const handleSelect = async (value: string) => {
     try {
-      const res = await (
-        await fetch("/api/cardData", {
-          method: "post",
-          body: JSON.stringify(value || location),
-        })
-      ).json();
-      console.log("res", res);
+      localStorage.setItem(LOCATION_KEY, value);
+      const res = await axios.post("http://localhost:3000/api/allCard", value);
+      console.log("response", res.data.data);
+      return res.data.data;
     } catch (err) {
       console.log("err", err);
     }

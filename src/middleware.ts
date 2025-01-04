@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { authTokenName } from "@/utils/constant";
+import { AUTH_TOKEN_KEY } from "@/utils/constant";
 
 // This function can be marked `async` if using `await` inside
 export default function authMiddleware(request: NextRequest) {
-  const token = request.cookies.get(authTokenName);
+  const token = request.cookies.get(AUTH_TOKEN_KEY);
   console.log("token", token);
   return token
     ? NextResponse.next()

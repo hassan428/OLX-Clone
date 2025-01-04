@@ -9,7 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { LocationSelectProps } from "@/interfaces";
-import { locationStrogeName } from "@/utils/constant";
+import { LOCATION_KEY } from "@/utils/constant";
 
 export const LocationSelectConfig = ({
   options,
@@ -28,7 +28,7 @@ export const LocationSelectConfig = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const val = localStorage.getItem(locationStrogeName);
+    const val = localStorage.getItem(LOCATION_KEY);
     isDefaultSelect && setDefaultSelect(val);
     selectedValue && setDefaultSelect(null);
   }, [selectedValue]);

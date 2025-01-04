@@ -1,5 +1,4 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   RenderDetailProductCard,
   RenderMoreProductCard,
@@ -12,48 +11,53 @@ import {
   RenderProductCardProps,
 } from "@/interfaces";
 import { data } from "@/utils";
-import { locationStrogeName } from "@/utils/constant";
 import axios from "axios";
+import { cookies } from "next/headers";
+import { LOCATION_KEY } from "@/utils/constant";
 
-export const ProductCardData = () => {
-  const [data, setdata] = useState<RenderProductCardProps[]>([]);
-
-  // Data Fetch
-  const getData = async () => {
-    const location = localStorage.getItem(locationStrogeName);
+export const ProductCardData = async () => {
+  const getDataHandle = async () => {
     try {
-      const res = await axios.post("/api/allCard", location);
-      setdata(res.data.data);
-      console.log("res", res.data.data);
+      const location = cookies().get(LOCATION_KEY);
+      const res = await axios.post(
+        "http://localhost:3000/api/allCard",
+        location?.value
+      );
+      console.log("response", res.data.data);
+      return res.data.data;
     } catch (err) {
       console.log("err", err);
     }
   };
-  useEffect(() => {
-    getData();
-  }, []);
-  return data.map((data, i) => <RenderProductCard key={i} {...data} />);
+
+  const getData: RenderProductCardProps[] = await getDataHandle();
+  return getData?.map((data, i) => <RenderProductCard key={i} {...data} />);
 };
 
-export const MoreProductCardData = ({
+export const MoreProductCardData = async ({
   mainCategory,
   subCategory,
 }: MoreProductCardDataProps) => {
-  const [data, setdata] = useState<ProductCardProps[]>([]);
-  // Data Fetch
-  const getData = async () => {
+  const getDataHandle = async () => {
     try {
-      const res = await axios.post("/api/specificCategoryCard", {mainCategory,subCategory});
-      setdata(res.data.data);
-      console.log("res", res.data.data);
+      const location = cookies().get(LOCATION_KEY);
+      const res = await axios.post(
+        "http://localhost:3000/api/specificCategoryCard",
+        {
+          mainCategory,
+          subCategory,
+          location: location?.value,
+        }
+      );
+      console.log("response", res.data.data);
+      return res.data.data;
     } catch (err) {
       console.log("err", err);
     }
   };
-  useEffect(() => {
-    getData();
-  }, []);
-  return data && <RenderMoreProductCard {...data} />;
+  const getData: ProductCardProps[] = await getDataHandle();
+
+  return <RenderMoreProductCard {...getData} />;
 };
 
 export const DetailProductCardData = ({
