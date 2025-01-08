@@ -1,6 +1,6 @@
 import { LayoutProps } from "@/interfaces";
 import React from "react";
-import { category_link } from "@/utils";
+import { ctg_link } from "@/utils";
 import Link from "next/link";
 import {
   Sheet,
@@ -25,11 +25,9 @@ import { PriceRange } from "@/components/PriceRange";
 const layout = ({ children, params }: LayoutProps) => {
   const { categoryName } = params;
 
-  const find_main_category = category_link.find(
-    ({ href }) => categoryName?.[0] == href
-  );
+  const find_main_ctg = ctg_link.find(({ href }) => categoryName?.[0] == href);
 
-  const find_sub_category = find_main_category?.subCategories?.find(
+  const find_sub_ctg = find_main_ctg?.subCategories?.find(
     ({ href }) => categoryName?.[1] == href
   );
 
@@ -49,7 +47,7 @@ const layout = ({ children, params }: LayoutProps) => {
       </div>
 
       <Accordion type="single" collapsible className="w-full">
-        {category_link.map(({ href, title, subCategories }, i) => (
+        {ctg_link.map(({ href, title, subCategories }, i) => (
           <AccordionItem key={i} value={`items-${i}`} className="border-b">
             <AccordionTrigger
               className={`text-left border-b-2 border-background p-3 px-4 rounded-md ${
@@ -122,21 +120,21 @@ const layout = ({ children, params }: LayoutProps) => {
           <Link href={"/"}>Home</Link>
         </h1>
         <h1>/</h1>
-        {find_main_category?.title && (
+        {find_main_ctg?.title && (
           <h1>
-            <Link href={`${commonRoute}${find_main_category.href}`}>
-              {find_main_category.title}
+            <Link href={`${commonRoute}${find_main_ctg.href}`}>
+              {find_main_ctg.title}
             </Link>
           </h1>
         )}
-        {find_sub_category?.title && (
+        {find_sub_ctg?.title && (
           <>
             <h1>/</h1>
             <h1>
               <Link
-                href={`${commonRoute}${find_main_category?.href}/${find_sub_category.href}`}
+                href={`${commonRoute}${find_main_ctg?.href}/${find_sub_ctg.href}`}
               >
-                {find_sub_category.title}
+                {find_sub_ctg.title}
               </Link>
             </h1>
           </>
@@ -144,7 +142,7 @@ const layout = ({ children, params }: LayoutProps) => {
       </div>
 
       <h1 className="sm:text-xl font-bold my-3">
-        {find_sub_category?.title || find_main_category?.title}
+        {find_sub_ctg?.title || find_main_ctg?.title}
         {categoryName == "allcategories" && "All Categories"}
       </h1>
 

@@ -9,7 +9,7 @@ import {
 import {
   DetailProductCardProps,
   ProductCardProps,
-  RenderProductCardProps,
+  MainCtgProductCardProps,
   ViewStyle,
 } from "@/interfaces";
 import Link from "next/link";
@@ -34,7 +34,7 @@ export function RenderProductCard({
   cardData,
   heading,
   href,
-}: RenderProductCardProps) {
+}: MainCtgProductCardProps) {
   return (
     <div className="m-2 my-3">
       <div className="flex justify-between items-center my-2">
@@ -63,6 +63,7 @@ export function RenderProductCard({
 }
 
 export function RenderMoreProductCard(cardData: ProductCardProps[]) {
+
   const [gridView, setGridView] = React.useState<Boolean>(false);
   const [sortedValue, setsortedValue] = React.useState<string | null>(null);
 

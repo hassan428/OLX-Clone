@@ -28,15 +28,15 @@ const footerdata: FooterLinkSection[] = [
   {
     title: "About",
     data: [
-      { text: "LOX Blog", href: "blog" },
-      { text: "Contact", href: "contact" },
+      { text: "LOX Blog", href: "/blog" },
+      { text: "Contact", href: "/contact" },
     ],
   },
   {
     title: "LOX",
     data: [
-      { text: "Help", href: "help" },
-      { text: "Privacy Policy", href: "privacypolicy" },
+      { text: "Help", href: "/help" },
+      { text: "Privacy Policy", href: "/privacypolicy" },
     ],
   },
 ];

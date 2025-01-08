@@ -2,10 +2,11 @@ import { DetailProductCardData } from "@/components/ProductsData";
 import { PageProps } from "@/interfaces";
 import * as React from "react";
 
-const ProductDetailsPage = ({ params }: PageProps) => {
+const ProductDetailsPage = async ({ params }: PageProps) => {
+  const { id } = await params;
   return (
     <div className="flex items-center">
-      <DetailProductCardData productID={params.id} />
+      <DetailProductCardData productID={id} />
     </div>
   );
 };

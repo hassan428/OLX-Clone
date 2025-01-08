@@ -1,4 +1,4 @@
-import { RenderProductCardProps } from "@/interfaces";
+import { MainCtgProductCardProps } from "@/interfaces";
 import { data } from "@/utils";
 import { LOCATION_KEY } from "@/utils/constant";
 import { cookies } from "next/headers";
@@ -6,10 +6,10 @@ import { cookies } from "next/headers";
 export async function POST(req: Request) {
   try {
     const body = await req.text();
-    console.log("body", body);
-    body && cookies().set(LOCATION_KEY, body);
+    // console.log("body", body);
+    body && cookies().set(LOCATION_KEY, body, { expires: undefined });
 
-    const fourCardData: RenderProductCardProps[] = data
+    const fourCardData: MainCtgProductCardProps[] = data
       .map((value) => {
         // Filter cardData based on the condition
         const filteredCardData = value.cardData.filter(
@@ -22,11 +22,9 @@ export async function POST(req: Request) {
         return filteredCardData.length > 0
           ? { ...value, cardData: filteredCardData }
           : null;
-
-        // Only return the object if cardData is not empty
       })
-      // Remove undefined values from the final array
-      .filter((item): item is RenderProductCardProps => item !== null); // Type narrowing
+      .filter((item): item is MainCtgProductCardProps => item !== null); // Type narrowing
+    // Remove undefined values from the final array
 
     return Response.json({ data: fourCardData });
   } catch (error) {

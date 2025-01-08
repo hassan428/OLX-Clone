@@ -7,7 +7,7 @@ import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { SentCategory, ImageItem, AdDetails, DynamicData } from "@/interfaces";
+import { SentCtg, ImageItem, AdDetails, DynamicData } from "@/interfaces";
 import {
   formatPrice,
   isError,
@@ -18,13 +18,13 @@ import {
   validatePhone,
   validateYear,
 } from "@/utils";
-import { categoryOptionsData } from "@/utils/categoryOptionsData";
+import { ctgOptionsData } from "@/utils/ctgOptionsData";
 import Image from "next/image";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 
 const PostPage = () => {
   const [sortedImages, setSortedImages] = useState<File[]>([]);
-  const [category, setCategory] = useState<SentCategory | null>(null);
+  const [ctg, setCtg] = useState<SentCtg | null>(null);
   const [data, setData] = useState<AdDetails | null>(null);
   const [error, setError] = useState<AdDetails | null>(null);
   const [dynamicData, setDynamicData] = useState<DynamicData | null>(null);
@@ -99,28 +99,26 @@ const PostPage = () => {
     // setDynamicData(null);
     setDynamicError(null);
     setErrorHandle({
-      mainCategory: category?.main && undefined,
+      mainCtg: ctg?.main && undefined,
     });
     setDataHandle({
-      mainCategory: category?.main,
-      subCategory: category?.sub,
+      mainCtg: ctg?.main,
+      subCtg: ctg?.sub,
     });
 
-    setMinPrice(minPriceHandle(category?.sub));
+    setMinPrice(minPriceHandle(ctg?.sub));
 
     dynamicDataKeys.map((value) =>
       setDynamicDataHandle({
         [value]: undefined,
       })
     );
-  }, [category, dynamicDataKeys]); // dynamicDataKeys added to the dependency array
+  }, [ctg, dynamicDataKeys]); // dynamicDataKeys added to the dependency array
 
   const errorCheck = (value?: string): AdDetails => {
     return {
       location: !data?.location ? "Location is required!" : undefined,
-      mainCategory: !category?.main
-        ? "Please select a category to proceed."
-        : undefined,
+      mainCtg: !ctg?.main ? "Please select a category to proceed." : undefined,
       image: sortedImages.length == 0 ? ["true"] : undefined,
       adTitle: !data?.adTitle
         ? "Ad Title is required!"
@@ -187,7 +185,7 @@ const PostPage = () => {
             <div className="flex flex-col sm:flex-row gap-2 items-center border-b-2 border-border p-2 sm:p-5 text-xs sm:text-sm">
               <h1
                 className={`w-full sm:w-1/4 font-bold ${
-                  error?.mainCategory && "text-error"
+                  error?.mainCtg && "text-error"
                 }`}
               >
                 Category
@@ -197,9 +195,7 @@ const PostPage = () => {
                   <div className="flex gap-1 ">
                     <Image
                       src={`/assets/images/${
-                        category?.src
-                          ? `category/${category.src} `
-                          : "load_avatar.png"
+                        ctg?.src ? `category/${ctg.src} ` : "load_avatar.png"
                       }`}
                       alt={"mobiles load_avatar.png"}
                       width={80}
@@ -208,23 +204,17 @@ const PostPage = () => {
                       priority={true}
                     />
                     <div className="flex flex-col justify-evenly ">
-                      <h1 className="font-bold">{`${
-                        category?.main || "Main"
-                      }`}</h1>
+                      <h1 className="font-bold">{`${ctg?.main || "Main"}`}</h1>
                       <h1 className="text-muted-foreground">{`${
-                        category?.sub || "Sub"
+                        ctg?.sub || "Sub"
                       }`}</h1>
                     </div>
                   </div>
 
-                  <CategoryDialog sentCategoryData={setCategory} />
+                  <CategoryDialog sentCtgData={setCtg} />
                 </div>
-                {error?.mainCategory && (
-                  <Text
-                    className="mt-1"
-                    error={true}
-                    text={error.mainCategory}
-                  />
+                {error?.mainCtg && (
+                  <Text className="mt-1" error={true} text={error.mainCtg} />
                 )}
               </div>
             </div>
@@ -255,8 +245,8 @@ const PostPage = () => {
 
             {/* dynamic option Section */}
 
-            {categoryOptionsData.map(({ subCategory, groups }, i) => {
-              if (subCategory !== category?.sub) {
+            {ctgOptionsData.map(({ subCtg, groups }, i) => {
+              if (subCtg !== ctg?.sub) {
                 return null;
               }
               return (

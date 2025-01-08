@@ -1,14 +1,15 @@
-// "use client";
 import React from "react";
-// import { usePathname } from "next/navigation";
+import { headers } from "next/headers";
+export const notFound = async () => {
+  const headersList = await headers();
+  const domain = headersList.get("host");
 
-export const notFound = () => {
+  console.log("headersList", headersList);
+  console.log("domain", domain);
+
   return (
     <div>
-      <h1 className="text-center text-3xl font-bold">
-        Page Not Found 
-        {/* :{usePathname()} */}
-      </h1>
+      <h1 className="text-center text-3xl font-bold">Page Not Found</h1>
     </div>
   );
 };

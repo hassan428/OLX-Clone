@@ -7,10 +7,7 @@ const MoreProductPage = ({ params }: PageProps) => {
 
   return (
     categoryName && (
-      <MoreProductCardData
-        mainCategory={categoryName[0]}
-        subCategory={categoryName[1]}
-      />
+      <MoreProductCardData mainCtg={categoryName[0]} subCtg={categoryName[1]} />
     )
   );
 };

@@ -1,28 +1,37 @@
-import { RenderProductCardProps } from "@/interfaces";
+import { ProductCardProps } from "@/interfaces";
 import { data } from "@/utils";
-import { LOCATION_KEY } from "@/utils/constant";
-import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
   try {
-    const { mainCategory, subCategory, location } = await req.json();
+    const { mainCtg, subCtg, location } = await req.json();
 
-    const allCategories =
-      mainCategory === "allcategories" &&
-      data.flatMap((value) => {
-        const filteredCardData = value.cardData.filter(
-          (card) =>
-            !location ||
-            location === "Over All, Pakistan" ||
-            card.location.includes(location)
-        );
+    let productCard: ProductCardProps[] = [];
 
-        return filteredCardData.length > 0 ? filteredCardData : [];
+    if (mainCtg === "allcategories") {
+      data.flatMap((mainCtgCard) => {
+        productCard.push(...mainCtgCard.cardData);
+
+        mainCtgCard?.subCtgCard?.flatMap((subCtgCard) => {
+          productCard.push(...subCtgCard.cardData);
+        });
       });
+    } else {
+      data.find((mainCtgCard) => {
+        if (!subCtg && mainCtgCard.href === mainCtg) {
+          productCard?.push(...mainCtgCard?.cardData);
+          mainCtgCard.subCtgCard?.find((subCtgCard) => {
+            productCard?.push(...subCtgCard?.cardData);
+          });
+        }
+        mainCtgCard.subCtgCard?.find((subCtgCard) => {
+          if (subCtgCard.href === subCtg) {
+            productCard?.push(...subCtgCard?.cardData);
+          }
+        });
+      });
+    }
 
-    const specificCategoryCard = data.find(
-      (value) => value.href === subCategory || value.href === mainCategory
-    )?.cardData.filter(
+    productCard = productCard?.filter(
       (card) =>
         !location ||
         location === "Over All, Pakistan" ||
@@ -30,7 +39,7 @@ export async function POST(req: Request) {
     );
 
     return Response.json({
-      data: allCategories || specificCategoryCard,
+      data: productCard,
     });
   } catch (error) {
     console.log("error", error);

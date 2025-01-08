@@ -173,12 +173,14 @@ export const DetailProductCardUI = ({
               {Object.entries(productOtherDetails).map(([key, value], i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-around bg-input w-full text-center"
+                  className="flex items-center justify-around w-full text-center"
                 >
-                  <h1 className="text-accent-foreground w-1/2 capitalize">
+                  <h1 className="text-accent-foreground w-1/2 capitalize bg-input">
                     {key}
                   </h1>
-                  <h1 className="font-bold w-1/2 capitalize">{value}</h1>
+                  <h1 className="font-bold w-1/2 capitalize bg-input ml-2">
+                    {value}
+                  </h1>
                 </div>
               ))}
             </div>

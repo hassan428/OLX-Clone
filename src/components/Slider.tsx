@@ -1,7 +1,6 @@
 "use client";
-import * as React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
-
 import {
   Carousel,
   CarouselContent,
@@ -11,22 +10,26 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import { SliderSrc } from "@/interfaces";
+import { BACKEND_URL } from "@/utils/constant";
+import axios from "axios";
+import Link from "next/link";
 
 export function Slider() {
-  const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true })
-  );
-  const [slider_src, set_slider_src] = React.useState<SliderSrc[]>([]);
+  const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
+  const [slider, set_slider] = useState<SliderSrc[]>([]);
 
-  React.useEffect(() => {
-    set_slider_src([
-      ...slider_src,
-      {
-        src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuHCbHGd7D623E5XBmXkDJSQb0iTK5l3GtSQ&s",
-      },
-    ]);
+  const getDataHandle = async () => {
+    const res = await axios.get(`${BACKEND_URL}/api/sliderImage`);
+    console.log("res", res.data.data);
+
+    set_slider([...slider, ...res.data.data]);
+  };
+  // console.log("slider", slider);
+
+  useEffect(() => {
+    getDataHandle();
   }, []);
-
+  //sliderImage
   return (
     <Carousel
       plugins={[plugin.current]}
@@ -35,18 +38,18 @@ export function Slider() {
       onMouseLeave={plugin.current.reset}
     >
       <CarouselContent>
-        {slider_src.map((src, i) => (
+        {slider.map(({ src, href }, i) => (
           <CarouselItem key={i}>
-            <div className="p-1">
+            <Link href={href} className="p-1">
               <Image
-                {...src}
+                src={src}
                 width={1000}
                 height={1000}
                 alt="sliderImage"
                 priority={true}
                 className="w-full h-32 sm:h-52 xl:h-56 object-fill"
               />
-            </div>
+            </Link>
           </CarouselItem>
         ))}
       </CarouselContent>

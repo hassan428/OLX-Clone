@@ -9,7 +9,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { category_link } from "@/utils";
+import { ctg_link } from "@/utils";
 
 export const CategoryTextWithImage = () => {
   const renderData = ({ href, src, title }: CategoryLink, i: number) => (
@@ -35,11 +35,11 @@ export const CategoryTextWithImage = () => {
         <strong className="hover:font-extrabold">All Categories</strong>
       </Link>
       <div className="hidden sm:grid grid-cols-6 xl:grid-cols-8">
-        {category_link.map((data, i) => renderData(data, i))}
+        {ctg_link.map((data, i) => renderData(data, i))}
       </div>
       <Carousel className="w-full sm:hidden">
         <CarouselContent>
-          {category_link.map((data, i) => (
+          {ctg_link.map((data, i) => (
             <CarouselItem key={i} className="basis-1/3">
               {renderData(data, i)}
             </CarouselItem>

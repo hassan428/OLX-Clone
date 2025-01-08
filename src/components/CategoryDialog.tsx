@@ -12,21 +12,19 @@ import {
 import { RiArrowRightWideLine } from "react-icons/ri";
 
 import Image from "next/image";
-import { category_link } from "@/utils";
+import { ctg_link } from "@/utils";
 import { useEffect, useState } from "react";
-import { CategoryDialogProps, SentCategory } from "@/interfaces";
+import { CtgDialogProps, SentCtg } from "@/interfaces";
 import { ArrowLeft } from "lucide-react";
 
-export const CategoryDialog = ({ sentCategoryData }: CategoryDialogProps) => {
-  const [category, setCategory] = useState<SentCategory | null>(null);
+export const CategoryDialog = ({ sentCtgData }: CtgDialogProps) => {
+  const [ctg, setCtg] = useState<SentCtg | null>(null);
 
-  const find_select_category = category_link.find(
-    ({ title }) => title == category?.main
-  );
+  const find_select_ctg = ctg_link.find(({ title }) => title == ctg?.main);
 
   useEffect(() => {
-    category?.sub && sentCategoryData(category);
-  }, [category, sentCategoryData]);
+    ctg?.sub && sentCtgData(ctg);
+  }, [ctg, sentCtgData]);
 
   return (
     <Dialog>
@@ -36,17 +34,17 @@ export const CategoryDialog = ({ sentCategoryData }: CategoryDialogProps) => {
       <DialogContent className="text-sm max-sm:min-h-screen max-h-[27rem] overflow-auto max-sm:px-1 max-sm:py-4 gap-0">
         <DialogHeader>
           <div>
-            <DialogTitle className={`${category?.main && "max-sm:hidden"}`}>
+            <DialogTitle className={`${ctg?.main && "max-sm:hidden"}`}>
               Choose a category
             </DialogTitle>
-            {category?.main && (
+            {ctg?.main && (
               <div
-                onClick={() => setCategory(null)}
+                onClick={() => setCtg(null)}
                 className="w-max flex items-center gap-3 justify-between cursor-pointer sm:hidden"
               >
                 <ArrowLeft size={20} />
                 <DialogTitle className="font-bold text-sm">
-                  {category?.main}
+                  {ctg?.main}
                 </DialogTitle>
               </div>
             )}
@@ -55,14 +53,14 @@ export const CategoryDialog = ({ sentCategoryData }: CategoryDialogProps) => {
           <div className="flex flex-col sm:flex-row w-full">
             <div
               className={`flex flex-col w-full sm:w-1/2 my-2 sm:border-2 border-border border-t-0 border-r-0  ${
-                category?.main && "hidden sm:flex"
+                ctg?.main && "hidden sm:flex"
               }`}
             >
-              {category_link.map(({ title, src }, i) => (
+              {ctg_link.map(({ title, src }, i) => (
                 <div
                   onClick={() =>
-                    setCategory({
-                      ...category,
+                    setCtg({
+                      ...ctg,
                       main: title,
                       src,
                       sub: undefined,
@@ -70,7 +68,7 @@ export const CategoryDialog = ({ sentCategoryData }: CategoryDialogProps) => {
                   }
                   key={i}
                   className={`flex h-14 items-center justify-between cursor-pointer hover:bg-success sm:border-y-2 border-border p-2 ${
-                    title == category?.main && "bg-success"
+                    title == ctg?.main && "bg-success"
                   }  `}
                 >
                   <div className="flex gap-2 items-center">
@@ -93,15 +91,15 @@ export const CategoryDialog = ({ sentCategoryData }: CategoryDialogProps) => {
 
             <div
               className={`flex flex-col w-full sm:w-1/2 my-2 sm:border-2 border-border   ${
-                !category?.main && "hidden sm:flex"
+                !ctg?.main && "hidden sm:flex"
               }`}
             >
-              {find_select_category?.subCategories?.map(({ title }, i) => (
+              {find_select_ctg?.subCategories?.map(({ title }, i) => (
                 <DialogClose
                   key={i}
-                  onClick={() => setCategory({ ...category, sub: title })}
+                  onClick={() => setCtg({ ...ctg, sub: title })}
                   className={`flex h-14 items-center justify-between cursor-pointer hover:bg-success border-border p-2 sm:border-y-2 ${
-                    title == category?.sub && "bg-success"
+                    title == ctg?.sub && "bg-success"
                   }`}
                 >
                   <DialogDescription className="font-bold text-foreground">

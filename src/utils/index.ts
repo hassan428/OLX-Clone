@@ -4,9 +4,9 @@ import {
   Option,
   PasswordRules,
   PasswordStrength,
-  RenderProductCardProps,
+  MainCtgProductCardProps,
   RouteData,
-  SubCategoryType,
+  SubCtgType,
   UserDetails,
 } from "@/interfaces";
 import {
@@ -31,7 +31,7 @@ export const verifiedData: UserDetails = {
   phoneNumber: undefined,
 }; // get data with (Redux Toolkit)
 
-export const isLogged: boolean = true; // get data with (Redux Toolkit)
+export const isLogged: boolean = false; // get data with (Redux Toolkit)
 
 export const scrollToTop = () => {
   document.getElementById("top")?.scrollIntoView({
@@ -109,8 +109,8 @@ export const isError = (obj: any, errorObj: boolean = false): boolean => {
   });
 };
 
-export const minPriceHandle = (subCategory?: SubCategoryType): number => {
-  const minPriceConfig: Record<SubCategoryType, number> = {
+export const minPriceHandle = (subCtg?: SubCtgType): number => {
+  const minPriceConfig: Record<SubCtgType, number> = {
     Tablets: 3000,
     Mobiles: 1500,
     Makeup: 100,
@@ -153,7 +153,7 @@ export const minPriceHandle = (subCategory?: SubCategoryType): number => {
     "Sofa & Chairs": 3000,
   };
 
-  return (subCategory && minPriceConfig[subCategory]) || 0;
+  return (subCtg && minPriceConfig[subCtg]) || 0;
 };
 
 export const genderData: Option[] = ["Male", "Female", "Others"].map((label) =>
@@ -182,7 +182,7 @@ export const location_of_pakistan: LocationDataProps[] = [
   },
 ];
 
-export const category_link: CategoryLink[] = [
+export const ctg_link: CategoryLink[] = [
   {
     src: "mobiles.png",
     href: "mobiles-tablets",
@@ -459,7 +459,7 @@ export const route_data: RouteData[] = isLogged
 
 let id = 1;
 
-export const data: RenderProductCardProps[] = [
+export const data: MainCtgProductCardProps[] = [
   {
     heading: "Vehicles",
     href: "vehicles",
@@ -478,7 +478,7 @@ export const data: RenderProductCardProps[] = [
         time: "2 days ago",
         productOtherDetails: { condition: "Used" },
 
-        title: "Toyota Corolla 2018 Model For Sale",
+        title: "Toyota Corolla 2018 Model For Sale vehicles ",
         id: (id++).toString(),
       },
       {
@@ -493,7 +493,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "1 week ago",
         productOtherDetails: { condition: "New", type: "other" },
-        title: "Honda Civic 2016 For Sale",
+        title: "Honda Civic 2016 For Sale vehicles",
         id: (id++).toString(),
       },
       {
@@ -508,7 +508,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "1 week ago",
         productOtherDetails: { condition: "low", type: "best" },
-        title: "Honda Civic 2016 For Sale",
+        title: "Honda Civic 2016 For Sale vehicles",
         id: (id++).toString(),
       },
       {
@@ -520,7 +520,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "2 months ago",
         productOtherDetails: { condition: "Used" },
-        title: "Suzuki Mehran 2008 For Sale",
+        title: "Suzuki Mehran 2008 For Sale vehicles",
         id: (id++).toString(),
       },
       {
@@ -532,90 +532,13 @@ export const data: RenderProductCardProps[] = [
 
         time: "3 weeks ago",
         productOtherDetails: { condition: "Used" },
-        title: "Toyota Fortuner 2021 Model For Sale",
+        title: "Toyota Fortuner 2021 Model For Sale  vehicles",
         id: (id++).toString(),
       },
     ],
   },
   {
-    heading: "Men's Fashion",
-    href: "men",
-    cardData: [
-      {
-        location: "Karimabad Karachi",
-        price: "Rs. 1,800,000",
-        src: [
-          "/assets/images/logo/Loxlight.png",
-          "/assets/images/products/mobile.jfif",
-          "/assets/images/products/mobileportrait.jfif",
-          "/assets/images/sliderImage.jfif",
-        ],
-        description:
-          "Toyota Corolla 2018 Model For Sale consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimuToyota Corolla 2018 Model For Sale dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
-        time: "2 days ago",
-        productOtherDetails: { condition: "Used" },
-
-        title: "Men's Fashion",
-        id: (id++).toString(),
-      },
-      {
-        location: "Hyderabad",
-        price: "Rs. 900,000",
-        src: [
-          "/assets/images/products/mobileportrait.jfif",
-          "/assets/images/sliderImage.jfif",
-        ],
-        description:
-          "Honda Civic 2016 For Sale sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Honda Civic 2016 For Saleexercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
-
-        time: "1 week ago",
-        productOtherDetails: { condition: "New", type: "other" },
-        title: "Men's Fashion",
-        id: (id++).toString(),
-      },
-      {
-        location: "Hyderabad",
-        price: "Rs. 900,000",
-        src: [
-          "/assets/images/products/mobile.jfif",
-          "/assets/images/products/mobileportrait.jfif",
-        ],
-        description:
-          "title Lorem ipsum dolor sit amet consectetr Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Accusantium dolorum reprehenderitodit dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
-
-        time: "1 week ago",
-        productOtherDetails: { condition: "low", type: "best" },
-        title: "Honda Civic 2016 For Sale",
-        id: (id++).toString(),
-      },
-      {
-        location: "Sukkur",
-        price: "Rs. 600,000",
-        src: ["/assets/images/sliderImage.jfif"],
-        description:
-          "title Lorem ipsum dolor sit amet consectetr Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Accusantium dolorum reprehenderitodit dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
-
-        time: "2 months ago",
-        productOtherDetails: { condition: "Used" },
-        title: "Suzuki Mehran 2008 For Sale",
-        id: (id++).toString(),
-      },
-      {
-        location: "Rawalpindi",
-        price: "Rs. 2,000,000",
-        src: ["/assets/images/logo/Loxlight.png"],
-        description:
-          "title Lorem ipsum dolor sit amet consectetr Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Accusantium dolorum reprehenderitodit dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
-
-        time: "3 weeks ago",
-        productOtherDetails: { condition: "Used" },
-        title: "Toyota Fortuner 2021 Model For Sale",
-        id: (id++).toString(),
-      },
-    ],
-  },
-  {
-    heading: "Furniture",
+    heading: "Furniture & Home Decorator",
     href: "furniture",
     cardData: [
       {
@@ -630,7 +553,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "3 weeks ago",
         productOtherDetails: { condition: "Used" },
-        title: "Wooden King Size Bed For Sale",
+        title: "Wooden King Size Furniture & Home Decorator",
         id: (id++).toString(),
       },
       {
@@ -645,7 +568,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "5 days ago",
         productOtherDetails: { condition: "Used" },
-        title: "Dining Table Set (6 Chairs)",
+        title: "Dining Table Set (6 Chairs) Furniture & Home Decorator",
         id: (id++).toString(),
       },
       {
@@ -657,7 +580,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "2 weeks ago",
         productOtherDetails: { condition: "Used" },
-        title: "Office Chair for Sale",
+        title: "Office Chair for Sale Furniture & Home Decorator",
         id: (id++).toString(),
       },
       {
@@ -669,7 +592,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "2 weeks ago",
         productOtherDetails: { condition: "Used" },
-        title: "Office Chair for Sale",
+        title: "Office Chair for Sale Furniture & Home Decorator",
         id: (id++).toString(),
       },
       {
@@ -685,13 +608,13 @@ export const data: RenderProductCardProps[] = [
 
         time: "1 week ago",
         productOtherDetails: { condition: "Used" },
-        title: "Sofa Set (3+1+1)",
+        title: "Sofa Set (3+1+1) Furniture & Home Decorator",
         id: (id++).toString(),
       },
     ],
   },
   {
-    heading: "Electronics",
+    heading: "Electronics & Home Appliances",
     href: "electronics",
     cardData: [
       {
@@ -703,7 +626,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "1 week ago",
         productOtherDetails: { condition: "Used" },
-        title: "Samsung LED 55 inches",
+        title: "Samsung LED 55 inches Electronics & Home Appliances",
         id: (id++).toString(),
       },
       {
@@ -718,7 +641,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "1 month ago",
         productOtherDetails: { condition: "Used" },
-        title: "LG Washing Machine 8kg",
+        title: "LG Washing Machine 8kg Electronics & Home Appliances",
         id: (id++).toString(),
       },
       {
@@ -730,7 +653,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "2 weeks ago",
         productOtherDetails: { condition: "Used" },
-        title: "HP Laptop 15.6 inch",
+        title: "HP Laptop 15.6 inch Electronics & Home Appliances",
         id: (id++).toString(),
       },
       {
@@ -745,7 +668,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "3 days ago",
         productOtherDetails: { condition: "Used" },
-        title: "Sony Home Theater System",
+        title: "Sony Home Theater System Electronics & Home Appliances",
         id: (id++).toString(),
       },
     ],
@@ -766,7 +689,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "3 days ago",
         productOtherDetails: { condition: "Used" },
-        title: "Vivo Y30",
+        title: "Vivo Y30 Mobiles & Tablets",
         id: (id++).toString(),
       },
       {
@@ -781,7 +704,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "1 week ago",
         productOtherDetails: { condition: "Used" },
-        title: "Samsung Galaxy j7",
+        title: "Samsung Galaxy j7 Mobiles & Tablets",
         id: (id++).toString(),
       },
       {
@@ -796,7 +719,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "2 weeks ago",
         productOtherDetails: { condition: "Used" },
-        title: "IPhone 12 pro ",
+        title: "IPhone 12 pro  Mobiles & Tablets",
         id: (id++).toString(),
       },
       {
@@ -811,7 +734,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "3 weeks ago",
         productOtherDetails: { condition: "Used" },
-        title: "Vivo y100 5G",
+        title: "Vivo y100 5G  Mobiles & Tablets",
         id: (id++).toString(),
       },
     ],
@@ -889,7 +812,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "3 days ago",
         productOtherDetails: { condition: "Used" },
-        title: "Men's Leather Jacket",
+        title: "Men's Leather Jacket Fashion & Beauty",
         id: (id++).toString(),
       },
       {
@@ -901,7 +824,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "1 week ago",
         productOtherDetails: { condition: "Used" },
-        title: "Women's Casual Dress",
+        title: "Women's Casual Dress Fashion & Beauty",
         id: (id++).toString(),
       },
       {
@@ -916,7 +839,7 @@ export const data: RenderProductCardProps[] = [
 
         time: "2 weeks ago",
         productOtherDetails: { condition: "Used" },
-        title: "Kids Winter Sweater",
+        title: "Kids Winter Sweater Fashion & Beauty",
         id: (id++).toString(),
       },
       {
@@ -931,8 +854,87 @@ export const data: RenderProductCardProps[] = [
 
         time: "3 weeks ago",
         productOtherDetails: { condition: "Used" },
-        title: "Ladies Shawl Collection",
+        title: "Ladies Shawl Collection Fashion & Beauty",
         id: (id++).toString(),
+      },
+    ],
+    subCtgCard: [
+      {
+        heading: "Men's Fashion",
+        href: "men",
+        cardData: [
+          {
+            location: "Karimabad Karachi",
+            price: "Rs. 1,800,000",
+            src: [
+              "/assets/images/logo/Loxlight.png",
+              "/assets/images/products/mobile.jfif",
+              "/assets/images/products/mobileportrait.jfif",
+              "/assets/images/sliderImage.jfif",
+            ],
+            description:
+              "Toyota Corolla 2018 Model For Sale consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimuToyota Corolla 2018 Model For Sale dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
+            time: "2 days ago",
+            productOtherDetails: { condition: "Used" },
+
+            title: "Men's Fashion",
+            id: (id++).toString(),
+          },
+          {
+            location: "Hyderabad",
+            price: "Rs. 900,000",
+            src: [
+              "/assets/images/products/mobileportrait.jfif",
+              "/assets/images/sliderImage.jfif",
+            ],
+            description:
+              "Honda Civic 2016 For Sale sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Honda Civic 2016 For Saleexercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
+
+            time: "1 week ago",
+            productOtherDetails: { condition: "New", type: "other" },
+            title: "Men's Fashion",
+            id: (id++).toString(),
+          },
+          {
+            location: "Hyderabad",
+            price: "Rs. 900,000",
+            src: [
+              "/assets/images/products/mobile.jfif",
+              "/assets/images/products/mobileportrait.jfif",
+            ],
+            description:
+              "title Lorem ipsum dolor sit amet consectetr Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Accusantium dolorum reprehenderitodit dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
+
+            time: "1 week ago",
+            productOtherDetails: { condition: "low", type: "best" },
+            title: "Honda Civic 2016 For Sale Men's Fashion",
+            id: (id++).toString(),
+          },
+          {
+            location: "Sukkur",
+            price: "Rs. 600,000",
+            src: ["/assets/images/sliderImage.jfif"],
+            description:
+              "title Lorem ipsum dolor sit amet consectetr Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Accusantium dolorum reprehenderitodit dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
+
+            time: "2 months ago",
+            productOtherDetails: { condition: "Used" },
+            title: "Suzuki Mehran 2008 For Sale ",
+            id: (id++).toString(),
+          },
+          {
+            location: "Rawalpindi",
+            price: "Rs. 2,000,000",
+            src: ["/assets/images/logo/Loxlight.png"],
+            description:
+              "title Lorem ipsum dolor sit amet consectetr Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut itaqueaccusamus cupiditate vel. Voluptates qui aliquam fugit possimus minima, cumque placeat. Accusantium dolorum reprehenderitodit dolores sunt dolorem, exercitationem nemo placeat ut.Delectus quia officia pariatur labore ipsa at, porro et laudantiumab cupiditate explicabo, magnam provident numquam voluptates!",
+
+            time: "3 weeks ago",
+            productOtherDetails: { condition: "Used" },
+            title: "Toyota Fortuner 2021 Model For Sale ",
+            id: (id++).toString(),
+          },
+        ],
       },
     ],
   },

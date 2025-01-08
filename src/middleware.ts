@@ -13,6 +13,6 @@ export default function authMiddleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/api", "/api/login"],
+  matcher: ["/api", "/api/login", "/post", "/editprofile"],
 };
-// "/(home)/:path*" "/post",       , "/post", "/editprofile"
+// "/(home)/:path*"

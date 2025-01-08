@@ -1,14 +1,14 @@
-import { CategoryOptions, NestedOptionGroup, OptionGroup } from "@/interfaces";
+import { CtgOptions, NestedOptionGroup, OptionGroup } from "@/interfaces";
 import { createOption } from ".";
 
 function condition(
-  subCategory?: string,
+  subCtg?: string,
   nestedGroup?: NestedOptionGroup
 ): OptionGroup {
   const commonn = ["New", "Used"];
   return {
     label: "Condition",
-    values: subCategory
+    values: subCtg
       ? [...commonn, "Open Box", "Refurbished", "For Parts"].map((label) =>
           createOption(label)
         )
@@ -17,9 +17,9 @@ function condition(
   };
 }
 
-export const categoryOptionsData: CategoryOptions[] = [
+export const ctgOptionsData: CtgOptions[] = [
   {
-    subCategory: "Cars",
+    subCtg: "Cars",
     groups: [
       {
         label: "Make",
@@ -173,7 +173,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Bikes",
+    subCtg: "Bikes",
     groups: [
       {
         label: "Make",
@@ -316,7 +316,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Rickshaw & Chingchi",
+    subCtg: "Rickshaw & Chingchi",
     groups: [
       {
         label: "Make",
@@ -339,7 +339,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Buses and Vans",
+    subCtg: "Buses and Vans",
     groups: [
       {
         label: "Make",
@@ -362,7 +362,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Other Fashion",
+    subCtg: "Other Fashion",
     groups: [
       {
         label: "items",
@@ -374,7 +374,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Other Vehicles",
+    subCtg: "Other Vehicles",
 
     groups: [
       {
@@ -387,7 +387,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Mobiles",
+    subCtg: "Mobiles",
     groups: [
       {
         label: "Brand",
@@ -535,7 +535,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Tablets",
+    subCtg: "Tablets",
     groups: [
       {
         label: "Brand",
@@ -618,7 +618,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Smart Watches",
+    subCtg: "Smart Watches",
     groups: [
       {
         label: "Brand",
@@ -702,7 +702,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Accessories",
+    subCtg: "Accessories",
     groups: [
       {
         label: "Accessory",
@@ -757,7 +757,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Footwear",
+    subCtg: "Footwear",
     groups: [
       {
         label: "Type",
@@ -816,7 +816,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Makeup",
+    subCtg: "Makeup",
     groups: [
       {
         label: "Accessory",
@@ -902,7 +902,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Office Furniture",
+    subCtg: "Office Furniture",
     groups: [
       {
         label: "Items",
@@ -987,7 +987,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Home Decor",
+    subCtg: "Home Decor",
     groups: [
       {
         label: "Items",
@@ -1031,7 +1031,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Sofa & Chairs",
+    subCtg: "Sofa & Chairs",
     groups: [
       {
         label: "Items",
@@ -1084,7 +1084,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Beds & Wardrobes",
+    subCtg: "Beds & Wardrobes",
     groups: [
       {
         label: "items",
@@ -1147,7 +1147,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Tables & Dining",
+    subCtg: "Tables & Dining",
     groups: [
       {
         label: "items",
@@ -1182,7 +1182,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Bathroom Accessories",
+    subCtg: "Bathroom Accessories",
     groups: [
       {
         label: "items",
@@ -1214,7 +1214,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Garden & Outdoor",
+    subCtg: "Garden & Outdoor",
     groups: [
       {
         label: "items",
@@ -1247,7 +1247,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Living Room Furniture",
+    subCtg: "Living Room Furniture",
     groups: [
       {
         label: "Items",
@@ -1349,7 +1349,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Other Furniture",
+    subCtg: "Other Furniture",
     groups: [
       {
         label: "items",
@@ -1361,7 +1361,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Jewellery",
+    subCtg: "Jewellery",
     groups: [
       {
         label: "type",
@@ -1398,7 +1398,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Men's Fashion",
+    subCtg: "Men's Fashion",
     groups: [
       {
         label: "Items",
@@ -1515,7 +1515,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Women's Fashion",
+    subCtg: "Women's Fashion",
     groups: [
       {
         label: "Items",
@@ -1644,7 +1644,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Kid's Fashion",
+    subCtg: "Kid's Fashion",
     groups: [
       {
         label: "Items",
@@ -1757,7 +1757,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Clothes",
+    subCtg: "Clothes",
     groups: [
       {
         label: "Items",
@@ -1841,7 +1841,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Computers & Accessories",
+    subCtg: "Computers & Accessories",
     groups: [
       {
         label: "Items",
@@ -2056,7 +2056,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Games",
+    subCtg: "Games",
     groups: [
       {
         label: "Items",
@@ -2144,7 +2144,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Televisions & Accessories",
+    subCtg: "Televisions & Accessories",
     groups: [
       {
         label: "Items",
@@ -2268,7 +2268,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Home Appliances",
+    subCtg: "Home Appliances",
     groups: [
       {
         label: "Items",
@@ -2487,7 +2487,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Audio",
+    subCtg: "Audio",
     groups: [
       {
         label: "Items",
@@ -2713,7 +2713,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Other Electronics",
+    subCtg: "Other Electronics",
     groups: [
       {
         label: "items",
@@ -2726,7 +2726,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Parrots",
+    subCtg: "Parrots",
     groups: [
       {
         label: "Type",
@@ -2760,7 +2760,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Cats",
+    subCtg: "Cats",
     groups: [
       {
         label: "Breed",
@@ -2793,7 +2793,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Dogs",
+    subCtg: "Dogs",
     groups: [
       {
         label: "Breed",
@@ -2830,7 +2830,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Rabbits",
+    subCtg: "Rabbits",
     groups: [
       {
         label: "Breed",
@@ -2862,7 +2862,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Hens",
+    subCtg: "Hens",
     groups: [
       {
         label: "Breed",
@@ -2894,7 +2894,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Pigeons",
+    subCtg: "Pigeons",
     groups: [
       {
         label: "Breed",
@@ -2921,7 +2921,7 @@ export const categoryOptionsData: CategoryOptions[] = [
     ],
   },
   {
-    subCategory: "Other Birds & Animals",
+    subCtg: "Other Birds & Animals",
     groups: [
       {
         label: "Type",

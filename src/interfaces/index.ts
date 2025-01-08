@@ -39,7 +39,7 @@ export interface InputValue {
 }
 
 export interface Params {
-  categoryName?: MainCategoryType;
+  categoryName?: MainCtgType;
   profileID?: string;
   id?: string;
 }
@@ -113,18 +113,19 @@ export interface AppImage {
 
 export interface SliderSrc {
   src: string;
+  href: string;
 }
 
 export interface SubCategoryLink {
   href: string;
   src?: string;
-  title: SubCategoryType;
+  title: SubCtgType;
 }
 
 export interface CategoryLink {
   href: string;
   src?: string;
-  title: MainCategoryType;
+  title: MainCtgType;
   subCategories?: SubCategoryLink[];
 }
 
@@ -145,9 +146,16 @@ export interface ProductCardProps {
   className?: string;
 }
 
-export interface RenderProductCardProps {
+export interface MainCtgProductCardProps {
   cardData: ProductCardProps[];
-  heading: string;
+  heading: MainCtgType;
+  href: string;
+  subCtgCard?: SubCtgProductCardProps[];
+}
+
+export interface SubCtgProductCardProps {
+  cardData: ProductCardProps[];
+  heading: SubCtgType;
   href: string;
 }
 
@@ -169,8 +177,8 @@ export interface CardDetailsImage {
 }
 
 export interface MoreProductCardDataProps {
-  mainCategory: MainCategoryType | string;
-  subCategory: SubCategoryType | string;
+  mainCtg: MainCtgType | string;
+  subCtg: SubCtgType | string;
 }
 
 export interface DetailProductCardDataProps {
@@ -258,25 +266,24 @@ export interface DatePickerProps {
   sendDate: (date?: Date) => void;
 }
 
-export interface SentCategory {
+export interface SentCtg {
   src?: string;
   main?: string;
-  sub?: SubCategoryType;
+  sub?: SubCtgType;
 }
 
-export interface CategoryDialogProps {
-  sentCategoryData: (value: SentCategory) => void;
+export interface CtgDialogProps {
+  sentCtgData: (value: SentCtg) => void;
 }
 
 export interface AdDetails {
-  mainCategory?: string;
-  subCategory?: SubCategoryType;
+  mainCtg?: string;
+  subCtg?: SubCtgType;
   image?: string[];
   adTitle?: string;
   description?: string;
   location?: string;
   price?: string;
-  // name?: string;
   phoneNumber?: string;
   showMyPhNum?: boolean;
 }
@@ -295,7 +302,7 @@ export interface NestedOptionGroup {
   conditionalOptions?: ConditionalOption[];
 }
 
-export type MainCategoryType =
+export type MainCtgType =
   | "allcategories"
   | "Mobiles & Tablets"
   | "Fashion & Beauty"
@@ -305,7 +312,7 @@ export type MainCategoryType =
   | "Furniture & Home Decorator"
   | undefined;
 
-export type SubCategoryType =
+export type SubCtgType =
   | "Tablets"
   | "Mobiles"
   | "Makeup"
@@ -356,9 +363,9 @@ export interface OptionGroup {
   nestedGroup?: NestedOptionGroup;
 }
 
-export interface CategoryOptions {
+export interface CtgOptions {
   groups: OptionGroup[];
-  subCategory: SubCategoryType;
+  subCtg: SubCtgType;
 }
 
 export interface DropDownConfigProps {
