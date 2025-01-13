@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import { SliderSrc } from "@/interfaces";
-import { BACKEND_URL } from "@/utils/constant";
 import axios from "axios";
 import Link from "next/link";
 
@@ -19,7 +18,7 @@ export function Slider() {
   const [slider, set_slider] = useState<SliderSrc[]>([]);
 
   const getDataHandle = async () => {
-    const res = await axios.get(`${BACKEND_URL}/api/sliderImage`);
+    const res = await axios.get(`/api/sliderImage`);
     // console.log("res", res.data.data);
 
     set_slider([...slider, ...res.data.data]);

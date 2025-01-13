@@ -1,5 +1,5 @@
+import { user_model } from "@/models_schema/user_profile";
 import bcrypt from "bcrypt";
-
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -13,6 +13,9 @@ export async function POST(req: Request) {
     }
 
     // body save on database
+    const createUser = await user_model.create(body);
+
+    console.log("createUser", createUser);
 
     // send OTP on email or SMS
 
