@@ -11,6 +11,9 @@ import { CategoryText } from "@/components/CategoryText";
 import { Toaster } from "@/components/ui/toaster";
 import { Sell_btn } from "@/components/Sell_btn";
 import { LayoutProps } from "@/interfaces";
+import connect_to_database from "@/lib/mongoose";
+
+await connect_to_database();
 
 const fontSans = FontSans({
   subsets: ["cyrillic-ext"],

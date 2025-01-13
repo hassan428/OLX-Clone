@@ -13,8 +13,6 @@ export async function POST(req: Request) {
 
     const customOTP = 789456; // find otp from user
 
-    console.log("customOTP", customOTP);
-    console.log("body.otp", body.otp);
     if (customOTP != body.otp) {
       return Response.json({ message: "Otp is incorrect", status: 404 });
     }
