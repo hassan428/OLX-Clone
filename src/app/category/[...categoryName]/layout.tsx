@@ -22,8 +22,8 @@ import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/Logo";
 import { PriceRange } from "@/components/PriceRange";
 
-const layout = ({ children, params }: LayoutProps) => {
-  const { categoryName } = params;
+const layout = async ({ children, params }: LayoutProps) => {
+  const { categoryName } = await params;
 
   const find_main_ctg = ctg_link.find(({ href }) => categoryName?.[0] == href);
 

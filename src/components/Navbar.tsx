@@ -56,7 +56,7 @@ export const Navbar = () => {
 
   return (
     <nav
-      className={`bg-background p-3 space-y-2 max-w-full sticky top-0 z-50 transition-transform duration-300 ${
+      className={`bg-background p-3 space-y-2 max-w-full sticky top-0 z-20 transition-transform duration-300 ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >

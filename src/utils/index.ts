@@ -39,6 +39,8 @@ export const scrollToTop = () => {
   });
 };
 
+export const generateOtp = () => Math.floor(100000 + Math.random() * 900000);
+
 export const validateYear = (year: string): boolean =>
   +year >= minYear && +year <= new Date().getFullYear();
 

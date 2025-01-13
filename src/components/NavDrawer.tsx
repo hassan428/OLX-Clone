@@ -19,7 +19,7 @@ import {
 import Image from "next/image";
 
 import Link from "next/link";
-import { isLogged, route_data } from "@/utils";
+import { isLogged, route_data, verifiedData } from "@/utils";
 import { LoginSignupAlert } from "@/components/LoginSignupAlert";
 const username: string = "Hassan Hanif";
 
@@ -52,15 +52,19 @@ export function NavDrawer() {
               >
                 {isLogged ? "Hello," : "Enter to your account"}
               </SheetDescription>
-              <SheetDescription
-                className={`text-foreground ${
-                  username
-                    ? "font-bold text-lg"
-                    : "underline underline-offset-2"
-                }`}
-              >
-                {username || "Log in to your account"}
-              </SheetDescription>
+              {isLogged ? (
+                <SheetDescription className="text-foreground font-bold text-lg">
+                  {verifiedData.name}
+                </SheetDescription>
+              ) : (
+                <LoginSignupAlert
+                  trigger={
+                    <h1 className="underline underline-offset-2">
+                      Log in to your account
+                    </h1>
+                  }
+                />
+              )}
             </div>
           </div>
           {isLogged && (

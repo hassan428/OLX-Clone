@@ -44,6 +44,8 @@ import {
   validatePhone,
   verifiedData,
 } from "@/utils";
+import { BACKEND_URL } from "@/utils/constant";
+import axios from "axios";
 
 const screenRoute: LoginSignupRoute[] = [
   {
@@ -78,11 +80,11 @@ const screenRoute: LoginSignupRoute[] = [
   },
   {
     current: "otpEmail",
-    previous: isLogged ? "verifyEmail" : "forgotPassEmail",
+    previous: isLogged ? "verifyEmail" : undefined,
   },
   {
     current: "otpPhone",
-    previous: isLogged ? "verifyPhone" : "forgotPassPhone",
+    previous: isLogged ? "verifyPhone" : undefined,
   },
 ];
 
@@ -96,16 +98,18 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
   const [data, setData] = useState<LoginSignup | null>(null);
   const [otp, setOtp] = useState<string>("");
   const [timeUp, setTimeUp] = useState<boolean>(false);
-  const [passwordRules, setPassWordRules] = useState<PasswordRules | null>(
+  const [showPasswordValidation, setShowPasswordValidation] =
+    useState<boolean>(true);
+  const [passwordRules, setPasswordRules] = useState<PasswordRules | null>(
     null
   );
-  const [passwordStrength, setPassWordStrength] =
+  const [passwordStrength, setPasswordStrength] =
     useState<PasswordStrength | null>(null);
 
   const [loading, setLoading] = useState<boolean>(false);
   const loginOrEmailString: string = screen.slice(screen.length - 5);
 
-  const PasswordValidationData: PasswordValidationData[] = [
+  const passwordValidationData: PasswordValidationData[] = [
     { text: "8 characters", condition: passwordRules?.hasMinLength },
     { text: "1 number", condition: passwordRules?.hasNumber },
     {
@@ -130,14 +134,16 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         (key) => setDataHandle({ [key]: undefined })
       );
       setTimeUp(false);
-      setPassWordRules(null);
-      setPassWordStrength(null);
+      setPasswordRules(null);
+      setPasswordStrength(null);
     }
     if (screen.includes("verify")) {
       setDataHandle(verifiedData);
       setTimeUp(false);
     }
     setError(null);
+    setLoading(false);
+    setShowPasswordValidation(true);
   }, [screen]);
 
   const setDataHandle = (newData: LoginSignup): void => {
@@ -152,12 +158,20 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     });
   };
 
-  const loginWithGoogle = async () => {
-    console.log("loginWithGoogle");
-  };
+  const checkPassword = (): string | undefined => {
+    const missingConditions: string[] = [];
+    !screen.includes("login") &&
+      passwordValidationData.filter(
+        ({ text, condition }) => !condition && missingConditions.push(text)
+      );
 
-  const joinWithGoogle = async () => {
-    console.log("joinWithGoogle");
+    if (missingConditions.length > 0) {
+      passwordInputRef.current?.focus();
+
+      return `Password should be at least ${missingConditions
+        .join(", ")
+        .replace(/, ([^,]*)$/, " & $1")}.`;
+    }
   };
 
   const errorCheck = (value?: string): LoginSignup => ({
@@ -180,16 +194,18 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         ? "Please enter a valid phone number"
         : undefined,
     password:
-      !value && !data?.password
-        ? "Passwordr is required!"
-        : !validatePhone(value || data?.password)
-        ? "Please enter a valid phone number"
+      !value && !data?.password ? "Password is required!" : checkPassword(),
+    confirmPassword:
+      !value && !data?.confirmPassword
+        ? "Confirm Password is required!"
+        : data?.confirmPassword !== (value || data?.password)
+        ? "Confirm Password does not match"
         : undefined,
   });
 
   const loginSignupUi = (logOrjoin: "login" | "join"): ReactNode => (
-    <div className="flex-1 overflow-y-auto space-y-4">
-      {/* Social Login Buttons */}
+    <>
+     
       <Button
         onClick={logOrjoin == "login" ? loginWithGoogle : joinWithGoogle}
         variant="outline"
@@ -217,7 +233,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         <MdOutlinePhone size={20} />
         {` ${logOrjoin} with Phone`}
       </Button>
-    </div>
+    </>
   );
 
   const phoneInput = (): ReactNode => (
@@ -255,9 +271,18 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
               placeholder: "Enter Phone Number",
               maxLength: 10,
               onBlur: () =>
+                !errorCheck().name &&
                 setErrorHandle({
                   phoneNumber: errorCheck().phoneNumber,
                 }),
+              onFocus: () => {
+                if (errorCheck().name) {
+                  nameInputRef.current?.focus();
+                  setErrorHandle({
+                    name: errorCheck().name,
+                  });
+                }
+              },
               onChange: (e) => {
                 const { value } = e.target;
                 if (isNumber(value)) {
@@ -358,9 +383,18 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
             value: data?.email || "",
             placeholder: "Enter Email",
             onBlur: () =>
+              !errorCheck().name &&
               setErrorHandle({
                 email: errorCheck().email,
               }),
+            onFocus: () => {
+              if (errorCheck().name) {
+                nameInputRef.current?.focus();
+                setErrorHandle({
+                  name: errorCheck().name,
+                });
+              }
+            },
             onChange: (e) => {
               const { value } = e.target;
               setDataHandle({
@@ -409,7 +443,16 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
             autoComplete: isLoginForm ? "current-password" : "new-password",
             value: data?.password || "",
             id: "password",
+            onBlur: () => {
+              setShowPasswordValidation(false);
+              (validateEmail(data?.email) ||
+                validatePhone(data?.phoneNumber)) &&
+                setErrorHandle({
+                  password: errorCheck().password,
+                });
+            },
             onFocus: () => {
+              setShowPasswordValidation(true);
               if (!validateEmail(data?.email)) {
                 emailInputRef.current?.focus();
                 setErrorHandle({
@@ -424,15 +467,13 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
               }
             },
             onChange: ({ target }) => {
-              const { id, value } = target;
-
-              setPassWordRules(validatePassword(value));
-              setPassWordStrength(checkPasswordStrength(value));
-
+              const { value } = target;
+              setPasswordRules(validatePassword(value));
+              setPasswordStrength(checkPasswordStrength(value));
               setErrorHandle({
-                [id]: value ? undefined : `${id} is required!`,
+                password: !value ? "Password is required!" : undefined,
               });
-              setDataHandle({ [id]: value });
+              setDataHandle({ password: value });
             },
           }}
         />
@@ -471,34 +512,30 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
             autoComplete: "new-password",
             value: data?.confirmPassword || "",
             id: "confirmPassword",
+            onBlur: () =>
+              !checkPassword() &&
+              setErrorHandle({
+                confirmPassword: errorCheck().confirmPassword,
+              }),
             onFocus: () => {
+              setShowPasswordValidation(false);
               if (!data?.password) {
                 passwordInputRef.current?.focus();
+                setErrorHandle({
+                  password: errorCheck().password,
+                });
               } else {
-                const missingConditions: string[] = [];
-                PasswordValidationData.filter(
-                  ({ text, condition }) =>
-                    !condition && missingConditions.push(text)
-                );
-
-                if (missingConditions.length > 0) {
-                  passwordInputRef.current?.focus();
-
-                  setErrorHandle({
-                    password: `Password should be at least ${missingConditions
-                      .join(", ")
-                      .replace(/, ([^,]*)$/, " & $1")}.`,
-                  });
-                }
+                checkPassword();
               }
             },
             onChange: ({ target }) => {
+              const { value } = target;
               setErrorHandle({
-                [target.id]: target.value
-                  ? undefined
-                  : `confirm password is required!`,
+                confirmPassword: !value
+                  ? "Confirm Password is required!"
+                  : undefined,
               });
-              setDataHandle({ [target.id]: target.value });
+              setDataHandle({ confirmPassword: value });
             },
           }}
         />
@@ -515,7 +552,13 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
   const loginEmailUi = (): ReactNode => (
     <>
-      {emailInput()}
+      <div>
+        <h1 className="text-sm mb-2">
+          Enter your email address and password to log in and access your
+          account.
+        </h1>
+        {emailInput()}
+      </div>
       <div>
         {passwordInput(true)}
         {forgotPasswordButtonUi("forgotPassEmail")}
@@ -530,7 +573,13 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
   const loginPhoneUi = (): ReactNode => (
     <>
-      {phoneInput()}
+      <div>
+        <h1 className="text-sm mb-2">
+          Enter your phone number and password to log in and access your
+          account.
+        </h1>
+        {phoneInput()}
+      </div>
       <div>
         {passwordInput(true)}
         {forgotPasswordButtonUi("forgotPassPhone")}
@@ -561,7 +610,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       <OTP_input
         value={otp}
         onChange={(value: string) => {
-          value.length == 6 && OTPVerifyHandle();
+          value.length == 6 && OTPVerifyHandle(value);
           setOtp(value);
         }}
       />
@@ -599,7 +648,11 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
   const joinEmailUi = (): ReactNode => (
     <>
-      <div className="flex flex-col gap-3 my-2">
+      <h1 className="text-sm">
+        Enter your email address to create a new account and start your journey
+        with us.
+      </h1>
+      <div className="flex flex-col gap-3 mb-2">
         {nameInput()}
         {emailInput()}
       </div>
@@ -615,7 +668,11 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
   const joinPhoneUi = (): ReactNode => (
     <>
-      <div className="flex flex-col gap-3 my-2">
+      <h1 className="text-sm">
+        Enter your phone number to create a new account and start your journey
+        with us.
+      </h1>
+      <div className="flex flex-col gap-3 mb-2">
         {nameInput()}
         {phoneInput()}
       </div>
@@ -639,7 +696,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
       {submitButtonUi({
         text: "Next",
-        onClick: OTPEmailScreenHandle,
+        onClick: () => setScreen("otpEmail"),
         disabled:
           isError({ email: data?.email }) ||
           isError({ email: error?.email }, true) ||
@@ -658,7 +715,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
       {submitButtonUi({
         text: "Next",
-        onClick: OTPPhoneScreenHandle,
+        onClick: () => setScreen("otpPhone"),
         disabled:
           isError({ phoneNumber: data?.phoneNumber }) ||
           isError({ phoneNumber: error?.phoneNumber }, true) ||
@@ -669,7 +726,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
   const createPassUi = (): ReactNode => (
     <>
-      <h1 className="text-sm">
+      <h1 className="text-sm m-0 p-0">
         To secure your account and log in faster, choose a strong password you
         haven’t used before.
       </h1>
@@ -677,7 +734,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       <div className="flex flex-col gap-3 my-2">
         <div>
           {passwordInput()}
-          {!error?.password && (
+          {!error?.password && showPasswordValidation && (
             <>
               <Text
                 className="mb-1 mt-2"
@@ -690,7 +747,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
               <div className="flex flex-col gap-2 bg-input rounded-md p-2 my-2 text-sm">
                 <Text text="Password must contain at least:" />
                 <div className="space-y-2 font-bold">
-                  {PasswordValidationData.map(({ text, condition }, i) => (
+                  {passwordValidationData.map(({ text, condition }, i) => (
                     <div className="flex items-start" key={i}>
                       <span className="mr-3">•</span> {text}
                       {condition ? (
@@ -793,10 +850,22 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     </Button>
   );
 
-  const loginWithEmailHandle = () => {};
-  const loginWithPhoneHandle = () => {};
-  const createAccountHandle = () => {};
-  const navigatePasswordScreenHandle = () => {
+  const loginWithEmailHandle = async () => {};
+  const loginWithPhoneHandle = async () => {};
+  const createAccountHandle = async () => {
+    setLoading(true);
+    try {
+      delete data?.confirmPassword;
+      const res = await axios.post(`${BACKEND_URL}/api/join`, data);
+      console.log("res.data", res.data);
+      setLoading(false);
+      setScreen(data?.email ? "otpEmail" : "otpPhone");
+      return;
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+  const navigatePasswordScreenHandle = async () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -804,44 +873,44 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     }, 2000);
   };
 
-  const OTPEmailScreenHandle = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setScreen("otpEmail");
-      // timerHandle();
-    }, 2000);
+  const loginWithGoogle = async () => {
+    console.log("loginWithGoogle");
   };
 
-  const OTPPhoneScreenHandle = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setScreen("otpPhone");
-      // timerHandle();
-    }, 2000);
+  const joinWithGoogle = async () => {
+    console.log("joinWithGoogle");
   };
 
-  const OTPVerifyHandle = () => {
-    console.log("OTPVerifyHandle");
+  const OTPVerifyHandle = async (otp: string) => {
+    setLoading(true);
+    try {
+      const res = await axios.post(`${BACKEND_URL}/api/otpVerify`, {
+        otp,
+        data,
+      });
+      console.log("res.data", res.data);
+      setLoading(false);
+      return;
+    } catch (err) {
+      console.log("err", err);
+    }
   };
-  const resendCodeBySMSHandle = () => {};
-  const resendCodeByCallHandle = () => {};
-  const resendCodeByEmailHandle = () => {};
+  const resendCodeBySMSHandle = async () => {};
+  const resendCodeByCallHandle = async () => {};
+  const resendCodeByEmailHandle = async () => {};
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
 
       <AlertDialogContent className="flex flex-col px-2 sm:px-5 py-5 max-sm:min-h-screen max-h-screen sm:max-h-[31rem] overflow-y-auto w-full sm:w-2/4 xmd:w-2/5 rounded-lg">
-        {/* Header */}
         {loading && <Loader />}
 
         <AlertDialogHeader className="sm:text-center">
           <div className="flex justify-center mb-2">
             <Logo />
           </div>
-          <AlertDialogTitle className="text-xl sm:text-2xl font-bold my-2">
+          <AlertDialogTitle className="text-xl sm:text-2xl font-bold">
             {screen == "login"
               ? "Login into your LOX account"
               : screen == "join"
@@ -862,7 +931,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
           </AlertDialogTitle>
         </AlertDialogHeader>
 
-        <div className="flex flex-col flex-1 sm:gap-3 gap-3 text-sm">
+        <div className="flex flex-col flex-1 gap-3 text-sm">
           {/* Scrollable Content */}
           {(screen === "login" || screen === "join") && loginSignupUi(screen)}
           {screen === "loginEmail" && loginEmailUi()}

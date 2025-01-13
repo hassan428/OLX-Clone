@@ -20,16 +20,14 @@ export function Slider() {
 
   const getDataHandle = async () => {
     const res = await axios.get(`${BACKEND_URL}/api/sliderImage`);
-    console.log("res", res.data.data);
+    // console.log("res", res.data.data);
 
     set_slider([...slider, ...res.data.data]);
   };
-  // console.log("slider", slider);
-
   useEffect(() => {
     getDataHandle();
   }, []);
-  //sliderImage
+
   return (
     <Carousel
       plugins={[plugin.current]}

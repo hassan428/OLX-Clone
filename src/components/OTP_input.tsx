@@ -24,7 +24,7 @@ export const OTP_input = ({ onChange, value, errorText }: OTP_input_props) => {
             .fill("")
             .map((_, i) => (
               <InputOTPSlot
-                className="h-14 w-11 text-lg border border-foreground"
+                className="h-14 w-11 text-lg border border-foreground bg-input"
                 index={i}
                 key={i}
               />

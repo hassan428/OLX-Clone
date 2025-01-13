@@ -10,18 +10,17 @@ import {
   ProductCardProps,
   MainCtgProductCardProps,
 } from "@/interfaces";
-
 import axios from "axios";
 import { cookies } from "next/headers";
-import { LOCATION_KEY, BACKEND_URL } from "@/utils/constant";
-import { Loader } from "@/components/Loader";
-
+import { LOCATION_KEY } from "@/utils/constant";
 import { notFound } from "next/navigation";
+
+const { BACKEND_URL } = process.env;
 
 export const ProductCardData = async () => {
   const getDataHandle = async () => {
     try {
-      const location = await cookies().get(LOCATION_KEY);
+      const location = await (await cookies()).get(LOCATION_KEY);
       console.log("location", location);
       const res = await axios.post(
         `${BACKEND_URL}/api/allCard`,
@@ -46,7 +45,7 @@ export const MoreProductCardData = async ({
 }: MoreProductCardDataProps) => {
   const getDataHandle = async () => {
     try {
-      const location = cookies().get(LOCATION_KEY);
+      const location = (await cookies()).get(LOCATION_KEY);
       const res = await axios.post(`${BACKEND_URL}/api/specificCategoryCard`, {
         mainCtg,
         subCtg,
