@@ -1,18 +1,11 @@
 import { LocationSelectConfig } from "@/components/LocationSelectConfig";
-import { LOCATION_KEY, BACKEND_URL } from "@/utils/constant";
 import { location_of_pakistan } from "@/utils";
-import axios from "axios";
+import Cookies from "js-cookie";
 
 export function Location_select() {
-  const handleSelect = async (value: string) => {
-    try {
-      localStorage.setItem(LOCATION_KEY, value);
-      const res = await axios.post(`${BACKEND_URL}/api/allCard`, value);
-      console.log("response", res.data.data);
-      return res.data.data;
-    } catch (err) {
-      console.log("err", err);
-    }
+  const handleSelect = (value: string) => {
+    Cookies.set(process.env.NEXT_PUBLIC_LOCATION_KEY || "", value);
+    window.location.reload();
   };
 
   return (
@@ -24,3 +17,4 @@ export function Location_select() {
     />
   );
 }
+

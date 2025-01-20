@@ -1,12 +1,12 @@
 import { Schema, model } from "mongoose";
 
-const codes_schmea = new Schema(
+const codeSchema = new Schema(
   {
     user_id: {
       type: Schema.Types.ObjectId,
       required: true,
       unique: true,
-      ref: "user_profiles",
+      ref: "userProfiles",
     },
     code: {
       type: String,
@@ -21,6 +21,4 @@ const codes_schmea = new Schema(
   { timestamps: true }
 );
 
-const code_model = model("user_codes", codes_schmea);
-
-module.exports = code_model;
+export const codeModel = model("userCodes", codeSchema);

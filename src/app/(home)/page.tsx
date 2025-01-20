@@ -3,12 +3,14 @@ import { CategoryTextWithImage } from "@/components/CategoryTextWithImage";
 import { Slider } from "@/components/Slider";
 import { ProductCardData } from "@/components/ProductsData";
 
+
 const HomePage = () => {
   return (
     <>
-      <Slider />
+      {/* <Slider /> */}
       <CategoryTextWithImage />
-      <ProductCardData />
+      {/* <ProductCardData /> */}
+
     </>
   );
 };

@@ -180,7 +180,7 @@ const PostPage = () => {
       <h1 className="text-center font-bold text-xl">Post Your AD</h1>
       <div className="sm:flex gap-2 p-1 items-start w-full">
         <div className="flex flex-col gap-5 sm:w-3/4">
-          <div className="border-2 border-border rounded-xl m-2">
+          <div className="border-2 border-border rounded-xl m-1 ">
             {/* select category Section */}
             <div className="flex flex-col sm:flex-row gap-2 items-center border-b-2 border-border p-2 sm:p-5 text-xs sm:text-sm">
               <h1
@@ -704,54 +704,10 @@ const PostPage = () => {
             </div>
           </div>
 
-          {/* name & price Section*/}
+          {/* price Section*/}
 
           <div className="border-2 border-border rounded-xl m-2">
             <div className="flex flex-col border-b-2 border-border p-2 sm:p-5 text-xs sm:text-sm">
-              {/* <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
-                <h1
-                  className={`w-full sm:w-1/4 font-bold ${
-                    error?.name && "text-error"
-                  }`}
-                >
-                  Name*
-                </h1>
-                <div className="w-full sm:w-3/4">
-                  <TextInput
-                    error={!!error?.name}
-                    cut_handle={() => {
-                      setDataHandle({ name: "" });
-                      setErrorHandle({ name: "Name is required!" });
-                    }}
-                    inputProps={{
-                      autoComplete: "name",
-                      maxLength: 50,
-                      id: "name",
-                      value: data?.name || "",
-                      placeholder: "Enter Name",
-                      onBlur: () =>
-                        setErrorHandle({
-                          name: errorCheck().name,
-                        }),
-                      onChange: (e) => {
-                        const { value } = e.target;
-                        setDataHandle({ name: value });
-                        setErrorHandle({
-                          name: !value
-                            ? "Name is required!"
-                            : value.length >= 2
-                            ? errorCheck(value).name
-                            : undefined,
-                        });
-                      },
-                    }}
-                  />
-                  {error?.name && (
-                    <Text className="mt-1" error={true} text={error.name} />
-                  )}
-                </div>
-              </div> */}
-
               <div className="flex flex-col sm:flex-row max-sm:gap-2 items-center py-3">
                 <h1
                   className={`w-full sm:w-1/4 font-bold ${

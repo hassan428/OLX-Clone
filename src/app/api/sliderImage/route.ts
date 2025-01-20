@@ -1,8 +1,8 @@
-import { SliderSrc } from "@/interfaces";
+import { CustomImageProps } from "@/interfaces";
 
 export async function GET(req: Request) {
   try {
-    const sliderImages: SliderSrc[] = [
+    const sliderImages: CustomImageProps[] = [
       { src: "/assets/images/category/fashion.png", href: "/category/fashion" },
       {
         src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuHCbHGd7D623E5XBmXkDJSQb0iTK5l3GtSQ&s",

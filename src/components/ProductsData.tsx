@@ -21,7 +21,7 @@ export const ProductCardData = async () => {
   const getDataHandle = async () => {
     try {
       const location = await (await cookies()).get(LOCATION_KEY);
-      console.log("location", location);
+      // console.log("location", location);
       const res = await axios.post(
         `${BACKEND_URL}/api/allCard`,
         location?.value

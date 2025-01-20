@@ -9,13 +9,13 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import { SliderSrc } from "@/interfaces";
+import { CustomImageProps } from "@/interfaces";
 import axios from "axios";
 import Link from "next/link";
 
 export function Slider() {
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
-  const [slider, set_slider] = useState<SliderSrc[]>([]);
+  const [slider, set_slider] = useState<CustomImageProps[]>([]);
 
   const getDataHandle = async () => {
     const res = await axios.get(`/api/sliderImage`);

@@ -5,17 +5,19 @@ import { Sell_btn } from "@/components/Sell_btn";
 import { NavScreenBtn } from "@/components/NavScreenBtn";
 import { Location_select } from "@/components/Location_select";
 import { Search_input } from "@/components/Search_input";
-import { IoCarSportOutline } from "react-icons/io5";
-import { FaMobileScreen } from "react-icons/fa6";
 import { DarkLightModeBtn } from "@/components/DarkLightMode";
 import { NavDrawer } from "@/components/NavDrawer";
-import { NavbarRoute } from "@/interfaces";
-import { isLogged } from "@/utils";
 import { ProfileRoutes } from "@/components/ProfileRoutes";
 import { Button } from "@/components/ui/button";
 import { LoginSignupAlert } from "@/components/LoginSignupAlert";
 import { BackToTopBtn } from "@/components/BackToTopBtn";
+import { useAppSelector } from "@/lib/hooks";
+import { navbarRoute } from "@/utils";
+import { Timer } from "@/components/Timer";
+
 export const Navbar = () => {
+  const { isLogged } = useAppSelector(({ auth }) => auth);
+
   const [isVisible, setIsVisible] = useState(true); // Navbar visibility state
   const [lastScrollY, setLastScrollY] = useState(0); // To track previous scroll position
 
@@ -40,19 +42,6 @@ export const Navbar = () => {
       window.removeEventListener("scroll", handleScroll); // Cleanup event listener
     };
   }, [lastScrollY]);
-
-  const navbarRoute: NavbarRoute[] = [
-    {
-      Icon: IoCarSportOutline,
-      title: "Vehicles",
-      href: "vehicles",
-    },
-    {
-      Icon: FaMobileScreen,
-      title: "Mobiles",
-      href: "mobiles-tablets",
-    },
-  ];
 
   return (
     <nav
@@ -103,12 +92,16 @@ export const Navbar = () => {
             />
           )}
         </div>
-
         <Sell_btn className="max-xmd:hidden" />
       </nav>
       <div className="fixed left-1/2 -translate-x-1/2 z-50">
         <BackToTopBtn className={!isVisible ? "mt-2" : ""} />
       </div>
+      
+       {/* OTP Timer don't Stop */}
+        <div className="hidden">
+          <Timer />
+        </div>
     </nav>
   );
 };

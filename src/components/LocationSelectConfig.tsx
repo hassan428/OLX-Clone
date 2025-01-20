@@ -9,7 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { LocationSelectProps } from "@/interfaces";
-import { LOCATION_KEY } from "@/utils/constant";
+import Cookies from "js-cookie";
 
 export const LocationSelectConfig = ({
   options,
@@ -28,8 +28,8 @@ export const LocationSelectConfig = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const val = localStorage.getItem(LOCATION_KEY);
-    isDefaultSelect && setDefaultSelect(val);
+    const location = Cookies.get(process.env.NEXT_PUBLIC_LOCATION_KEY || "");
+    isDefaultSelect && location && setDefaultSelect(location);
     selectedValue && setDefaultSelect(null);
   }, [selectedValue]);
 

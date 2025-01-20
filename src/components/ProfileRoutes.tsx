@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { RiArrowDownWideLine } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
-import { route_data } from "@/utils";
+import { profileRouteData } from "@/utils";
 import { NavScreenBtn } from "@/components/NavScreenBtn";
 
 export const ProfileRoutes = () => {
@@ -64,7 +64,7 @@ export const ProfileRoutes = () => {
               </Link>
             </div>
 
-            {route_data.map(
+            {profileRouteData.map(
               ({ Icon, title, href, className }, i) =>
                 title != "Dark Mode" && (
                   <div

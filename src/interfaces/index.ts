@@ -1,15 +1,10 @@
 import { InputProps } from "@/components/ui/input";
 import { DialogCloseProps } from "@radix-ui/react-dialog";
 import { LucideIcon } from "lucide-react";
-import { ButtonHTMLAttributes, ChangeEvent, ReactNode } from "react";
+import { ChangeEvent, ReactNode } from "react";
 import { IconType } from "react-icons";
 
 type IconComponent = IconType | LucideIcon;
-
-export interface Option {
-  label: string;
-  value: string;
-}
 
 export interface LocationDataProps {
   province:
@@ -31,54 +26,27 @@ export interface LocationSelectProps {
   error?: boolean;
 }
 
-export interface InputValue {
-  target: {
-    value: string;
-    id: string;
-  };
-}
-
 export interface Params {
   categoryName?: MainCtgType;
   profileID?: string;
   id?: string;
 }
 
-export interface LayoutProps {
+export interface LayoutProps extends PageProps, ChildrenType {}
+
+export interface ChildrenType {
   children: ReactNode;
-  params: Params;
 }
 
 export interface PageProps {
   params: Params;
 }
 
-export interface NavbarRoute {
-  title: string;
-  className?: string;
-  Icon: IconType;
-  href: string;
-}
-
-export interface RouteData {
+export interface RouteDataProps {
   title: string;
   Icon: IconComponent;
   href: string;
   className?: string;
-}
-
-export interface NavigateButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
-  pageName: string;
-  btnText: string;
-  variant:
-    | "secondary"
-    | "default"
-    | "destructive"
-    | "ghost"
-    | "link"
-    | "outline";
-  method: "push" | "replace" | "forward" | "back" | "refresh";
 }
 
 export interface NavScreenBtnProps {
@@ -103,28 +71,24 @@ export interface FooterLinkSection {
 
 export interface SocialMediaLinks {
   href: string;
-  Icon: IconType;
+  Icon: IconComponent;
 }
 
-export interface AppImage {
+export interface CustomImageProps {
   href: string;
   src: string;
 }
 
-export interface SliderSrc {
-  src: string;
-  href: string;
-}
-
-export interface SubCategoryLink {
+export interface CategoryImage {
   href: string;
   src?: string;
+}
+
+export interface SubCategoryLink extends CategoryImage {
   title: SubCtgType;
 }
 
-export interface CategoryLink {
-  href: string;
-  src?: string;
+export interface CategoryLink extends CategoryImage {
   title: MainCtgType;
   subCategories?: SubCategoryLink[];
 }
@@ -160,14 +124,14 @@ export interface SubCtgProductCardProps {
 }
 
 export interface ViewStyle {
-  Tag: IconType;
+  Tag: IconComponent;
   size: number;
   onClick: () => void;
   className?: string;
   tooltipText: string;
 }
 
-export interface PriceRangeInterface {
+export interface PriceRangeProps {
   lowest?: string;
   highest?: string;
 }
@@ -189,10 +153,15 @@ export interface DetailProductCardProps {
   cardDetails: ProductCardProps;
 }
 
+export interface StoreProviderProps extends ChildrenType {
+  authApiResponse: UserDetails & UserDetailsOpional;
+}
+
 export interface UserDetails {
   name?: string;
   email?: string;
   phoneNumber?: string;
+  isLogged?: boolean;
 }
 
 export interface UserDetailsOpional {
@@ -207,20 +176,6 @@ export interface TextInputProps {
   cut_handle?: () => void;
   error?: boolean;
   className?: string;
-}
-
-export interface DropDownConfigProps {
-  placeholder: string;
-  defaultSelect?: string;
-  selectValue?: string;
-  selectHandle: (value: Option) => void;
-  dropdownData?: Option[];
-  error?: boolean;
-  id?: string;
-  cut_handle?: () => void;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: () => void;
-  onOpen?: () => void;
 }
 
 export interface TextProps {
@@ -240,7 +195,6 @@ export interface ImageComponentProps {
   index: number;
   moveImage: (dragIndex: number, hoverIndex: number) => void;
   isFirst: boolean;
-
   onClick: () => void;
 }
 
@@ -288,9 +242,38 @@ export interface AdDetails {
   showMyPhNum?: boolean;
 }
 
+export interface DropDownConfigProps {
+  placeholder: string;
+  defaultSelect?: string;
+  selectValue?: string;
+  selectHandle: (value: string) => void;
+  dropdownData?: string[];
+  error?: boolean;
+  id?: string;
+  maxLength?: number;
+  cut_handle?: () => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: () => void;
+  onOpen?: () => void;
+}
+
+export interface OptionGroup {
+  label: string;
+  values?: string[];
+  inputType?: "number" | "Text";
+  helpingText?: string;
+  maxLength?: number;
+  nestedGroup?: NestedOptionGroup;
+}
+
+export interface CtgOptions {
+  groups: OptionGroup[];
+  subCtg: SubCtgType;
+}
+
 interface ConditionalOption {
   condition: string[];
-  values?: Option[];
+  values?: string[];
   inputType?: "number" | "Text";
   maxLength?: number;
   helpingText?: string;
@@ -353,33 +336,6 @@ export type SubCtgType =
   | "Men's Fashion"
   | "Beds & Wardrobes"
   | "Sofa & Chairs";
-
-export interface OptionGroup {
-  label: string;
-  values?: Option[];
-  inputType?: "number" | "Text";
-  helpingText?: string;
-  maxLength?: number;
-  nestedGroup?: NestedOptionGroup;
-}
-
-export interface CtgOptions {
-  groups: OptionGroup[];
-  subCtg: SubCtgType;
-}
-
-export interface DropDownConfigProps {
-  placeholder: string;
-  defaultSelect?: string;
-  selectValue?: string;
-  selectHandle: (value: Option) => void;
-  dropdownData?: Option[];
-  error?: boolean;
-  id?: string;
-  maxLength?: number;
-  cut_handle?: () => void;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-}
 
 export type DynamicData = {
   [key: string]: any;
@@ -451,6 +407,5 @@ export interface PasswordValidationData {
 }
 
 export interface TimerProps {
-  duration: number; // Timer duration in seconds
-  onComplete: () => void; // Function to call when timer completes
+  onComplete?: () => void; // Function to call when timer completes
 }

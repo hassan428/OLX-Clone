@@ -2,10 +2,10 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { PriceRangeInterface } from "@/interfaces";
+import { PriceRangeProps } from "@/interfaces";
 
 export const PriceRange = () => {
-  const [range, setRange] = useState<PriceRangeInterface>({
+  const [range, setRange] = useState<PriceRangeProps>({
     highest: "99999",
     lowest: "0",
   });

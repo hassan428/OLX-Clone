@@ -37,58 +37,64 @@ import { Progress } from "@/components/ui/progress";
 import {
   checkPasswordStrength,
   isError,
-  isLogged,
   isNumber,
   validateEmail,
   validatePassword,
   validatePhone,
-  verifiedData,
 } from "@/utils";
-import { BACKEND_URL } from "@/utils/constant";
-import axios from "axios";
 
-const screenRoute: LoginSignupRoute[] = [
-  {
-    current: "join",
-  },
-  {
-    current: "joinEmail",
-    previous: "join",
-  },
-  {
-    current: "joinPhone",
-    previous: "join",
-  },
-  {
-    current: "login",
-  },
-  {
-    current: "loginEmail",
-    previous: "login",
-  },
-  {
-    current: "loginPhone",
-    previous: "login",
-  },
-  {
-    current: "forgotPassPhone",
-    previous: "loginPhone",
-  },
-  {
-    current: "forgotPassEmail",
-    previous: "loginEmail",
-  },
-  {
-    current: "otpEmail",
-    previous: isLogged ? "verifyEmail" : undefined,
-  },
-  {
-    current: "otpPhone",
-    previous: isLogged ? "verifyPhone" : undefined,
-  },
-];
+import axios from "axios";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { setUserDetails } from "@/lib/features/slices/authSlice";
+import { startTimer, resetTimer } from "@/lib/features/slices/timerSlice";
 
 export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
+  const userDetails = useAppSelector(({ auth }) => auth);
+  const dispatch = useAppDispatch();
+
+  const { isLogged } = userDetails;
+
+  const loginSignupRoute: LoginSignupRoute[] = [
+    {
+      current: "join",
+    },
+    {
+      current: "joinEmail",
+      previous: "join",
+    },
+    {
+      current: "joinPhone",
+      previous: "join",
+    },
+    {
+      current: "login",
+    },
+    {
+      current: "loginEmail",
+      previous: "login",
+    },
+    {
+      current: "loginPhone",
+      previous: "login",
+    },
+    {
+      current: "forgotPassPhone",
+      previous: "loginPhone",
+    },
+    {
+      current: "forgotPassEmail",
+      previous: "loginEmail",
+    },
+    {
+      current: "otpEmail",
+      previous: isLogged ? "verifyEmail" : undefined,
+    },
+    {
+      current: "otpPhone",
+      previous: isLogged ? "verifyPhone" : undefined,
+    },
+  ];
+
   const [screen, setScreen] = useState<LoginSignupScreenName>(
     isLogged ? "verifyEmail" : "login" // get data with (Redux Toolkit)
   );
@@ -98,6 +104,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
   const [data, setData] = useState<LoginSignup | null>(null);
   const [otp, setOtp] = useState<string>("");
   const [timeUp, setTimeUp] = useState<boolean>(false);
+  const [api_res, set_api_res] = useState<any>();
   const [showPasswordValidation, setShowPasswordValidation] =
     useState<boolean>(true);
   const [passwordRules, setPasswordRules] = useState<PasswordRules | null>(
@@ -126,7 +133,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
   const confirmPassInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    screenRoute.find(({ current, previous }) => {
+    loginSignupRoute.find(({ current, previous }) => {
       screen == current && previous && setPrevScreen(previous);
     });
     if (screen.includes("login") || screen.includes("join")) {
@@ -138,12 +145,13 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       setPasswordStrength(null);
     }
     if (screen.includes("verify")) {
-      setDataHandle(verifiedData);
+      setDataHandle(userDetails);
       setTimeUp(false);
     }
     setError(null);
     setLoading(false);
     setShowPasswordValidation(true);
+    setOtp("");
   }, [screen]);
 
   const setDataHandle = (newData: LoginSignup): void => {
@@ -205,7 +213,6 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
   const loginSignupUi = (logOrjoin: "login" | "join"): ReactNode => (
     <>
-     
       <Button
         onClick={logOrjoin == "login" ? loginWithGoogle : joinWithGoogle}
         variant="outline"
@@ -333,6 +340,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
             id: "name",
             value: data?.name || "",
             placeholder: "Enter Name",
+            maxLength: 20,
             onBlur: () =>
               setErrorHandle({
                 name: errorCheck().name,
@@ -592,59 +600,61 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     </>
   );
 
-  const otpUi = (): ReactNode => (
-    <>
-      <h1 className="text-center text-sm">
-        You will receive a 6-digit code through a{" "}
-        {screen === "otpEmail" ? (
-          <>
-            Email Address on <strong>{data?.email}</strong>
-          </>
-        ) : (
-          <>
-            SMS on <strong>{data?.phoneNumber}</strong>
-          </>
+  const otpUi = (): ReactNode => {
+    return (
+      <>
+        <h1 className="text-center text-sm">
+          You will receive a 6-digit code through a{" "}
+          {screen === "otpEmail" ? (
+            <>
+              Email Address on <strong>{data?.email}</strong>
+            </>
+          ) : (
+            <>
+              SMS on <strong>{data?.phoneNumber}</strong>
+            </>
+          )}
+        </h1>
+
+        <OTP_input
+          value={otp}
+          onChange={(value: string) => {
+            value.length == 6 && OTPVerifyHandle(value);
+            setOtp(value);
+          }}
+        />
+
+        {!timeUp && (
+          <div className="text-center font-bold">
+            <h1>Hurry up! OTP will expire in </h1>
+            <Timer onComplete={() => setTimeUp(true)} />.
+          </div>
         )}
-      </h1>
 
-      <OTP_input
-        value={otp}
-        onChange={(value: string) => {
-          value.length == 6 && OTPVerifyHandle(value);
-          setOtp(value);
-        }}
-      />
+        {LinkButtonUi({
+          text: `Resend Code ${screen === "otpPhone" ? "by SMS" : ""}`,
+          onClick:
+            screen === "otpPhone"
+              ? resendCodeBySMSHandle
+              : resendCodeByEmailHandle,
+          disabled: !timeUp,
+        })}
 
-      {!timeUp && (
-        <div className="text-center font-bold">
-          <h1>Hurry up! OTP will expire in </h1>
-          <Timer duration={150} onComplete={() => setTimeUp(true)} />.
-        </div>
-      )}
-
-      {LinkButtonUi({
-        text: `Resend Code ${screen === "otpPhone" ? "by SMS" : ""}`,
-        onClick:
-          screen === "otpPhone"
-            ? resendCodeBySMSHandle
-            : resendCodeByEmailHandle,
-        disabled: !timeUp,
-      })}
-
-      {screen !== "otpEmail" && (
-        <div className="flex flex-col items-center">
-          <h1 className="text-sm text-center">
-            If you have not recieved the code by SMS, please request
-          </h1>
-          {LinkButtonUi({
-            text: "Resend Code by Call",
-            onClick: resendCodeByCallHandle,
-            disabled: !timeUp,
-          })}
-        </div>
-      )}
-    </>
-  );
+        {screen !== "otpEmail" && (
+          <div className="flex flex-col items-center">
+            <h1 className="text-sm text-center">
+              If you have not recieved the code by SMS, please request
+            </h1>
+            {LinkButtonUi({
+              text: "Resend Code by Call",
+              onClick: resendCodeByCallHandle,
+              disabled: !timeUp,
+            })}
+          </div>
+        )}
+      </>
+    );
+  };
 
   const joinEmailUi = (): ReactNode => (
     <>
@@ -700,7 +710,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         disabled:
           isError({ email: data?.email }) ||
           isError({ email: error?.email }, true) ||
-          verifiedData.email == data?.email,
+          userDetails.email == data?.email,
       })}
     </>
   );
@@ -719,7 +729,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         disabled:
           isError({ phoneNumber: data?.phoneNumber }) ||
           isError({ phoneNumber: error?.phoneNumber }, true) ||
-          verifiedData.phoneNumber == data?.phoneNumber,
+          userDetails.phoneNumber == data?.phoneNumber,
       })}
     </>
   );
@@ -850,27 +860,54 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     </Button>
   );
 
-  const loginWithEmailHandle = async () => {};
+  const loginWithEmailHandle = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.post(`/api/login`, data);
+      console.log("res.data", res.data);
+      setLoading(false);
+      return;
+    } catch (err) {
+      setLoading(false);
+      console.log("err", err);
+    }
+  };
   const loginWithPhoneHandle = async () => {};
+
   const createAccountHandle = async () => {
     setLoading(true);
     try {
       delete data?.confirmPassword;
-      const res = await axios.post(`${BACKEND_URL}/api/join`, data);
+      const res = await axios.post(`/api/join`, {
+        ...data,
+        ...api_res,
+      });
       console.log("res.data", res.data);
+      set_api_res(undefined);
       setLoading(false);
       setScreen(data?.email ? "otpEmail" : "otpPhone");
+      dispatch(startTimer(150));
       return;
     } catch (err) {
+      setLoading(false);
       console.log("err", err);
     }
   };
+
   const navigatePasswordScreenHandle = async () => {
     setLoading(true);
-    setTimeout(() => {
+    try {
+      delete data?.confirmPassword;
+      const res = await axios.post(`/api/join`, data);
+      console.log("res.data", res.data);
+      set_api_res(res.data.data);
       setLoading(false);
       setScreen("createPass");
-    }, 2000);
+      return;
+    } catch (err) {
+      setLoading(false);
+      console.log("err", err);
+    }
   };
 
   const loginWithGoogle = async () => {
@@ -884,20 +921,36 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
   const OTPVerifyHandle = async (otp: string) => {
     setLoading(true);
     try {
-      const res = await axios.post(`${BACKEND_URL}/api/otpVerify`, {
+      const res = await axios.post(`/api/otpVerify`, {
         otp,
         data,
       });
       console.log("res.data", res.data);
+
+      if (res.data.success) {
+        dispatch(setUserDetails({ ...res.data.data, isLogged: true }));
+        dispatch(resetTimer());
+      }
       setLoading(false);
       return;
     } catch (err) {
+      setLoading(false);
       console.log("err", err);
     }
   };
-  const resendCodeBySMSHandle = async () => {};
-  const resendCodeByCallHandle = async () => {};
-  const resendCodeByEmailHandle = async () => {};
+
+  const resendCodeBySMSHandle = async () => {
+    setTimeUp(false);
+    dispatch(startTimer(150));
+  };
+  const resendCodeByCallHandle = async () => {
+    setTimeUp(false);
+    dispatch(startTimer(150));
+  };
+  const resendCodeByEmailHandle = async () => {
+    setTimeUp(false);
+    dispatch(startTimer(150));
+  };
 
   return (
     <AlertDialog>

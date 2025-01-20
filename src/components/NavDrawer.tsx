@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import { TiThListOutline } from "react-icons/ti";
 import { PiListDuotone } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
 import { NavScreenBtn } from "@/components/NavScreenBtn";
@@ -19,11 +18,13 @@ import {
 import Image from "next/image";
 
 import Link from "next/link";
-import { isLogged, route_data, verifiedData } from "@/utils";
+import { publicRouteData, profileRouteData } from "@/utils";
 import { LoginSignupAlert } from "@/components/LoginSignupAlert";
-const username: string = "Hassan Hanif";
+import { useAppSelector } from "@/lib/hooks";
 
 export function NavDrawer() {
+  const { isLogged, name } = useAppSelector(({ auth }) => auth);
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -54,7 +55,7 @@ export function NavDrawer() {
               </SheetDescription>
               {isLogged ? (
                 <SheetDescription className="text-foreground font-bold text-lg">
-                  {verifiedData.name}
+                  {name}
                 </SheetDescription>
               ) : (
                 <LoginSignupAlert
@@ -83,20 +84,22 @@ export function NavDrawer() {
           <DarkLightModeSwitch />
         </SheetTitle>
 
-        {route_data.map(({ Icon, title, href, className }, i) => (
-          <SheetTitle
-            className={`p-3 w-full flex justify-between items-center border-border ${className}`}
-            key={i}
-          >
-            <NavScreenBtn
-              text={title}
-              icon={<Icon size={25} />}
-              className="text-[16px] font-normal ml-2"
-              href={href}
-              SheetClose={SheetClose}
-            />
-          </SheetTitle>
-        ))}
+        {(isLogged ? profileRouteData : publicRouteData).map(
+          ({ Icon, title, href, className }, i) => (
+            <SheetTitle
+              className={`p-3 w-full flex justify-between items-center border-border ${className}`}
+              key={i}
+            >
+              <NavScreenBtn
+                text={title}
+                icon={<Icon size={25} />}
+                className="text-[16px] font-normal ml-2"
+                href={href}
+                SheetClose={SheetClose}
+              />
+            </SheetTitle>
+          )
+        )}
 
         <SheetFooter>
           <div className={`w-full ${isLogged && "hidden"}`}>

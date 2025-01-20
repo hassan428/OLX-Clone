@@ -23,36 +23,6 @@ export const InputAndDropdown = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [hasMounted, setHasMounted] = useState<boolean>(false);
 
-  //  // Memoize the function to avoid unnecessary re-renders
-  //  const handleClickOutside = useCallback(
-  //   (event: MouseEvent) => {
-  //     if (
-  //       dropdownRef.current &&
-  //       !dropdownRef.current.contains(event.target as Node)
-  //     ) {
-  //       setIsOpen(false);
-  //       if (hasMounted && !selectValue) {
-  //         onBlur?.(); // Trigger the onBlurOrClose callback
-  //       }
-  //     }
-  //   },
-  //   [ selectValue, onBlur] // Removed `isOpen` from dependencies
-  // );
-
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     onOpen?.();
-  //     document.addEventListener("mousedown", handleClickOutside);
-  //   } else {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   }
-  //   setHasMounted(true);
-  //   // Cleanup listener on unmount
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [isOpen, handleClickOutside, onOpen]); // Proper dependency management
-
   const handleClickOutside = (event: MouseEvent) => {
     if (
       dropdownRef.current &&
@@ -100,17 +70,17 @@ export const InputAndDropdown = ({
     />
   ) : dropdownData.length <= 3 ? (
     <div className="flex items-center gap-3 flex-wrap">
-      {dropdownData.map((option, i) => {
+      {dropdownData.map((value, i) => {
         return (
           <Button
             key={i}
             className={`rounded text-foreground border-4 hover:bg-background border-green-900  ${
-              option.label == selectValue && " bg-success hover:bg-success"
+              value == selectValue && " bg-success hover:bg-success"
             } `}
-            onClick={() => selectHandle(option)}
-            variant={option.label == selectValue ? "default" : "outline"}
+            onClick={() => selectHandle(value)}
+            variant={value == selectValue ? "default" : "outline"}
           >
-            {option.label}
+            {value}
           </Button>
         );
       })}
@@ -137,18 +107,18 @@ export const InputAndDropdown = ({
           <div
             className={`absolute z-10 bg-background overflow-auto w-full max-h-60  right-0 border rounded-md mt-2 shadow-lg `}
           >
-            {dropdownData?.map((option, i) => (
+            {dropdownData?.map((value, i) => (
               <div
                 key={i}
                 className={`cursor-pointer hover:bg-input px-5 py-3 ${
-                  option.label == selectValue && "font-black"
+                  value == selectValue && "font-black"
                 }`}
                 onClick={() => {
-                  selectHandle(option);
+                  selectHandle(value);
                   setIsOpen(false);
                 }}
               >
-                <h1>{option.label}</h1>
+                <h1>{value}</h1>
               </div>
             ))}
           </div>

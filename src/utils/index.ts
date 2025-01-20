@@ -1,13 +1,11 @@
 import {
   CategoryLink,
   LocationDataProps,
-  Option,
   PasswordRules,
   PasswordStrength,
   MainCtgProductCardProps,
-  RouteData,
+  RouteDataProps,
   SubCtgType,
-  UserDetails,
 } from "@/interfaces";
 import {
   IoCameraOutline,
@@ -20,18 +18,11 @@ import {
   IoNewspaperOutline,
   IoNotificationsOutline,
   IoSettingsOutline,
+  IoCarSportOutline,
 } from "react-icons/io5";
+import { FaMobileScreen } from "react-icons/fa6";
 import zxcvbn from "zxcvbn";
-
 export const minYear: number = 1950;
-
-export const verifiedData: UserDetails = {
-  email: "example@gmail.com",
-  name: undefined,
-  phoneNumber: undefined,
-}; // get data with (Redux Toolkit)
-
-export const isLogged: boolean = false; // get data with (Redux Toolkit)
 
 export const scrollToTop = () => {
   document.getElementById("top")?.scrollIntoView({
@@ -158,9 +149,7 @@ export const minPriceHandle = (subCtg?: SubCtgType): number => {
   return (subCtg && minPriceConfig[subCtg]) || 0;
 };
 
-export const genderData: Option[] = ["Male", "Female", "Others"].map((label) =>
-  createOption(label)
-);
+export const genderData: string[] = ["Male", "Female", "Others"];
 
 export const location_of_pakistan: LocationDataProps[] = [
   {
@@ -385,11 +374,19 @@ export const ctg_link: CategoryLink[] = [
   },
 ];
 
-export function createOption(label: string, value?: string): Option {
-  return { label, value: value || label.split(" ").join("_").toLowerCase() };
-}
-
-export const common_route_data: RouteData[] = [
+export const navbarRoute: RouteDataProps[] = [
+  {
+    Icon: IoCarSportOutline,
+    title: "Vehicles",
+    href: "vehicles",
+  },
+  {
+    Icon: FaMobileScreen,
+    title: "Mobiles",
+    href: "mobiles-tablets",
+  },
+];
+export const common_route_data: RouteDataProps[] = [
   {
     title: "Start selling",
     Icon: IoCameraOutline,
@@ -407,57 +404,57 @@ export const common_route_data: RouteData[] = [
   },
 ];
 
-export const route_data: RouteData[] = isLogged
-  ? [
-      ...common_route_data,
-      {
-        href: "/myfavourites",
-        title: "Favourites & Saved searches",
-        Icon: IoHeartOutline,
-      },
-      {
-        href: "/profile/id",
-        title: "Public Profile",
-        Icon: IoEyeOutline,
-      },
-      {
-        href: "/payments",
-        title: "Buy Discounted Packages",
-        Icon: IoNewspaperOutline,
-      },
-      {
-        href: "/myorders",
-        title: "Bought Packages & Billing",
-        Icon: IoCardOutline,
-      },
-      {
-        title: "Notifications",
-        Icon: IoNotificationsOutline,
-        href: "/notifications",
-      },
-      {
-        title: "Help",
-        Icon: IoHelpCircleOutline,
-        href: "/help",
-        className: "border-t",
-      },
-      {
-        href: "/setting",
-        title: "Setting",
-        Icon: IoSettingsOutline,
-        className: "border-b",
-      },
-      { href: "/logout", title: "Logout", Icon: IoLogOutOutline },
-    ]
-  : [
-      ...common_route_data,
-      {
-        title: "Help",
-        Icon: IoHelpCircleOutline,
-        href: "/help",
-        className: "border-y",
-      },
-    ];
+export const profileRouteData: RouteDataProps[] = [
+  ...common_route_data,
+  {
+    href: "/myfavourites",
+    title: "Favourites & Saved searches",
+    Icon: IoHeartOutline,
+  },
+  {
+    href: "/profile/id",
+    title: "Public Profile",
+    Icon: IoEyeOutline,
+  },
+  {
+    href: "/payments",
+    title: "Buy Discounted Packages",
+    Icon: IoNewspaperOutline,
+  },
+  {
+    href: "/myorders",
+    title: "Bought Packages & Billing",
+    Icon: IoCardOutline,
+  },
+  {
+    title: "Notifications",
+    Icon: IoNotificationsOutline,
+    href: "/notifications",
+  },
+  {
+    title: "Help",
+    Icon: IoHelpCircleOutline,
+    href: "/help",
+    className: "border-t",
+  },
+  {
+    href: "/setting",
+    title: "Setting",
+    Icon: IoSettingsOutline,
+    className: "border-b",
+  },
+  { href: "/logout", title: "Logout", Icon: IoLogOutOutline },
+];
+
+export const publicRouteData: RouteDataProps[] = [
+  ...common_route_data,
+  {
+    title: "Help",
+    Icon: IoHelpCircleOutline,
+    href: "/help",
+    className: "border-y",
+  },
+];
 
 let id = 1;
 

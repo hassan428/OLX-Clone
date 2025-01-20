@@ -8,10 +8,7 @@ export const BackToTopBtn = ({ className }: BackToTopButtonProps) => {
   const [showBtn, setShowBtn] = useState<Boolean>(false);
 
   useEffect(() => {
-    const showBtnHandle = () => {
-      setShowBtn(window.scrollY >= 300);
-      // window.scrollY >= 300 ? setShowBtn(true) : setShowBtn(false);
-    };
+    const showBtnHandle = () => setShowBtn(window.scrollY >= 300);
 
     window.addEventListener("scroll", showBtnHandle);
     return () => {

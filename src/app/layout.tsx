@@ -12,8 +12,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Sell_btn } from "@/components/Sell_btn";
 import { LayoutProps } from "@/interfaces";
 import connect_to_database from "@/lib/mongoose";
+import StoreProvider from "@/app/StoreProvider";
+import axios from "axios";
+import { cookies } from "next/headers";
 
-await connect_to_database();
+// await connect_to_database();
 
 const fontSans = FontSans({
   subsets: ["cyrillic-ext"],
@@ -26,7 +29,24 @@ export const metadata: Metadata = {
   keywords: "LOX, Buy, Sell, Products, Pakistan",
 };
 
-const RootLayout: FC<LayoutProps> = ({ children }) => {
+const RootLayout: FC<LayoutProps> = async ({ children }) => {
+  const getToken = await (
+    await cookies()
+  ).get(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || "");
+
+  const authApiHandle = async () => {
+    try {
+      const res = await axios.post(
+        `${process.env.BACKEND_URL}/api/authCheck`,
+        getToken?.value
+      );
+      console.log("res.data", res.data);
+      return res.data.success ? { ...res.data.data, isLogged: true } : null;
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -42,15 +62,17 @@ const RootLayout: FC<LayoutProps> = ({ children }) => {
           enableSystem
           disableTransitionOnChange
         >
-          <div>
-            <Sell_btn className="fixed bottom-3 left-1/2 transform -translate-x-1/2 xmd:hidden z-50" />
-            <Navbar />
-            <CategoryText />
-            {children}
-          </div>
-          <div>
-            <Footer />
-          </div>
+          <StoreProvider authApiResponse={await authApiHandle()}>
+            <div>
+              <Sell_btn className="fixed bottom-3 left-1/2 transform -translate-x-1/2 xmd:hidden z-50" />
+              <Navbar />
+              <CategoryText />
+              {children}
+            </div>
+            <div>
+              <Footer />
+            </div>
+          </StoreProvider>
         </ThemeProvider>
         <Toaster />
       </body>

@@ -1,5 +1,9 @@
 import React from "react";
-import { AppImage, FooterLinkSection, SocialMediaLinks } from "@/interfaces";
+import {
+  CustomImageProps,
+  FooterLinkSection,
+  SocialMediaLinks,
+} from "@/interfaces";
 import { FaFacebook, FaGithub, FaInstagram, FaTwitter } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
@@ -48,7 +52,7 @@ const socialMediaLinks: SocialMediaLinks[] = [
   { href: "instagramurl", Icon: FaInstagram },
 ];
 
-const appImage: AppImage[] = [
+const CustomImageProps: CustomImageProps[] = [
   { src: "playstore.svg", href: "https://play.google.com/" },
   { src: "appstore.svg", href: "https://www.apple.com/app-store/" },
   { src: "appgallery.svg", href: "https://appgallery.huawei.com/" },
@@ -82,7 +86,7 @@ export const Footer = () => {
             </div>
           </div>
           <div className="flex gap-2 p-3 items-center w-full flex-wrap justify-center">
-            {appImage.map(({ src, href }, i) => (
+            {CustomImageProps.map(({ src, href }, i) => (
               <Link href={href} key={i} target="_blank">
                 <Image
                   src={`/assets/images/${src}`}

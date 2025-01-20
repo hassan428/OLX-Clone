@@ -6,7 +6,7 @@ import { LoginSignupAlert } from "@/components/LoginSignupAlert";
 import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
-import { Option, UserDetails, UserDetailsOpional } from "@/interfaces";
+import { UserDetails, UserDetailsOpional } from "@/interfaces";
 import {
   genderData,
   isError,
@@ -14,14 +14,16 @@ import {
   validateEmail,
   validatePassword,
   validatePhone,
-  verifiedData,
 } from "@/utils";
 import Image from "next/image";
 import React, { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import { HiLightBulb } from "react-icons/hi";
 import { IoCameraReverseOutline, IoCloseOutline } from "react-icons/io5";
+import { useAppSelector } from "@/lib/hooks";
 
 const EditProfilePage = () => {
+  const userOldDetails = useAppSelector(({ auth }) => auth);
+
   const defaultAvatarUrl = "/assets/images/load_avatar.png";
 
   const [data, setData] = useState<UserDetails | null>(null);
@@ -29,12 +31,24 @@ const EditProfilePage = () => {
     null
   );
   const [error, setError] = useState<UserDetails | null>(null);
-  const [gender, setGender] = useState<Option | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<any>(defaultAvatarUrl);
+  const [btnDisabled, setBtnDisabled] = useState<boolean>(true);
+
+  const hasChanges = (oldData: any, newData: any) => {
+    if (!oldData || !newData) return false;
+    return Object.keys(oldData).some((key) => oldData[key] !== newData[key]);
+  };
 
   useEffect(() => {
-    setDataHandle(verifiedData); // get data with Redux Toolkit & set data
+    setDataHandle(userOldDetails);
+    setOptionalDataHandle(userOldDetails);
   }, []);
+
+  useEffect(() => {
+    const dataChanged = hasChanges(userOldDetails, data);
+    const optionalDataChanged = hasChanges(userOldDetails, optionalData);
+    setBtnDisabled(!(dataChanged || optionalDataChanged));
+  }, [data]);
 
   const setDataHandle = (newData: UserDetails) => {
     setData((pre) => {
@@ -65,10 +79,6 @@ const EditProfilePage = () => {
       reader.readAsDataURL(url);
     }
   };
-
-  // const connectFacebook = () => {
-  //   console.log("connectFacebook");
-  // };
 
   const connectGoogle = () => {
     console.log("connectGoogle");
@@ -103,16 +113,11 @@ const EditProfilePage = () => {
 
   const saveChangesHandle = () => {
     setError(null);
-
     setOptionalDataHandle({
       avatarUrl: avatarUrl != defaultAvatarUrl ? avatarUrl : undefined,
-      gender: gender?.value,
     });
-
-    // const phoneNumber = `+92${data?.phoneNumber}`; // update phone number on send data to backend
-
+    // const phoneNumber = `+92${data?.phoneNumber}`; // update phone number on send data to backen
     setErrorHandle(errorCheck());
-
     if (!data || isError({ ...data }) || isError({ ...error }, true)) {
       console.log("error hain");
     } else {
@@ -143,6 +148,7 @@ const EditProfilePage = () => {
           id,
           value: data?.name || "",
           placeholder: "Enter Name",
+          maxLength: 20,
           onBlur: () =>
             setErrorHandle({
               name: errorCheck().name,
@@ -182,6 +188,7 @@ const EditProfilePage = () => {
             className="rounded-l-none"
             inputProps={{
               id: "phoneNumber",
+              defaultValue: data?.phoneNumber,
               value: data?.phoneNumber || "",
               placeholder: "Enter Phone Number",
               maxLength: 10,
@@ -238,7 +245,6 @@ const EditProfilePage = () => {
               }),
             onChange: (e) => {
               const { value } = e.target;
-
               setDataHandle({
                 email: value.split(" ").join(""),
               });
@@ -334,9 +340,9 @@ const EditProfilePage = () => {
               <div>
                 <InputAndDropdown
                   placeholder={"Select your gender"}
-                  selectValue={gender?.label || ""}
+                  selectValue={optionalData?.gender || ""}
                   dropdownData={genderData}
-                  selectHandle={setGender}
+                  selectHandle={(gender) => setOptionalDataHandle({ gender })}
                 />
               </div>
             </div>
@@ -391,24 +397,6 @@ const EditProfilePage = () => {
         <div className="flex flex-col gap-5 sm:pb-5 sm:border-b border-muted-foreground">
           <div className="flex flex-col gap-3">
             <h1 className="text-sm font-bold">Optional Information</h1>
-            {/* <div className="flex items-center gap-2">
-              <div className="flex flex-col items-start w-full text-sm gap-1">
-                <h1 className="font-bold">Facebook</h1>
-                <h6 className="text-muted-foreground text-xs">
-                  Sign in with Facebook and discover your trusted connections to
-                  buyers.
-                </h6>
-              </div>
-              <div className="sm:w-full">
-                <Button
-                  className="border border-foreground sm:w-1/2"
-                  variant={"outline"}
-                  onClick={connectFacebook}
-                >
-                  Connect
-                </Button>
-              </div>
-            </div> */}
             <div className="flex items-center gap-2">
               <div className="flex flex-col items-start w-full text-sm gap-1">
                 <h1 className="font-bold">Google</h1>
@@ -433,7 +421,11 @@ const EditProfilePage = () => {
         <div className="sm:flex w-full justify-between items-center max-sm:border-b border-muted-foreground max-sm:pb-5">
           <Alert
             trigger={
-              <Button className="hidden sm:flex" variant="outline">
+              <Button
+                disabled={btnDisabled}
+                className="hidden sm:flex"
+                variant="outline"
+              >
                 Discard
               </Button>
             }
@@ -444,7 +436,11 @@ const EditProfilePage = () => {
             cancelText="Cancel"
           />
           <Alert
-            trigger={<Button className="max-sm:w-full">Save Changes</Button>}
+            trigger={
+              <Button disabled={btnDisabled} className="max-sm:w-full">
+                Save Changes
+              </Button>
+            }
             title="Save Changes?"
             description="Are you sure you want to save these changes?"
             doneText="Save"

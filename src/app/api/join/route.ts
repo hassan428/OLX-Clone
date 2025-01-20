@@ -1,28 +1,38 @@
-import { user_model } from "@/models_schema/user_profile";
+import { userModel } from "@/lib/schema/profileSchema";
 import bcrypt from "bcrypt";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-
+    console.log("body", body);
     const { GEN_SALT } = process.env;
 
-    if (GEN_SALT) {
+    if (GEN_SALT && body.password && body._id) {
       const salt = await bcrypt.genSalt(+GEN_SALT);
       const hash = await bcrypt.hash(body.password, salt);
       body.password = hash;
+
+      const findUser = body._id; // await userModel.findById(body._id);
+      if (!findUser)
+        return Response.json({ status: 404, message: "User not Found!" });
+      const updateUser = { ...body, ...findUser }; // await findUser.updateOne(body);
+      console.log("updateUser", updateUser);
+      return Response.json({
+        data: updateUser,
+        message: "Request is Successfull",
+      });
     }
 
     // body save on database
-    const createUser = await user_model.create(body);
-
+    const createUser = { ...body, _id: 1 }; // await userModel.create(body);
     console.log("createUser", createUser);
 
     // send OTP on email or SMS
 
-    return Response.json({ data: body, message: "Request is Successfull " });
+    return Response.json({
+      data: createUser,
+      message: "Request is Successfull",
+    });
   } catch (error) {
     console.log("error", error);
   }
 }
-//hash $2b$10$SDY4G0r20bkGsXH7u3Qlr.p4abfNTpxxw/WHSITSFuPi4fpRAD0Ve
-//hash $2b$10$2MkY62CGPyT215iOGzfXee0/fWzVARMGSyM5bqQlgih75KU39c7Om

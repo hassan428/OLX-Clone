@@ -1,5 +1,4 @@
 import { CtgOptions, NestedOptionGroup, OptionGroup } from "@/interfaces";
-import { createOption } from ".";
 
 function condition(
   subCtg?: string,
@@ -9,10 +8,8 @@ function condition(
   return {
     label: "Condition",
     values: subCtg
-      ? [...commonn, "Open Box", "Refurbished", "For Parts"].map((label) =>
-          createOption(label)
-        )
-      : commonn.map((label) => createOption(label)),
+      ? [...commonn, "Open Box", "Refurbished", "For Parts"]
+      : commonn,
     nestedGroup,
   };
 }
@@ -30,7 +27,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Hyundai",
           "Nissan",
           "Other Make",
-        ].map((label) => createOption(label)),
+        ],
 
         nestedGroup: {
           title: "Model",
@@ -51,7 +48,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Ravi",
                 "Jimny",
                 "Other",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["toyota"],
@@ -69,7 +66,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "chr",
                 "RAV4",
                 "Other",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["honda"],
@@ -86,7 +83,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Odyssey",
                 "Fit",
                 "Other",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["nissan"],
@@ -103,7 +100,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "370Z",
                 "GT-R",
                 "Other",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["hyundai"],
@@ -120,7 +117,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Palisade",
                 "Ioniq",
                 "Other",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["other_make"],
@@ -152,23 +149,19 @@ export const ctgOptionsData: CtgOptions[] = [
 
       {
         label: "Fuel",
-        values: ["Petrol", "Diesel", "CNG", "LPG", "Other Fuel"].map((label) =>
-          createOption(label)
-        ),
+        values: ["Petrol", "Diesel", "CNG", "LPG", "Other Fuel"],
       },
       {
         label: "Transmission",
-        values: ["Automatic", "Manual"].map((label) => createOption(label)),
+        values: ["Automatic", "Manual"],
       },
       {
         label: "Color",
-        values: ["White", "Black", "Silver", "Gray", "Blue", "Red"].map(
-          (label) => createOption(label)
-        ),
+        values: ["White", "Black", "Silver", "Gray", "Blue", "Red"],
       },
       {
         label: "Documents",
-        values: ["Original", "Duplicate"].map((label) => createOption(label)),
+        values: ["Original", "Duplicate"],
       },
     ],
   },
@@ -187,7 +180,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Super Star",
           "Unique",
           "Other Make",
-        ].map((label) => createOption(label)),
+        ],
 
         nestedGroup: {
           title: "Model",
@@ -202,7 +195,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "CBR 250R",
                 "SH150i",
                 "Other",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["yamaha"],
@@ -214,7 +207,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "FZS 250",
                 "XTZ 250",
                 "Other",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["suzuki"],
@@ -226,7 +219,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "SV650",
                 "GZ150",
                 "Other",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["kawasaki"],
@@ -238,23 +231,23 @@ export const ctgOptionsData: CtgOptions[] = [
                 "KLR650",
                 "Z400",
                 "Other",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["hi_speed"],
-              values: ["Other"].map((label) => createOption(label)),
+              values: ["Other"],
             },
             {
               condition: ["super_power"],
-              values: ["Other"].map((label) => createOption(label)),
+              values: ["Other"],
             },
             {
               condition: ["super_star"],
-              values: ["Other"].map((label) => createOption(label)),
+              values: ["Other"],
             },
             {
               condition: ["unique"],
-              values: ["Other"].map((label) => createOption(label)),
+              values: ["Other"],
             },
             {
               condition: ["other_make"],
@@ -273,7 +266,7 @@ export const ctgOptionsData: CtgOptions[] = [
       },
       {
         label: "Engine Type",
-        values: ["2 Stroke", "4 Stroke"].map((label) => createOption(label)),
+        values: ["2 Stroke", "4 Stroke"],
       },
       {
         label: "Engine Capacity",
@@ -290,7 +283,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "1000cc",
           "Above 1000cc",
           "Other Capacities",
-        ].map((label) => createOption(label)),
+        ],
       },
       {
         label: "KMs Driven",
@@ -302,15 +295,11 @@ export const ctgOptionsData: CtgOptions[] = [
 
       {
         label: "Ignition type",
-        values: ["Self Start", "Kickstarter"].map((label) =>
-          createOption(label)
-        ),
+        values: ["Self Start", "Kickstarter"],
       },
       {
         label: "Origin",
-        values: ["Local", "Chinese", "Imported"].map((label) =>
-          createOption(label)
-        ),
+        values: ["Local", "Chinese", "Imported"],
       },
       condition(),
     ],
@@ -328,7 +317,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Hi-Speed",
           "Chingchi",
           "Other Make",
-        ].map((label) => createOption(label)),
+        ],
       },
       {
         label: "Year",
@@ -351,7 +340,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Daihatsu",
           "Yutong",
           "Other Make",
-        ].map((label) => createOption(label)),
+        ],
       },
       {
         label: "Year",
@@ -403,7 +392,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Realme",
           "Motorola",
           "Other Brand",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Model",
           conditionalOptions: [
@@ -416,7 +405,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Galaxy Z Flip 5",
                 "Galaxy Z Fold 4",
                 "Galaxy A34",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["apple"],
@@ -438,7 +427,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "iPhone XS Max",
                 "iPhone XR",
                 "iPhone X",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["xiaomi"],
@@ -449,7 +438,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Redmi K50",
                 "Xiaomi 12T",
                 "Redmi Note 11 Pro",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["oppo"],
@@ -459,7 +448,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Oppo A78",
                 "Oppo F21 Pro",
                 "Oppo Reno 8 Pro",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["vivo"],
@@ -469,7 +458,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Vivo Y100",
                 "Vivo V23",
                 "Vivo X90 Pro",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["huawei"],
@@ -479,7 +468,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Huawei P50 Pro",
                 "Huawei Nova 10",
                 "Huawei Mate 50",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["oneplus"],
@@ -489,17 +478,11 @@ export const ctgOptionsData: CtgOptions[] = [
                 "OnePlus 10 Pro",
                 "OnePlus 9",
                 "OnePlus Nord CE 2",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["google"],
-              values: [
-                "Pixel 7",
-                "Pixel 7a",
-                "Pixel 6",
-                "Pixel 6a",
-                "Pixel 5",
-              ].map((label) => createOption(label)),
+              values: ["Pixel 7", "Pixel 7a", "Pixel 6", "Pixel 6a", "Pixel 5"],
             },
             {
               condition: ["realme"],
@@ -509,7 +492,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Realme 10",
                 "Realme C35",
                 "Realme Narzo 50",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["motorola"],
@@ -519,7 +502,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Motorola Edge 20",
                 "Motorola Moto G Power",
                 "Motorola Razr 5G",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["other_brand"],
@@ -547,7 +530,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Amazon",
           "Huawei",
           "Other Brand",
-        ].map((label) => createOption(label)),
+        ],
 
         nestedGroup: {
           title: "Model",
@@ -560,7 +543,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "iPad Air (5th Gen",
                 "iPad (10th Gen",
                 "iPad Mini (6th Gen",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["samsung"],
@@ -569,7 +552,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Galaxy Tab S9 Ultra",
                 "Galaxy Tab A8",
                 "Galaxy Tab S7 FE",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["microsoft"],
@@ -578,22 +561,15 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Surface Go 3",
                 "Surface Laptop Studio",
                 "Surface Duo 2",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["lenovo"],
-              values: ["Tab P12 Pro", "Tab M10 Plus", "Tab P11", "Tab M8"].map(
-                (label) => createOption(label)
-              ),
+              values: ["Tab P12 Pro", "Tab M10 Plus", "Tab P11", "Tab M8"],
             },
             {
               condition: ["amazon"],
-              values: [
-                "Fire HD 10",
-                "Fire HD 10 Plus",
-                "Fire 7",
-                "Fire HD 8",
-              ].map((label) => createOption(label)),
+              values: ["Fire HD 10", "Fire HD 10 Plus", "Fire 7", "Fire HD 8"],
             },
             {
               condition: ["huawei"],
@@ -602,7 +578,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "MatePad 11",
                 "MediaPad M5",
                 "MediaPad T5",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["other_brand"],
@@ -630,7 +606,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Fossil",
           "Amazfit",
           "Other Brand",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Model",
           conditionalOptions: [
@@ -641,7 +617,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Apple Watch Ultra 2",
                 "Apple Watch SE (2nd Gen",
                 "Apple Watch Series 8",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["samsung"],
@@ -650,7 +626,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Galaxy Watch 6 Classic",
                 "Galaxy Watch Active 2",
                 "Galaxy Watch 5",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["garmin"],
@@ -659,7 +635,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Garmin Venu 2",
                 "Garmin Forerunner 255",
                 "Garmin Instinct 2",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["fitbit"],
@@ -668,7 +644,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Fitbit Versa 4",
                 "Fitbit Inspire 3",
                 "Fitbit Luxe",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["fossil"],
@@ -677,7 +653,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Fossil Hybrid HR",
                 "Fossil Gen 5",
                 "Fossil Gen 6 Wellness Edition",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["amazfit"],
@@ -686,7 +662,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Amazfit Bip U Pro",
                 "Amazfit T-Rex Pro",
                 "Amazfit GTS 2",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["other_brand"],
@@ -721,7 +697,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Cover & Cases",
           "External Memory",
           "Other Accessories",
-        ].map((label) => createOption(label)),
+        ],
 
         nestedGroup: {
           title: "type",
@@ -733,21 +709,17 @@ export const ctgOptionsData: CtgOptions[] = [
                 "chargers",
                 "cover_&_cases",
               ],
-              values: ["Tablet", "Mobile", "Smart Watches"].map((label) =>
-                createOption(label)
-              ),
+              values: ["Tablet", "Mobile", "Smart Watches"],
             },
             {
               label: "cable type",
               condition: ["charging_cables", "chargers"],
-              values: ["IOS", "Micro-USB/Android", "USB Type-C", "Others"].map(
-                (label) => createOption(label)
-              ),
+              values: ["IOS", "Micro-USB/Android", "USB Type-C", "Others"],
             },
 
             {
               condition: ["headphones", "earphones"],
-              values: ["Wired", "Wireless"].map((label) => createOption(label)),
+              values: ["Wired", "Wireless"],
             },
           ],
         },
@@ -778,7 +750,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Wedges",
           "Platform Shoes",
           "Other Type",
-        ].map((label) => createOption(label)),
+        ],
       },
       {
         label: "Size",
@@ -787,9 +759,7 @@ export const ctgOptionsData: CtgOptions[] = [
       },
       {
         label: "Gender",
-        values: ["Men", "Women", "All", "Boys", "Girls"].map((label) =>
-          createOption(label)
-        ),
+        values: ["Men", "Women", "All", "Boys", "Girls"],
       },
       {
         label: "Brand",
@@ -810,7 +780,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Timberland",
           "Dr. Martens",
           "Other Brand",
-        ].map((label) => createOption(label)),
+        ],
       },
       condition(),
     ],
@@ -827,7 +797,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Lips",
           "Nails",
           "Other Makeup Accessories",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Type",
           conditionalOptions: [
@@ -841,7 +811,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Blending Brushes",
                 "Contour Brushes",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["eyes"],
@@ -852,7 +822,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Eyebrow Pencils",
                 "Eye Primers",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["face"],
@@ -864,7 +834,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Blushes",
                 "Setting Powders",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["lips"],
@@ -875,7 +845,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Lip Tints",
                 "Lip Balms",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["nails"],
@@ -886,7 +856,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Nail Extensions",
                 "Top Coats",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["other_makeup_accessories"],
@@ -913,7 +883,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Shelves & Racks",
           "Office Cabinets",
           "Other Office Furniture",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Type",
           conditionalOptions: [
@@ -924,7 +894,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Executive Chairs",
                 "Visitor Chairs",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["office_sofas"],
@@ -935,7 +905,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Lounge Sofas",
                 "Modular Sofas",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["office_tables"],
@@ -947,7 +917,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Training Tables",
                 "Work Stations",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["shelves_&_racks"],
@@ -959,7 +929,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Storage Racks",
                 "Wall-Mounted Racks",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["office_cabinets"],
@@ -971,7 +941,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Metal Cabinets",
                 "Wall Cabinets",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["other_office_furniture"],
@@ -1003,7 +973,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Showpieces",
           "Artifical Flower & Plants",
           "Other Decor Items",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Type",
           conditionalOptions: [
@@ -1015,7 +985,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Metal Lamps",
                 "Hanging Lamps",
                 "Wooden Lamps",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["other_decor_items"],
@@ -1044,7 +1014,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Recliners",
           "Bean Bags",
           "Others",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "type",
           conditionalOptions: [
@@ -1057,7 +1027,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Stools",
                 "Swing Chairs",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["sofas"],
@@ -1068,7 +1038,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Dewan",
                 "L Shaped",
                 "Sofa Set",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["others"],
@@ -1097,41 +1067,33 @@ export const ctgOptionsData: CtgOptions[] = [
           "Blankets & Comforters",
           "Wardrobes",
           "Other Bedding Accessories",
-        ].map((label) => createOption(label)),
+        ],
 
         nestedGroup: {
           title: "type",
           conditionalOptions: [
             {
               condition: ["beds"],
-              values: ["Bed Set", "King Bed", "Queen Bed", "Single Bed"].map(
-                (label) => createOption(label)
-              ),
+              values: ["Bed Set", "King Bed", "Queen Bed", "Single Bed"],
             },
             {
               label: "Material type",
               condition: ["beds"],
-              values: ["Wooden", "Iron", "Others"].map((label) =>
-                createOption(label)
-              ),
+              values: ["Wooden", "Iron", "Others"],
             },
             {
               condition: ["mattresses"],
-              values: ["Single Bed", "King Bed", "Queen Bed"].map((label) =>
-                createOption(label)
-              ),
+              values: ["Single Bed", "King Bed", "Queen Bed"],
             },
             {
               label: "Material type",
               condition: ["mattresses"],
-              values: ["Air", "Foam", "Medicated", "Spring", "Others"].map(
-                (label) => createOption(label)
-              ),
+              values: ["Air", "Foam", "Medicated", "Spring", "Others"],
             },
             {
               label: "Folding type",
               condition: ["mattresses"],
-              values: ["Yes", "No"].map((label) => createOption(label)),
+              values: ["Yes", "No"],
             },
             {
               condition: ["other_bedding_accessories"],
@@ -1164,7 +1126,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Study Tables",
           "Trolleys",
           "Others",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "type",
           conditionalOptions: [
@@ -1197,7 +1159,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Toilets",
           "Vanity Units",
           "Other Bathroom Accessories",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "type",
           conditionalOptions: [
@@ -1230,7 +1192,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Plants & Pots",
           "Tents & Shades",
           "Other Outdoor Items",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "type",
           conditionalOptions: [
@@ -1259,7 +1221,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Cabinets",
           "Chairs",
           "Other Living Room Furniture",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Type",
           conditionalOptions: [
@@ -1273,7 +1235,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Armchairs",
                 "Chaise Lounges",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["coffee_tables"],
@@ -1285,7 +1247,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Glass Coffee Tables",
                 "Wooden Coffee Tables",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["tv_units"],
@@ -1297,7 +1259,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Floating Shelves",
                 "Cabinet TV Units",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["shelves"],
@@ -1309,7 +1271,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Bookcases",
                 "Display Shelves",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["cabinets"],
@@ -1321,7 +1283,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "TV Cabinets",
                 "Accent Cabinets",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["chairs"],
@@ -1333,7 +1295,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Swivel Chairs",
                 "Lounge Chairs",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["other_living_room_furniture"],
@@ -1377,7 +1339,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Nose rings",
           "Pendants",
           "Others",
-        ].map((label) => createOption(label)),
+        ],
       },
       {
         label: "Material",
@@ -1388,11 +1350,11 @@ export const ctgOptionsData: CtgOptions[] = [
           "Artificial",
           "Platinum",
           "Others",
-        ].map((label) => createOption(label)),
+        ],
       },
       {
         label: "Gender",
-        values: ["Men", "Women"].map((label) => createOption(label)),
+        values: ["Men", "Women"],
       },
       condition(),
     ],
@@ -1413,7 +1375,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Footwear",
           "Accessories",
           "Other Men's Fashion",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Type",
           conditionalOptions: [
@@ -1427,7 +1389,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "V-Neck T-Shirts",
                 "Crew Neck T-Shirts",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["shirts"],
@@ -1439,7 +1401,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Printed Shirts",
                 "Checkered Shirts",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["jeans"],
@@ -1451,7 +1413,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Straight Leg Jeans",
                 "Distressed Jeans",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["trousers"],
@@ -1463,7 +1425,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Track Pants",
                 "Khakis",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["jackets"],
@@ -1475,7 +1437,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Windbreakers",
                 "Parkas",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["footwear"],
@@ -1487,7 +1449,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Sandals",
                 "Slip-Ons",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["accessories"],
@@ -1499,7 +1461,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Hats & Caps",
                 "Ties",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["other_mens_fashion"],
@@ -1530,7 +1492,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Footwear",
           "Accessories",
           "Other Women's Fashion",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Type",
           conditionalOptions: [
@@ -1544,7 +1506,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Long Sleeve Tops",
                 "Sweatshirts",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["dresses"],
@@ -1556,7 +1518,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Cocktail Dresses",
                 "A-Line Dresses",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["skirts"],
@@ -1568,7 +1530,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Pleated Skirts",
                 "A-Line Skirts",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["jeans"],
@@ -1580,7 +1542,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Bootcut Jeans",
                 "Distressed Jeans",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["trousers"],
@@ -1592,7 +1554,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Track Pants",
                 "Joggers",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["jackets"],
@@ -1604,7 +1566,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Bomber Jackets",
                 "Coats",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["footwear"],
@@ -1616,7 +1578,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Sneakers",
                 "Loafers",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["accessories"],
@@ -1628,7 +1590,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Sunglasses",
                 "Hats",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["other_womens_fashion"],
@@ -1658,7 +1620,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Footwear",
           "Accessories",
           "Other Kids' Fashion",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Type",
           conditionalOptions: [
@@ -1672,7 +1634,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Tank Tops",
                 "Long Sleeve Tops",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["dresses"],
@@ -1684,7 +1646,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Mini Dresses",
                 "A-Line Dresses",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["jeans"],
@@ -1695,7 +1657,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Bootcut Jeans",
                 "Distressed Jeans",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["trousers"],
@@ -1706,7 +1668,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Cargo Pants",
                 "Shorts",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["jackets"],
@@ -1718,7 +1680,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Bomber Jackets",
                 "Blazers",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["footwear"],
@@ -1729,7 +1691,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Slippers",
                 "Flats",
                 "Other Kids' Footwear",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["accessories"],
@@ -1741,7 +1703,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Jewelry",
                 "Scarves",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["other_kids_fashion"],
@@ -1768,7 +1730,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Sports Clothes",
           "Kids Clothes",
           "Other Clothing",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Type",
           conditionalOptions: [
@@ -1781,7 +1743,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Lehengas",
                 "Sherwanis",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["western"],
@@ -1792,7 +1754,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Blouses",
                 "Skirts",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["hijabs_&_abayas"],
@@ -1803,7 +1765,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Shaylas",
                 "Khimars",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["sports_clothes"],
@@ -1814,7 +1776,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Activewear",
                 "Jackets",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["kids_clothes"],
@@ -1825,7 +1787,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Trousers",
                 "Outerwear",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["other_clothing"],
@@ -1859,7 +1821,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Monitors",
           "Printers & Scanners",
           "Other Computer & Accessories",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Type",
           conditionalOptions: [
@@ -1870,7 +1832,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Tower Desktops",
                 "Mini Desktops",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["desktops"],
@@ -1888,7 +1850,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "MSI",
                 "Toshiba",
                 "Other Desktop Brands",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["computers_system"],
@@ -1907,7 +1869,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Samsung",
                 "Huawei",
                 "Other Computer Brands",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["laptops"],
@@ -1926,7 +1888,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Samsung",
                 "Huawei",
                 "Other Laptop Brands",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["laptops"],
@@ -1937,7 +1899,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Convertible Laptops",
                 "Chromebooks",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["computer_&_laptop_accessories"],
@@ -1949,7 +1911,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Docking Stations",
                 "Webcams",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["computer_components"],
@@ -1961,7 +1923,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Power Supplies",
                 "Cooling Systems",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["networking_devices"],
@@ -1972,7 +1934,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Network Cables",
                 "Access Points",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["storage_devices"],
@@ -1983,7 +1945,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "NAS Devices",
                 "Memory Cards",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["monitors"],
@@ -2000,7 +1962,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "ViewSonic",
                 "MSI",
                 "Other Monitor Brands",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["monitors"],
@@ -2011,7 +1973,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Touchscreen Monitors",
                 "4K Monitors",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["printers_&_scanners"],
@@ -2028,7 +1990,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Samsung",
                 "Pantum",
                 "Other Printer Brands",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["printers_&_scanners"],
@@ -2039,7 +2001,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Scanners",
                 "3D Printers",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
 
             {
@@ -2067,7 +2029,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Gaming Accessories",
           "Board Games",
           "Other Games",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Type",
           conditionalOptions: [
@@ -2080,7 +2042,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Retro Consoles",
                 "Handheld Consoles",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["video_games"],
@@ -2092,7 +2054,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Mobile Games",
                 "VR Games",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["controllers"],
@@ -2104,7 +2066,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "VR Controllers",
                 "Mobile Game Controllers",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["gaming_accessories"],
@@ -2116,7 +2078,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Charging Docks",
                 "Game Storage",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["board_games"],
@@ -2128,7 +2090,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Trivia Games",
                 "Party Games",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["other_games"],
@@ -2159,7 +2121,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Wall Mounts",
           "TV Remotes",
           "Other TV Accessories",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Type",
           conditionalOptions: [
@@ -2182,7 +2144,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "PEL",
                 "Philips",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["crt_tv"],
@@ -2199,7 +2161,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Sanyo",
                 "RCA",
                 "Other Brands",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["led_tv"],
@@ -2212,7 +2174,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "50-59 Inches",
                 "60-69 Inches",
                 "70 Inches & above",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["led_tv"],
@@ -2223,7 +2185,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Full HD (1080p)",
                 "4K or Ultra HD (2160p)",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["dish_antennas"],
@@ -2232,7 +2194,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Digital Antenna",
                 "Portable Antenna",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["projectors_&_projection_screens"],
@@ -2243,16 +2205,11 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Projection Screens",
                 "Portable Projectors",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["android_boxes"],
-              values: [
-                "4K Boxes",
-                "HD Boxes",
-                "Streaming Sticks",
-                "Others",
-              ].map((label) => createOption(label)),
+              values: ["4K Boxes", "HD Boxes", "Streaming Sticks", "Others"],
             },
             {
               condition: ["other_tv_accessories"],
@@ -2289,7 +2246,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Coffee Makers",
           "Toasters",
           "Others",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Brand",
           conditionalOptions: [
@@ -2307,7 +2264,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Whirlpool",
                 "Midea",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["refrigerators"],
@@ -2323,7 +2280,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Sharp",
                 "Bosch",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["microwave_ovens"],
@@ -2338,7 +2295,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Beko",
                 "Midea",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["air_conditioners"],
@@ -2354,7 +2311,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Gree",
                 "Blue Star",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["washing_machines"],
@@ -2364,7 +2321,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Front Load",
                 "Semi-Automatic",
                 "Fully Automatic",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["refrigerators"],
@@ -2376,21 +2333,17 @@ export const ctgOptionsData: CtgOptions[] = [
                 "French Door",
                 "Mini Fridge",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["microwave_ovens"],
               label: "Type",
-              values: ["Solo", "Grill", "Convection", "Combo"].map((label) =>
-                createOption(label)
-              ),
+              values: ["Solo", "Grill", "Convection", "Combo"],
             },
             {
               condition: ["air_conditioners"],
               label: "Cooling Capacity",
-              values: ["1 Ton", "1.5 Ton", "2 Ton", "Others"].map((label) =>
-                createOption(label)
-              ),
+              values: ["1 Ton", "1.5 Ton", "2 Ton", "Others"],
             },
             {
               condition: ["dishwashers"],
@@ -2404,7 +2357,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Electrolux",
                 "Kitchenaid",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["water_dispensers"],
@@ -2417,7 +2370,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Voltas",
                 "Blue Star",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["vacuum_cleaners"],
@@ -2432,7 +2385,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Samsung",
                 "LG",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["table_fans"],
@@ -2445,7 +2398,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Havells",
                 "Luminous",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["iron_&_garment_steamer"],
@@ -2458,7 +2411,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Usha",
                 "Bajaj",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["food_processors"],
@@ -2471,7 +2424,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Usha",
                 "Prestige",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["others"],
@@ -2503,7 +2456,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Party Speakers",
           "Portable Speakers",
           "Others",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Brand",
           conditionalOptions: [
@@ -2522,7 +2475,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Creative",
                 "F&D",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["headphones"],
@@ -2538,7 +2491,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Bang & Olufsen",
                 "AKG",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["earphones"],
@@ -2555,7 +2508,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Anker",
                 "Realme",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["soundbars"],
@@ -2571,7 +2524,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Sonos",
                 "Klipsch",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["amplifiers"],
@@ -2587,7 +2540,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Behringer",
                 "Boss",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["microphones"],
@@ -2602,7 +2555,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "AKG",
                 "MXL",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["speakers"],
@@ -2614,7 +2567,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Party Speakers",
                 "Home Speakers",
                 "Sound Systems",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["headphones"],
@@ -2626,7 +2579,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "On-Ear Headphones",
                 "In-Ear Headphones",
                 "Noise Cancelling Headphones",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["earphones"],
@@ -2637,7 +2590,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "In-Ear Earphones",
                 "True Wireless Earphones",
                 "Sports Earphones",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["soundbars"],
@@ -2648,7 +2601,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "5.1 Channel",
                 "7.1 Channel",
                 "Dolby Atmos",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["amplifiers"],
@@ -2659,7 +2612,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "200W - 500W",
                 "500W - 1000W",
                 "1000W and above",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["microphones"],
@@ -2671,7 +2624,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Lavalier Microphone",
                 "Wireless Microphone",
                 "USB Microphone",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["home_theater_systems"],
@@ -2687,7 +2640,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "Harman Kardon",
                 "Onkyo",
                 "Others",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["home_theater_systems"],
@@ -2697,7 +2650,7 @@ export const ctgOptionsData: CtgOptions[] = [
                 "5.1 Channel",
                 "7.1 Channel",
                 "Dolby Atmos",
-              ].map((label) => createOption(label)),
+              ],
             },
             {
               condition: ["others"],
@@ -2746,11 +2699,11 @@ export const ctgOptionsData: CtgOptions[] = [
           "Lories",
           "Macaw",
           "Monk",
-        ].map((label) => createOption(label)),
+        ],
       },
       {
         label: "Gender",
-        values: ["Male", "Female", "Pair"].map((label) => createOption(label)),
+        values: ["Male", "Female", "Pair"],
       },
       {
         label: "Age",
@@ -2779,11 +2732,11 @@ export const ctgOptionsData: CtgOptions[] = [
           "American Shorthair",
           "Exotic Shorthair",
           "Others",
-        ].map((label) => createOption(label)),
+        ],
       },
       {
         label: "Gender",
-        values: ["Male", "Female", "Pair"].map((label) => createOption(label)),
+        values: ["Male", "Female", "Pair"],
       },
       {
         label: "Age",
@@ -2816,11 +2769,11 @@ export const ctgOptionsData: CtgOptions[] = [
           "Cocker Spaniel",
           "Bichon Frise",
           "Others",
-        ].map((label) => createOption(label)),
+        ],
       },
       {
         label: "Gender",
-        values: ["Male", "Female", "Pair"].map((label) => createOption(label)),
+        values: ["Male", "Female", "Pair"],
       },
       {
         label: "Age",
@@ -2847,11 +2800,11 @@ export const ctgOptionsData: CtgOptions[] = [
           "Flemish Giant",
           "Californian",
           "Others",
-        ].map((label) => createOption(label)),
+        ],
       },
       {
         label: "Gender",
-        values: ["Male", "Female", "Pair"].map((label) => createOption(label)),
+        values: ["Male", "Female", "Pair"],
       },
       {
         label: "Age",
@@ -2879,11 +2832,11 @@ export const ctgOptionsData: CtgOptions[] = [
           "Cochin",
           "Silkie",
           "Other Breeds",
-        ].map((label) => createOption(label)),
+        ],
       },
       {
         label: "Gender",
-        values: ["Male", "Female", "Pair"].map((label) => createOption(label)),
+        values: ["Male", "Female", "Pair"],
       },
       {
         label: "Age",
@@ -2906,11 +2859,11 @@ export const ctgOptionsData: CtgOptions[] = [
           "King Pigeons",
           "Mourning Doves",
           "Other Breeds",
-        ].map((label) => createOption(label)),
+        ],
       },
       {
         label: "Gender",
-        values: ["Male", "Female", "Pair"].map((label) => createOption(label)),
+        values: ["Male", "Female", "Pair"],
       },
       {
         label: "Age",
@@ -2946,7 +2899,7 @@ export const ctgOptionsData: CtgOptions[] = [
           "Gecko",
           "Other Birds",
           "Other Animals",
-        ].map((label) => createOption(label)),
+        ],
         nestedGroup: {
           title: "Name",
           conditionalOptions: [
@@ -2961,9 +2914,7 @@ export const ctgOptionsData: CtgOptions[] = [
       },
       {
         label: "Gender",
-        values: ["Male", "Female", "Pair", "Unsexed"].map((label) =>
-          createOption(label)
-        ),
+        values: ["Male", "Female", "Pair", "Unsexed"],
       },
       {
         label: "Age",

@@ -1,21 +1,25 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { TimerProps } from "@/interfaces";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { timerDecrement } from "@/lib/features/slices/timerSlice";
 
-export const Timer = ({ duration, onComplete }: TimerProps) => {
-  const [timeLeft, setTimeLeft] = useState(duration);
+export const Timer = ({ onComplete }: TimerProps) => {
+  const { time } = useAppSelector(({ timer }) => timer);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (timeLeft <= 0) {
-      onComplete(); // Call the provided callback function
+    if (time <= 0) {
+      onComplete?.(); // Call the provided callback function
       return;
     }
 
     const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
+      dispatch(timerDecrement());
     }, 1000);
 
     return () => clearInterval(timer); // Cleanup timer on unmount
-  }, [timeLeft, onComplete]);
+  }, [time, onComplete]);
 
   // Format the time (mm:ss)
   const formatTime = (seconds: number) => {
@@ -27,5 +31,5 @@ export const Timer = ({ duration, onComplete }: TimerProps) => {
     )}`;
   };
 
-  return <>{formatTime(timeLeft)}</>;
+  return <>{formatTime(time)}</>;
 };

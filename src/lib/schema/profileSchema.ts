@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const user_schema = new Schema(
+const userSchema = new Schema(
   {
     gender: String,
     avatarUrl: String,
@@ -24,12 +24,7 @@ const user_schema = new Schema(
       trim: true,
       lowercase: true,
     },
-    password: {
-      type: String,
-      required: [true, "password is required!"],
-      minLength: 8,
-    },
-
+    password: String,
     isVerified: {
       type: Boolean,
       required: true,
@@ -44,4 +39,4 @@ const user_schema = new Schema(
   { timestamps: true }
 );
 
-export const user_model = model("user_profiles", user_schema);
+export const userModel = model("userProfiles", userSchema);
