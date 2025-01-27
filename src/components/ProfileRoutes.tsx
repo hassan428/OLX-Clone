@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useState } from "react";
 import { RiArrowDownWideLine } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { profileRouteData } from "@/utils";

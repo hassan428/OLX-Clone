@@ -1,5 +1,5 @@
 "use client";
-import React, { forwardRef, useState } from "react";
+import { forwardRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { IoCloseSharp, IoEye, IoEyeOff } from "react-icons/io5";
 import { TextInputProps } from "@/interfaces";

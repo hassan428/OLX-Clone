@@ -1,5 +1,4 @@
 import { TextProps } from "@/interfaces";
-import React from "react";
 
 export const Text = ({ text, className, error }: TextProps) => {
   return (

@@ -154,7 +154,7 @@ export interface DetailProductCardProps {
 }
 
 export interface StoreProviderProps extends ChildrenType {
-  authApiResponse: UserDetails & UserDetailsOpional;
+  authApiResponse: UserDetails;
 }
 
 export interface UserDetails {
@@ -162,9 +162,6 @@ export interface UserDetails {
   email?: string;
   phoneNumber?: string;
   isLogged?: boolean;
-}
-
-export interface UserDetailsOpional {
   gender?: string;
   birthDate?: Date;
   aboutMe?: string;
@@ -210,10 +207,6 @@ export interface AlertProps {
   doneClickHandle: () => void;
   cancelText?: string;
   canceClickHandle?: () => void;
-}
-
-export interface LoginSignupAlertProps {
-  trigger: ReactNode;
 }
 
 export interface DatePickerProps {
@@ -341,7 +334,7 @@ export type DynamicData = {
   [key: string]: any;
 };
 
-export type LoginSignupScreenName =
+export type LogJoinScreenName =
   | "login"
   | "join"
   | "loginEmail"
@@ -356,12 +349,17 @@ export type LoginSignupScreenName =
   | "forgotPassPhone"
   | "forgotPassEmail";
 
-export interface LoginSignupRoute {
-  current: LoginSignupScreenName;
-  previous?: LoginSignupScreenName;
+export interface LogJoinAlertProps {
+  trigger: ReactNode;
+  onClick: () => void;
 }
 
-export interface LoginSignup {
+export interface LogJoinRoute {
+  currentScreen: LogJoinScreenName;
+  previousScreen?: LogJoinScreenName;
+}
+
+export interface LogJoinData {
   name?: string;
   email?: string;
   phoneNumber?: string;

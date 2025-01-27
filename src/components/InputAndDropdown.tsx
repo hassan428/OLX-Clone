@@ -1,6 +1,6 @@
 "use client";
 import { DropDownConfigProps } from "@/interfaces";
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { RiArrowDownWideLine } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { TextInput } from "@/components/Text_input";

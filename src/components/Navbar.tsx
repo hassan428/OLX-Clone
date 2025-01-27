@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Logo } from "@/components/Logo";
 import { Sell_btn } from "@/components/Sell_btn";
 import { NavScreenBtn } from "@/components/NavScreenBtn";
@@ -9,15 +9,16 @@ import { DarkLightModeBtn } from "@/components/DarkLightMode";
 import { NavDrawer } from "@/components/NavDrawer";
 import { ProfileRoutes } from "@/components/ProfileRoutes";
 import { Button } from "@/components/ui/button";
-import { LoginSignupAlert } from "@/components/LoginSignupAlert";
+import { LogJoinAlert } from "@/components/LogJoinAlert";
 import { BackToTopBtn } from "@/components/BackToTopBtn";
-import { useAppSelector } from "@/lib/hooks";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { navbarRoute } from "@/utils";
 import { Timer } from "@/components/Timer";
+import { setLogJoinScreen } from "@/lib/features/slices/logJoinScreenSlice";
 
 export const Navbar = () => {
   const { isLogged } = useAppSelector(({ auth }) => auth);
-
+  const dispatch = useAppDispatch();
   const [isVisible, setIsVisible] = useState(true); // Navbar visibility state
   const [lastScrollY, setLastScrollY] = useState(0); // To track previous scroll position
 
@@ -45,7 +46,7 @@ export const Navbar = () => {
 
   return (
     <nav
-      className={`bg-background p-3 space-y-2 max-w-full sticky top-0 z-20 transition-transform duration-300 ${
+      className={`bg-background border-b border-border p-3 space-y-2 max-w-full sticky top-0 z-20 transition-transform duration-300 ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
@@ -83,7 +84,8 @@ export const Navbar = () => {
           {isLogged ? (
             <ProfileRoutes />
           ) : (
-            <LoginSignupAlert
+            <LogJoinAlert
+              onClick={() => dispatch(setLogJoinScreen("login"))}
               trigger={
                 <Button variant={"link"} className="font-bold">
                   Login
@@ -97,11 +99,11 @@ export const Navbar = () => {
       <div className="fixed left-1/2 -translate-x-1/2 z-50">
         <BackToTopBtn className={!isVisible ? "mt-2" : ""} />
       </div>
-      
-       {/* OTP Timer don't Stop */}
-        <div className="hidden">
-          <Timer />
-        </div>
+
+      {/* OTP Timer don't Stop */}
+      <div className="hidden">
+        <Timer />
+      </div>
     </nav>
   );
 };

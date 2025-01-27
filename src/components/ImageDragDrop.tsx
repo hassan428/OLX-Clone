@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, FC, ChangeEvent } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Image from "next/image";
@@ -12,13 +12,13 @@ import { IoCloseOutline } from "react-icons/io5";
 
 // Image item interface
 
-const ImageComponent: React.FC<ImageComponentProps> = ({
+const ImageComponent = ({
   image,
   index,
   moveImage,
   isFirst,
   onClick,
-}) => {
+}: ImageComponentProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [{ isDragging }, drag] = useDrag({
     type: "IMAGE",
@@ -74,9 +74,7 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
 
 // Main component handling file uploads, sorting, and rendering the image grid
 
-export const ImageUploader: React.FC<ImageUploaderProps> = ({
-  onSortedImages,
-}) => {
+export const ImageUploader: FC<ImageUploaderProps> = ({ onSortedImages }) => {
   const [images, setImages] = useState<ImageItem[]>(
     Array(5)
       .fill(null)
@@ -93,7 +91,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   };
 
   // Handle file input change
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     const updatedImages = [...images];
     files.forEach((file) => {

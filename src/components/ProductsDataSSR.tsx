@@ -1,18 +1,14 @@
-import React from "react";
 import {
   RenderDetailProductCard,
-  RenderMoreProductCard,
   RenderProductCard,
-} from "@/components/RenderProductCard";
+} from "@/components/RenderProductCardSSR";
 import {
   DetailProductCardDataProps,
-  MoreProductCardDataProps,
   ProductCardProps,
   MainCtgProductCardProps,
 } from "@/interfaces";
 import axios from "axios";
 import { cookies } from "next/headers";
-import { LOCATION_KEY } from "@/utils/constant";
 import { notFound } from "next/navigation";
 
 const { BACKEND_URL } = process.env;
@@ -20,8 +16,9 @@ const { BACKEND_URL } = process.env;
 export const ProductCardData = async () => {
   const getDataHandle = async () => {
     try {
-      const location = await (await cookies()).get(LOCATION_KEY);
-      // console.log("location", location);
+      const location = await (
+        await cookies()
+      ).get(process.env.NEXT_PUBLIC_LOCATION_KEY || "");
       const res = await axios.post(
         `${BACKEND_URL}/api/allCard`,
         location?.value
@@ -37,29 +34,6 @@ export const ProductCardData = async () => {
   return !getData
     ? notFound()
     : getData?.map((data, i) => <RenderProductCard key={i} {...data} />);
-};
-
-export const MoreProductCardData = async ({
-  subCtg,
-  mainCtg,
-}: MoreProductCardDataProps) => {
-  const getDataHandle = async () => {
-    try {
-      const location = (await cookies()).get(LOCATION_KEY);
-      const res = await axios.post(`${BACKEND_URL}/api/specificCategoryCard`, {
-        mainCtg,
-        subCtg,
-        location: location?.value,
-      });
-      // console.log("response", res.data.data);
-      return res.data.data;
-    } catch (err) {
-      console.log("err", err);
-    }
-  };
-  const getData: ProductCardProps[] = await getDataHandle();
-
-  return !getData?.length ? notFound() : <RenderMoreProductCard {...getData} />;
 };
 
 export const DetailProductCardData = async ({

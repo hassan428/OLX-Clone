@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { TimerProps } from "@/interfaces";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { timerDecrement } from "@/lib/features/slices/timerSlice";

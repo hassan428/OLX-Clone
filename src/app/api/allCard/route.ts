@@ -1,15 +1,13 @@
 import { MainCtgProductCardProps } from "@/interfaces";
 import { data } from "@/utils";
-import { LOCATION_KEY } from "@/utils/constant";
 import { cookies } from "next/headers";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 export async function POST(req: Request) {
   try {
     const body = await req.text();
     // console.log("body", body);
-    body && (await cookies()).set(LOCATION_KEY, body);
+    body &&
+      (await cookies()).set(process.env.NEXT_PUBLIC_LOCATION_KEY || "", body);
 
     const fourCardData: MainCtgProductCardProps[] = data
       .map((value) => {

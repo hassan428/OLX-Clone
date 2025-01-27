@@ -1,6 +1,5 @@
-import { DetailProductCardData } from "@/components/ProductsData";
+import { DetailProductCardData } from "@/components/ProductsDataSSR";
 import { PageProps } from "@/interfaces";
-import * as React from "react";
 
 const ProductDetailsPage = async ({ params }: PageProps) => {
   const { id } = await params;

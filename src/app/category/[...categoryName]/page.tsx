@@ -1,4 +1,4 @@
-import { MoreProductCardData } from "@/components/ProductsData";
+import { MoreProductCardData } from "@/components/ProductsDataCSR";
 import { PageProps } from "@/interfaces";
 
 const MoreProductPage = async ({ params }: PageProps) => {

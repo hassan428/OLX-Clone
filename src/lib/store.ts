@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authSlice from "@/lib/features/slices/authSlice";
-import timerSlice from "@/lib/features/slices/timerSlice";
+import auth from "@/lib/features/slices/authSlice";
+import timer from "@/lib/features/slices/timerSlice";
+import logJoin from "@/lib/features/slices/logJoinScreenSlice";
 
 export const makeStore = () => {
   return configureStore({
-    reducer: { auth: authSlice, timer: timerSlice },
+    reducer: { auth, timer, logJoin },
   });
 };
 

@@ -1,5 +1,4 @@
 import { LayoutProps } from "@/interfaces";
-import React from "react";
 import { ctg_link } from "@/utils";
 import Link from "next/link";
 import {
@@ -146,8 +145,8 @@ const layout = async ({ children, params }: LayoutProps) => {
         {categoryName == "allcategories" && "All Categories"}
       </h1>
 
-      <div className="flex flex-col sm:flex-row items-start sm:bg-border bg-background">
-        <div className="w-1/3 max-sm:hidden sticky top-2 overflow-auto">
+      <div className="flex flex-col sm:flex-row items-start bg-background">
+        <div className="w-1/3 sm:bg-border max-sm:hidden sticky top-2 overflow-auto">
           {sidebarUi()}
         </div>
         <div className="sm:hidden">{sidebarSheetUi()}</div>

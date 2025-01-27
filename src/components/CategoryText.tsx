@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useState } from "react";
 import { ctg_link } from "@/utils";
 import { usePathname } from "next/navigation";
 

@@ -69,17 +69,21 @@ export const MoreProductCardUI = ({
   id,
 }: ProductCardProps) => {
   return (
-    <Link href={`/products/${id}`} key={id}>
+    <Link href={`/products/${id}`}>
       <Card className="cursor-pointer hover:bg-border h-36 sm:h-52 flex my-2 sm:m-2 border-2 border-border">
-        <CardHeader className="p-0 w-28 sm:w-52">
-          <Image
-            src={src?.[0]}
-            alt="led"
-            width={250}
-            height={250}
-            className="h-full w-full"
-            priority
-          />
+        <CardHeader
+          className={`p-0 w-28 sm:w-52 ${!src && "bg-gray-400 animate-pulse"}`}
+        >
+          {src && (
+            <Image
+              src={src?.[0]}
+              alt="led"
+              width={250}
+              height={250}
+              className="h-full w-full"
+              priority
+            />
+          )}
         </CardHeader>
         <div className="w-2/3 flex flex-col justify-between border-l-2 p-2 sm:p-5 border-border">
           <CardContent className="flex-col p-0">
@@ -140,8 +144,8 @@ export const DetailProductCardUI = ({
 
   return (
     <div className="sm:flex items-start gap-2 m-2">
-      <Card className="w-full bg-background">
-        <CardHeader className="p-0 m-0">
+      <Card className="w-full bg-background border-none">
+        <CardHeader className="p-0 m-0 mb-3 border border-border rounded">
           <CardDetailImageSlider src={src} />
         </CardHeader>
         <CardContent className="p-0">
@@ -169,16 +173,16 @@ export const DetailProductCardUI = ({
 
           <div className="border border-border my-3 p-3 rounded text-foreground">
             <h1 className="text-xl font-bold">Details</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 my-1 gap-3 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 my-1 gap-3 text-sm w-full">
               {Object.entries(productOtherDetails).map(([key, value], i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-around w-full text-center"
+                  className="flex items-center justify-center w-full text-center"
                 >
-                  <h1 className="text-accent-foreground w-1/2 capitalize bg-input">
+                  <h1 className="text-accent-foreground w-full capitalize bg-border rounded">
                     {key}
                   </h1>
-                  <h1 className="font-bold w-1/2 capitalize bg-input ml-2">
+                  <h1 className="font-bold w-full capitalize bg-border ml-2 rounded">
                     {value}
                   </h1>
                 </div>
@@ -195,8 +199,8 @@ export const DetailProductCardUI = ({
         </CardContent>
       </Card>
 
-      <div className="w-full">
-        <div className="border border-border rounded p-3 my-3 flex flex-col gap-3">
+      <div className="w-full ">
+        <div className="border border-border rounded p-3 mb-3 flex flex-col gap-3">
           <h1 className="text-xl font-bold">Listed by private user</h1>
           <Link
             href={"/profile/id"}

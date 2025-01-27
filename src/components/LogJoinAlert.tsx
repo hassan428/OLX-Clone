@@ -10,10 +10,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
-  LoginSignup,
-  LoginSignupAlertProps,
-  LoginSignupRoute,
-  LoginSignupScreenName,
+  LogJoinData,
+  LogJoinAlertProps,
+  LogJoinRoute,
+  LogJoinScreenName,
   PasswordValidationData,
   SubmitButton,
   PasswordRules,
@@ -47,61 +47,58 @@ import axios from "axios";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { setUserDetails } from "@/lib/features/slices/authSlice";
 import { startTimer, resetTimer } from "@/lib/features/slices/timerSlice";
+import { setLogJoinScreen } from "@/lib/features/slices/logJoinScreenSlice";
 
-export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
-  const userDetails = useAppSelector(({ auth }) => auth);
+export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
   const dispatch = useAppDispatch();
-
+  const userDetails = useAppSelector(({ auth }) => auth);
+  const { currentScreen } = useAppSelector(({ logJoin }) => logJoin);
   const { isLogged } = userDetails;
 
-  const loginSignupRoute: LoginSignupRoute[] = [
+  const logJoinRoute: LogJoinRoute[] = [
     {
-      current: "join",
+      currentScreen: "join",
     },
     {
-      current: "joinEmail",
-      previous: "join",
+      currentScreen: "joinEmail",
+      previousScreen: "join",
     },
     {
-      current: "joinPhone",
-      previous: "join",
+      currentScreen: "joinPhone",
+      previousScreen: "join",
     },
     {
-      current: "login",
+      currentScreen: "login",
     },
     {
-      current: "loginEmail",
-      previous: "login",
+      currentScreen: "loginEmail",
+      previousScreen: "login",
     },
     {
-      current: "loginPhone",
-      previous: "login",
+      currentScreen: "loginPhone",
+      previousScreen: "login",
     },
     {
-      current: "forgotPassPhone",
-      previous: "loginPhone",
+      currentScreen: "forgotPassPhone",
+      previousScreen: "loginPhone",
     },
     {
-      current: "forgotPassEmail",
-      previous: "loginEmail",
+      currentScreen: "forgotPassEmail",
+      previousScreen: "loginEmail",
     },
     {
-      current: "otpEmail",
-      previous: isLogged ? "verifyEmail" : undefined,
+      currentScreen: "otpEmail",
+      previousScreen: isLogged ? "verifyEmail" : undefined,
     },
     {
-      current: "otpPhone",
-      previous: isLogged ? "verifyPhone" : undefined,
+      currentScreen: "otpPhone",
+      previousScreen: isLogged ? "verifyPhone" : undefined,
     },
   ];
 
-  const [screen, setScreen] = useState<LoginSignupScreenName>(
-    isLogged ? "verifyEmail" : "login" // get data with (Redux Toolkit)
-  );
-
-  const [prevScreen, setPrevScreen] = useState<LoginSignupScreenName>("login");
-  const [error, setError] = useState<LoginSignup | null>(null);
-  const [data, setData] = useState<LoginSignup | null>(null);
+  const [prevScreen, setPrevScreen] = useState<LogJoinScreenName>("login");
+  const [error, setError] = useState<LogJoinData | null>(null);
+  const [data, setData] = useState<LogJoinData | null>(null);
   const [otp, setOtp] = useState<string>("");
   const [timeUp, setTimeUp] = useState<boolean>(false);
   const [api_res, set_api_res] = useState<any>();
@@ -114,7 +111,10 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     useState<PasswordStrength | null>(null);
 
   const [loading, setLoading] = useState<boolean>(false);
-  const loginOrEmailString: string = screen.slice(screen.length - 5);
+
+  const phoneOrEmailString: string = currentScreen?.slice(
+    currentScreen.length - 5
+  );
 
   const passwordValidationData: PasswordValidationData[] = [
     { text: "8 characters", condition: passwordRules?.hasMinLength },
@@ -131,12 +131,16 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
   const phoneInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const confirmPassInputRef = useRef<HTMLInputElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    loginSignupRoute.find(({ current, previous }) => {
-      screen == current && previous && setPrevScreen(previous);
-    });
-    if (screen.includes("login") || screen.includes("join")) {
+    logJoinRoute.find(
+      ({ currentScreen: current, previousScreen }) =>
+        currentScreen == current &&
+        previousScreen &&
+        setPrevScreen(previousScreen)
+    );
+    if (currentScreen?.includes("login") || currentScreen?.includes("join")) {
       ["name", "email", "phoneNumber", "password", "confirmPassword"].map(
         (key) => setDataHandle({ [key]: undefined })
       );
@@ -144,7 +148,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       setPasswordRules(null);
       setPasswordStrength(null);
     }
-    if (screen.includes("verify")) {
+    if (currentScreen?.includes("verify")) {
       setDataHandle(userDetails);
       setTimeUp(false);
     }
@@ -152,15 +156,15 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     setLoading(false);
     setShowPasswordValidation(true);
     setOtp("");
-  }, [screen]);
+  }, [currentScreen]);
 
-  const setDataHandle = (newData: LoginSignup): void => {
+  const setDataHandle = (newData: LogJoinData): void => {
     setData((pre) => {
       return { ...pre, ...newData };
     });
   };
 
-  const setErrorHandle = (newError: LoginSignup): void => {
+  const setErrorHandle = (newError: LogJoinData): void => {
     setError((pre) => {
       return { ...pre, ...newError };
     });
@@ -168,7 +172,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
   const checkPassword = (): string | undefined => {
     const missingConditions: string[] = [];
-    !screen.includes("login") &&
+    !currentScreen?.includes("login") &&
       passwordValidationData.filter(
         ({ text, condition }) => !condition && missingConditions.push(text)
       );
@@ -182,7 +186,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     }
   };
 
-  const errorCheck = (value?: string): LoginSignup => ({
+  const errorCheck = (value?: string): LogJoinData => ({
     name:
       !value && !data?.name
         ? "Name is required!"
@@ -211,7 +215,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         : undefined,
   });
 
-  const loginSignupUi = (logOrjoin: "login" | "join"): ReactNode => (
+  const logJoinUi = (logOrjoin: "login" | "join"): ReactNode => (
     <>
       <Button
         onClick={logOrjoin == "login" ? loginWithGoogle : joinWithGoogle}
@@ -225,7 +229,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
       {/* Email and Phone Login Buttons */}
       <Button
-        onClick={() => setScreen(`${logOrjoin}Email`)}
+        onClick={() => dispatch(setLogJoinScreen(`${logOrjoin}Email`))}
         variant="outline"
         className="w-full border-2 border-primary capitalize flex gap-2 items-center justify-center font-semibold"
       >
@@ -233,7 +237,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       </Button>
 
       <Button
-        onClick={() => setScreen(`${logOrjoin}Phone`)}
+        onClick={() => dispatch(setLogJoinScreen(`${logOrjoin}Phone`))}
         variant="outline"
         className="w-full border-2 border-primary capitalize flex gap-2 items-center justify-center font-semibold"
       >
@@ -605,7 +609,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       <>
         <h1 className="text-center text-sm">
           You will receive a 6-digit code through a{" "}
-          {screen === "otpEmail" ? (
+          {currentScreen === "otpEmail" ? (
             <>
               Email Address on <strong>{data?.email}</strong>
             </>
@@ -632,15 +636,15 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
         )}
 
         {LinkButtonUi({
-          text: `Resend Code ${screen === "otpPhone" ? "by SMS" : ""}`,
+          text: `Resend Code ${currentScreen === "otpPhone" ? "by SMS" : ""}`,
           onClick:
-            screen === "otpPhone"
+            currentScreen === "otpPhone"
               ? resendCodeBySMSHandle
               : resendCodeByEmailHandle,
           disabled: !timeUp,
         })}
 
-        {screen !== "otpEmail" && (
+        {currentScreen !== "otpEmail" && (
           <div className="flex flex-col items-center">
             <h1 className="text-sm text-center">
               If you have not recieved the code by SMS, please request
@@ -706,7 +710,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
       {submitButtonUi({
         text: "Next",
-        onClick: () => setScreen("otpEmail"),
+        onClick: () => dispatch(setLogJoinScreen("otpEmail")),
         disabled:
           isError({ email: data?.email }) ||
           isError({ email: error?.email }, true) ||
@@ -725,7 +729,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
       {submitButtonUi({
         text: "Next",
-        onClick: () => setScreen("otpPhone"),
+        onClick: () => dispatch(setLogJoinScreen("otpPhone")),
         disabled:
           isError({ phoneNumber: data?.phoneNumber }) ||
           isError({ phoneNumber: error?.phoneNumber }, true) ||
@@ -786,12 +790,14 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
   );
 
   const footer = (): ReactNode => {
-    const isLoginScreen: boolean = screen.includes("login");
+    const isLoginScreen: boolean = currentScreen?.includes("login");
     return (
       <AlertDialogFooter className="sm:justify-center">
         <Button
           variant={"link"}
-          onClick={() => setScreen(isLoginScreen ? "join" : "login")}
+          onClick={() =>
+            dispatch(setLogJoinScreen(isLoginScreen ? "join" : "login"))
+          }
           className="font-semibold hover:underline text-blue-500"
         >
           <AlertDialogDescription className="text-blue-500">
@@ -804,24 +810,26 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     );
   };
 
-  const forgotPasswordButtonUi = (
-    screenName: LoginSignupScreenName
-  ): ReactNode => (
+  const forgotPasswordButtonUi = (screenName: LogJoinScreenName): ReactNode => (
     <Button
       variant={"link"}
       className="text-blue-500 justify-start p-0 font-bold"
-      onClick={() => setScreen(screenName)}
+      onClick={() => dispatch(setLogJoinScreen(screenName))}
     >
       Forgot your Password?
     </Button>
   );
 
   const backButtonUi = (): ReactNode =>
-    !(screen == "join" || screen == "login" || screen.includes("verify")) && (
+    !(
+      currentScreen == "join" ||
+      currentScreen == "login" ||
+      currentScreen?.includes("verify")
+    ) && (
       <Button
         variant={"outline"}
         className="bg-primary text-background absolute top-1 left-1 sm:top-4 sm:left-4 mt-2 sm:mt-0"
-        onClick={() => setScreen(prevScreen)}
+        onClick={() => dispatch(setLogJoinScreen(prevScreen))}
       >
         <RiArrowLeftWideLine size={20} />
       </Button>
@@ -832,13 +840,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     onClick,
     disabled,
   }: SubmitButton): ReactNode => (
-    <Button
-      className="font-bold"
-      disabled={disabled}
-      onClick={() => {
-        onClick();
-      }}
-    >
+    <Button className="font-bold" disabled={disabled} onClick={onClick}>
       {text}
     </Button>
   );
@@ -885,7 +887,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       console.log("res.data", res.data);
       set_api_res(undefined);
       setLoading(false);
-      setScreen(data?.email ? "otpEmail" : "otpPhone");
+      dispatch(setLogJoinScreen(data?.email ? "otpEmail" : "otpPhone"));
       dispatch(startTimer(150));
       return;
     } catch (err) {
@@ -902,7 +904,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       console.log("res.data", res.data);
       set_api_res(res.data.data);
       setLoading(false);
-      setScreen("createPass");
+      dispatch(setLogJoinScreen("createPass"));
       return;
     } catch (err) {
       setLoading(false);
@@ -930,6 +932,7 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
       if (res.data.success) {
         dispatch(setUserDetails({ ...res.data.data, isLogged: true }));
         dispatch(resetTimer());
+        closeButtonRef.current?.click();
       }
       setLoading(false);
       return;
@@ -951,10 +954,11 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
     setTimeUp(false);
     dispatch(startTimer(150));
   };
-
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
+      <AlertDialogTrigger onClick={onClick} asChild>
+        {trigger}
+      </AlertDialogTrigger>
 
       <AlertDialogContent className="flex flex-col px-2 sm:px-5 py-5 max-sm:min-h-screen max-h-screen sm:max-h-[31rem] overflow-y-auto w-full sm:w-2/4 xmd:w-2/5 rounded-lg">
         {loading && <Loader />}
@@ -964,21 +968,21 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
             <Logo />
           </div>
           <AlertDialogTitle className="text-xl sm:text-2xl font-bold">
-            {screen == "login"
+            {currentScreen == "login"
               ? "Login into your LOX account"
-              : screen == "join"
+              : currentScreen == "join"
               ? "Create a new LOX account"
-              : screen == "joinEmail" || screen == "joinPhone"
-              ? `Create account with ${loginOrEmailString}`
-              : screen.includes("verify")
-              ? `Verify ${loginOrEmailString}`
-              : screen == "loginEmail" || screen == "loginPhone"
-              ? `Log in with ${loginOrEmailString}`
-              : screen.includes("forgotPass")
+              : currentScreen == "joinEmail" || currentScreen == "joinPhone"
+              ? `Create account with ${phoneOrEmailString}`
+              : currentScreen?.includes("verify")
+              ? `Verify ${phoneOrEmailString}`
+              : currentScreen == "loginEmail" || currentScreen == "loginPhone"
+              ? `Log in with ${phoneOrEmailString}`
+              : currentScreen?.includes("forgotPass")
               ? "Forgot Password"
-              : screen == "createPass"
+              : currentScreen == "createPass"
               ? "Create a password"
-              : screen.includes("otp")
+              : currentScreen?.includes("otp")
               ? "Enter confirmation code"
               : ""}
           </AlertDialogTitle>
@@ -986,24 +990,28 @@ export const LoginSignupAlert = ({ trigger }: LoginSignupAlertProps) => {
 
         <div className="flex flex-col flex-1 gap-3 text-sm">
           {/* Scrollable Content */}
-          {(screen === "login" || screen === "join") && loginSignupUi(screen)}
-          {screen === "loginEmail" && loginEmailUi()}
-          {screen === "loginPhone" && loginPhoneUi()}
-          {screen === "joinEmail" && joinEmailUi()}
-          {screen === "joinPhone" && joinPhoneUi()}
-          {screen.includes("otp") && otpUi()}
-          {screen === "createPass" && createPassUi()}
-          {screen === "verifyEmail" && forgotPassEmailUi()}
-          {screen === "verifyPhone" && forgotPassPhoneUi()}
-          {screen === "forgotPassEmail" && forgotPassEmailUi()}
-          {screen === "forgotPassPhone" && forgotPassPhoneUi()}
+          {(currentScreen === "login" || currentScreen === "join") &&
+            logJoinUi(currentScreen)}
+          {currentScreen === "loginEmail" && loginEmailUi()}
+          {currentScreen === "loginPhone" && loginPhoneUi()}
+          {currentScreen === "joinEmail" && joinEmailUi()}
+          {currentScreen === "joinPhone" && joinPhoneUi()}
+          {currentScreen?.includes("otp") && otpUi()}
+          {currentScreen === "createPass" && createPassUi()}
+          {currentScreen === "verifyEmail" && forgotPassEmailUi()}
+          {currentScreen === "verifyPhone" && forgotPassPhoneUi()}
+          {currentScreen === "forgotPassEmail" && forgotPassEmailUi()}
+          {currentScreen === "forgotPassPhone" && forgotPassPhoneUi()}
         </div>
 
-        {!screen.includes("otp") && footer()}
+        {!currentScreen?.includes("otp") && footer()}
 
         {backButtonUi()}
         {/* Close Button */}
-        <AlertDialogCancel className="bg-primary text-background absolute top-1 right-1 sm:top-4 sm:right-4">
+        <AlertDialogCancel
+          ref={closeButtonRef}
+          className="bg-primary text-background absolute top-1 right-1 sm:top-4 sm:right-4"
+        >
           <IoCloseSharp size={20} />
         </AlertDialogCancel>
       </AlertDialogContent>

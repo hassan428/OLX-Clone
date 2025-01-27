@@ -1,16 +1,13 @@
-import React from "react";
 import { CategoryTextWithImage } from "@/components/CategoryTextWithImage";
 import { Slider } from "@/components/Slider";
-import { ProductCardData } from "@/components/ProductsData";
-
+import { ProductCardData } from "@/components/ProductsDataSSR";
 
 const HomePage = () => {
   return (
     <>
-      {/* <Slider /> */}
+      <Slider />
       <CategoryTextWithImage />
-      {/* <ProductCardData /> */}
-
+      <ProductCardData />
     </>
   );
 };

@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import { useRef, useState, useEffect } from "react";
 import Autoplay from "embla-carousel-autoplay";
 
 import {
@@ -15,15 +15,13 @@ import { CardDetailsImage } from "@/interfaces";
 import { Camera } from "lucide-react";
 
 export function CardDetailImageSlider({ src }: CardDetailsImage) {
-  const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true })
-  );
+  const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
 
-  const [api, setApi] = React.useState<CarouselApi>();
-  const [current, setCurrent] = React.useState(0);
-  const [count, setCount] = React.useState(0);
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!api) {
       return;
     }
@@ -57,7 +55,7 @@ export function CardDetailImageSlider({ src }: CardDetailsImage) {
                 height={1000}
                 alt="sliderImage"
                 priority={true}
-                className="object-contain w-full h-full"
+                className="object-contain w-full h-full cursor-move"
               />
             </div>
           </CarouselItem>

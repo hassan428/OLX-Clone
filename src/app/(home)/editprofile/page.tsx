@@ -2,11 +2,11 @@
 import { Alert } from "@/components/Alert";
 import { DatePicker } from "@/components/DatePicker";
 import { InputAndDropdown } from "@/components/InputAndDropdown";
-import { LoginSignupAlert } from "@/components/LoginSignupAlert";
+import { LogJoinAlert } from "@/components/LogJoinAlert";
 import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
-import { UserDetails, UserDetailsOpional } from "@/interfaces";
+import { UserDetails } from "@/interfaces";
 import {
   genderData,
   isError,
@@ -16,48 +16,41 @@ import {
   validatePhone,
 } from "@/utils";
 import Image from "next/image";
-import React, { ChangeEvent, ReactNode, useEffect, useState } from "react";
+import { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import { HiLightBulb } from "react-icons/hi";
 import { IoCameraReverseOutline, IoCloseOutline } from "react-icons/io5";
-import { useAppSelector } from "@/lib/hooks";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { setLogJoinScreen } from "@/lib/features/slices/logJoinScreenSlice";
 
 const EditProfilePage = () => {
   const userOldDetails = useAppSelector(({ auth }) => auth);
-
+  const dispatch = useAppDispatch();
   const defaultAvatarUrl = "/assets/images/load_avatar.png";
-
   const [data, setData] = useState<UserDetails | null>(null);
-  const [optionalData, setOptionalData] = useState<UserDetailsOpional | null>(
-    null
-  );
   const [error, setError] = useState<UserDetails | null>(null);
-  const [avatarUrl, setAvatarUrl] = useState<any>(defaultAvatarUrl);
   const [btnDisabled, setBtnDisabled] = useState<boolean>(true);
 
   const hasChanges = (oldData: any, newData: any) => {
     if (!oldData || !newData) return false;
-    return Object.keys(oldData).some((key) => oldData[key] !== newData[key]);
+    const { name, email, phoneNumber } = newData;
+    return Object.keys(newData).some(
+      (key) =>
+        oldData[key] != newData[key] &&
+        !isError({ name, email, phoneNumber }) &&
+        !isError({ ...error }, true)
+    );
   };
 
   useEffect(() => {
     setDataHandle(userOldDetails);
-    setOptionalDataHandle(userOldDetails);
   }, []);
 
   useEffect(() => {
-    const dataChanged = hasChanges(userOldDetails, data);
-    const optionalDataChanged = hasChanges(userOldDetails, optionalData);
-    setBtnDisabled(!(dataChanged || optionalDataChanged));
-  }, [data]);
+    setBtnDisabled(!hasChanges(userOldDetails, data));
+  }, [data, error]);
 
   const setDataHandle = (newData: UserDetails) => {
     setData((pre) => {
-      return { ...pre, ...newData };
-    });
-  };
-
-  const setOptionalDataHandle = (newData: UserDetailsOpional) => {
-    setOptionalData((pre) => {
       return { ...pre, ...newData };
     });
   };
@@ -74,7 +67,7 @@ const EditProfilePage = () => {
     if (url) {
       const reader = new FileReader();
       reader.onload = ({ target }: ProgressEvent<FileReader>) => {
-        setAvatarUrl(target?.result);
+        setDataHandle({ avatarUrl: target?.result?.toString() });
       };
       reader.readAsDataURL(url);
     }
@@ -112,18 +105,8 @@ const EditProfilePage = () => {
   };
 
   const saveChangesHandle = () => {
-    setError(null);
-    setOptionalDataHandle({
-      avatarUrl: avatarUrl != defaultAvatarUrl ? avatarUrl : undefined,
-    });
-    // const phoneNumber = `+92${data?.phoneNumber}`; // update phone number on send data to backen
-    setErrorHandle(errorCheck());
-    if (!data || isError({ ...data }) || isError({ ...error }, true)) {
-      console.log("error hain");
-    } else {
-      console.log("error nahi hain");
-      console.log("send data to bakend");
-    }
+    console.log("error nahi hain");
+    console.log("send data to bakend");
   };
 
   const deleteAccount = () => {
@@ -188,7 +171,6 @@ const EditProfilePage = () => {
             className="rounded-l-none"
             inputProps={{
               id: "phoneNumber",
-              defaultValue: data?.phoneNumber,
               value: data?.phoneNumber || "",
               placeholder: "Enter Phone Number",
               maxLength: 10,
@@ -287,26 +269,26 @@ const EditProfilePage = () => {
               onChange={imageAvatarHandle}
             />
             <div className="relative">
-              {avatarUrl != defaultAvatarUrl && (
+              {data?.avatarUrl && (
                 <div
                   className="bg-foreground cursor-pointer absolute p-1 rounded-full right-0 top-0 text-background"
-                  onClick={() => setAvatarUrl(defaultAvatarUrl)}
+                  onClick={() => setDataHandle({ avatarUrl: undefined })}
                 >
                   <IoCloseOutline />
                 </div>
               )}
               <Image
-                src={avatarUrl}
+                src={data?.avatarUrl || defaultAvatarUrl}
                 alt="Avatar"
                 width={75}
                 height={75}
                 priority={true}
                 className="rounded-full object-cover min-w-20 h-20"
               />
-              {avatarUrl == defaultAvatarUrl && (
+              {!data?.avatarUrl && (
                 <label
                   htmlFor="avatar"
-                  className="bg-foreground flex sm:hidden absolute p-1 rounded-full right-0 bottom-0 text-background"
+                  className="bg-foreground cursor-pointer flex sm:hidden absolute p-1 rounded-full right-0 bottom-0 text-background"
                 >
                   <IoCameraReverseOutline />
                 </label>
@@ -330,7 +312,7 @@ const EditProfilePage = () => {
               <h1 className="text-sm font-bold">Date of Birth</h1>
               <div>
                 <DatePicker
-                  sendDate={(birthDate) => setOptionalDataHandle({ birthDate })}
+                  sendDate={(birthDate) => setDataHandle({ birthDate })}
                 />
               </div>
             </div>
@@ -340,9 +322,9 @@ const EditProfilePage = () => {
               <div>
                 <InputAndDropdown
                   placeholder={"Select your gender"}
-                  selectValue={optionalData?.gender || ""}
+                  selectValue={data?.gender || ""}
                   dropdownData={genderData}
-                  selectHandle={(gender) => setOptionalDataHandle({ gender })}
+                  selectHandle={(gender) => setDataHandle({ gender })}
                 />
               </div>
             </div>
@@ -354,12 +336,11 @@ const EditProfilePage = () => {
                 rows={5}
                 placeholder="About me (Optional)"
                 maxLength={200}
-                onChange={(e) =>
-                  setOptionalDataHandle({ aboutMe: e.target.value })
-                }
+                value={data?.aboutMe || ""}
+                onChange={(e) => setDataHandle({ aboutMe: e.target.value })}
               />
               <div className="flex items-center justify-end">
-                <Text text={`${optionalData?.aboutMe?.length || "0"} / 200`} />
+                <Text text={`${data?.aboutMe?.length || "0"} / 200`} />
               </div>
             </div>
           </div>
@@ -388,9 +369,14 @@ const EditProfilePage = () => {
             >
               Contact
             </h1>
-
-            <LoginSignupAlert trigger={phoneInput()} />
-            <LoginSignupAlert trigger={emailInput()} />
+            <LogJoinAlert
+              onClick={() => dispatch(setLogJoinScreen("verifyPhone"))}
+              trigger={phoneInput()}
+            />
+            <LogJoinAlert
+              onClick={() => dispatch(setLogJoinScreen("verifyEmail"))}
+              trigger={emailInput()}
+            />
           </div>
         </div>
 

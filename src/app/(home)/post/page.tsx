@@ -20,7 +20,7 @@ import {
 } from "@/utils";
 import { ctgOptionsData } from "@/utils/ctgOptionsData";
 import Image from "next/image";
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 
 const PostPage = () => {
   const [sortedImages, setSortedImages] = useState<File[]>([]);

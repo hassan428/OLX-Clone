@@ -1,7 +1,7 @@
-import { UserDetails, UserDetailsOpional } from "@/interfaces";
+import { UserDetails } from "@/interfaces";
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState: UserDetails & UserDetailsOpional = {
+const initialState: UserDetails = {
   isLogged: false,
 };
 

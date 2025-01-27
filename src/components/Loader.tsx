@@ -1,5 +1,4 @@
 import { LoaderPinwheelIcon } from "lucide-react";
-import React from "react";
 
 export const Loader = () => {
   return (

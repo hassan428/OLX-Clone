@@ -1,6 +1,5 @@
 import { FooterLinkSection } from "@/interfaces";
 import Link from "next/link";
-import React from "react";
 
 export const FooterLink = ({ data, title }: FooterLinkSection) => {
   return (

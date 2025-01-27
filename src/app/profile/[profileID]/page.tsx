@@ -1,9 +1,8 @@
-import { RenderMoreProductCard } from "@/components/RenderProductCard";
+import { RenderMoreProductCard } from "@/components/RenderProductCardCSR";
 import { ShareProfile } from "@/components/ShareProfile";
 import { PageProps } from "@/interfaces";
 import { data } from "@/utils";
 import Image from "next/image";
-import React from "react";
 import { IoLocationOutline } from "react-icons/io5";
 
 const ProfilePage = ({ params }: PageProps) => {

@@ -1,4 +1,3 @@
-import React from "react";
 import {
   CustomImageProps,
   FooterLinkSection,
@@ -14,7 +13,7 @@ const footerdata: FooterLinkSection[] = [
   {
     title: "Popular Categories",
     data: [
-      { text: "Mobiles", href: "/category/mobiles" },
+      { text: "Mobiles", href: "/category/mobiles-tablets/mobiles" },
       { text: "Vehicles", href: "/category/vehicles" },
       { text: "Fashion & Beauty", href: "/category/fashion" },
       { text: "Home Appliances", href: "/category/electronics" },
@@ -52,7 +51,7 @@ const socialMediaLinks: SocialMediaLinks[] = [
   { href: "instagramurl", Icon: FaInstagram },
 ];
 
-const CustomImageProps: CustomImageProps[] = [
+const customImageProps: CustomImageProps[] = [
   { src: "playstore.svg", href: "https://play.google.com/" },
   { src: "appstore.svg", href: "https://www.apple.com/app-store/" },
   { src: "appgallery.svg", href: "https://appgallery.huawei.com/" },
@@ -86,7 +85,7 @@ export const Footer = () => {
             </div>
           </div>
           <div className="flex gap-2 p-3 items-center w-full flex-wrap justify-center">
-            {CustomImageProps.map(({ src, href }, i) => (
+            {customImageProps.map(({ src, href }, i) => (
               <Link href={href} key={i} target="_blank">
                 <Image
                   src={`/assets/images/${src}`}

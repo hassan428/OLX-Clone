@@ -1,6 +1,5 @@
 import { SellButtonProps } from "@/interfaces";
 import Link from "next/link";
-import React from "react";
 
 export const Sell_btn = ({ className }: SellButtonProps) => {
   return (

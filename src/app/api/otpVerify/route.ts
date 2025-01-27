@@ -4,12 +4,15 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { JWT_SECRET } = process.env;
-    console.log("body", body);
 
     const findUser = body.data; // await userModel.findById(body._id);
 
     if (!findUser) {
-      return Response.json({ message: "Users not found!", status: 404  ,  success: false,});
+      return Response.json({
+        message: "Users not found!",
+        status: 404,
+        success: false,
+      });
     }
 
     const findOTP = 789456; // find otp from find_user
@@ -36,7 +39,7 @@ export async function POST(req: Request) {
     // send OTP on email or SMS
 
     return Response.json({
-      data: body,
+      data: findUser,
       message: "User is Successfully Logged",
       success: true,
     });

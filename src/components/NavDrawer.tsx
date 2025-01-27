@@ -1,5 +1,4 @@
 "use client";
-import * as React from "react";
 import { PiListDuotone } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
 import { NavScreenBtn } from "@/components/NavScreenBtn";
@@ -19,11 +18,13 @@ import Image from "next/image";
 
 import Link from "next/link";
 import { publicRouteData, profileRouteData } from "@/utils";
-import { LoginSignupAlert } from "@/components/LoginSignupAlert";
-import { useAppSelector } from "@/lib/hooks";
+import { LogJoinAlert } from "@/components/LogJoinAlert";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { setLogJoinScreen } from "@/lib/features/slices/logJoinScreenSlice";
 
 export function NavDrawer() {
   const { isLogged, name } = useAppSelector(({ auth }) => auth);
+  const dispatch = useAppDispatch();
 
   return (
     <Sheet>
@@ -58,7 +59,8 @@ export function NavDrawer() {
                   {name}
                 </SheetDescription>
               ) : (
-                <LoginSignupAlert
+                <LogJoinAlert
+                  onClick={() => dispatch(setLogJoinScreen("login"))}
                   trigger={
                     <h1 className="underline underline-offset-2">
                       Log in to your account
@@ -103,14 +105,16 @@ export function NavDrawer() {
 
         <SheetFooter>
           <div className={`w-full ${isLogged && "hidden"}`}>
-            <LoginSignupAlert
+            <LogJoinAlert
+              onClick={() => dispatch(setLogJoinScreen("login"))}
               trigger={
                 <Button className="w-full border-2 border-primary my-2">
                   Login
                 </Button>
               }
             />
-            <LoginSignupAlert
+            <LogJoinAlert
+              onClick={() => dispatch(setLogJoinScreen("join"))}
               trigger={
                 <Button
                   variant={"outline"}

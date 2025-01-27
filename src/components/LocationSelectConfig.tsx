@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IoLocation, IoLocationOutline } from "react-icons/io5";
 import { RiArrowDownWideLine } from "react-icons/ri";
 import {

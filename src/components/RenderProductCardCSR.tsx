@@ -1,18 +1,7 @@
 "use client";
-import * as React from "react";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import {
-  DetailProductCardUI,
-  MoreProductCardUI,
-  ProductCardUI,
-} from "@/components/ProductCardUI";
-import {
-  DetailProductCardProps,
-  ProductCardProps,
-  MainCtgProductCardProps,
-  ViewStyle,
-} from "@/interfaces";
-import Link from "next/link";
+import { useEffect, useState } from "react";
+import { MoreProductCardUI, ProductCardUI } from "@/components/ProductCardsUI";
+import { ProductCardProps, ViewStyle } from "@/interfaces";
 import { FiGrid } from "react-icons/fi";
 import { MdOutlineViewHeadline } from "react-icons/md";
 import {
@@ -30,44 +19,11 @@ import {
 import { CheckCircle } from "lucide-react";
 import { GRID_VIEW_KEY, SORTED_KEY } from "@/utils/constant";
 
-export function RenderProductCard({
-  cardData,
-  heading,
-  href,
-}: MainCtgProductCardProps) {
-  return (
-    <div className="m-2 my-3">
-      <div className="flex justify-between items-center my-2">
-        <h1 className="text-2xl font-bold">{heading}</h1>
-        <Link href={`category/${href}`} className="hover:underline">
-          View more
-        </Link>
-      </div>
-      <div className="hidden xmd:flex space-x-3">
-        {cardData?.map(
-          (data, i) => i < 4 && <ProductCardUI key={data.id} {...data} />
-        )}
-      </div>
-      <ScrollArea className="xmd:hidden">
-        <div className="flex w-max space-x-3">
-          {cardData?.map((data) => (
-            <figure key={data.id}>
-              <ProductCardUI {...data} />
-            </figure>
-          ))}
-        </div>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
-    </div>
-  );
-}
-
 export function RenderMoreProductCard(cardData: ProductCardProps[]) {
+  const [gridView, setGridView] = useState<Boolean>(false);
+  const [sortedValue, setsortedValue] = useState<string | null>(null);
 
-  const [gridView, setGridView] = React.useState<Boolean>(false);
-  const [sortedValue, setsortedValue] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof window !== "undefined") {
       const sortStorageValue = localStorage.getItem(SORTED_KEY);
       const gridStorageValue = localStorage.getItem(GRID_VIEW_KEY);
@@ -180,22 +136,18 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
           "grid grid-flow-dense grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2"
         }`}
       >
-        {Object.values(cardData).map((data) =>
+        {Object.values(cardData).map((data, i) =>
           gridView ? (
             <ProductCardUI
-              key={data.id}
+              key={data?.id || i}
               {...data}
               className={"w-full xmd:w-full"}
             />
           ) : (
-            <MoreProductCardUI key={data.id} {...data} />
+            <MoreProductCardUI key={data?.id || i} {...data} />
           )
         )}
       </div>
     </div>
   );
-}
-
-export function RenderDetailProductCard(data: DetailProductCardProps) {
-  return <DetailProductCardUI {...data} />;
 }
