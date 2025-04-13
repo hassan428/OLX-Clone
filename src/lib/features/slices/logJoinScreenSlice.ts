@@ -1,17 +1,22 @@
 import { LogJoinRoute } from "@/interfaces";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: LogJoinRoute = {
   currentScreen: "login",
 };
 
 const logJoinSlice = createSlice({
-  initialState,
   name: "logJoin",
+  initialState,
   reducers: {
-    setLogJoinScreen: (state, { payload }) => (state.currentScreen = payload),
+    setLogJoinScreen: (
+      state,
+      { payload }: PayloadAction<LogJoinRoute["currentScreen"]>
+    ) => {
+      state.currentScreen = payload;
+    },
   },
 });
-export default logJoinSlice.reducer;
 
+export default logJoinSlice.reducer;
 export const { setLogJoinScreen } = logJoinSlice.actions;
