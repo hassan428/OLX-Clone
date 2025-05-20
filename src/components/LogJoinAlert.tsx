@@ -215,39 +215,45 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
         : undefined,
   });
 
-  const logJoinUi = (logOrjoin: "login" | "join"): ReactNode => (
-    <>
-      <Button
-        onClick={logOrjoin == "login" ? loginWithGoogle : joinWithGoogle}
-        variant="outline"
-        className="w-full border-2 border-primary capitalize flex gap-2 items-center justify-center font-semibold"
-      >
-        <BsGoogle size={20} /> {` ${logOrjoin} with Google`}
-      </Button>
+  const LogJoinUi = (): ReactNode => {
+    return (
+      (currentScreen == "login" || currentScreen == "join") && (
+        <>
+          <Button
+            onClick={
+              currentScreen == "login" ? loginWithGoogle : joinWithGoogle
+            }
+            variant="outline"
+            className="w-full border-2 border-primary capitalize flex gap-2 items-center justify-center font-semibold"
+          >
+            <BsGoogle size={20} /> {` ${currentScreen} with Google`}
+          </Button>
 
-      <h1 className="text-center text-muted-foreground">OR</h1>
+          <h1 className="text-center text-muted-foreground">OR</h1>
 
-      {/* Email and Phone Login Buttons */}
-      <Button
-        onClick={() => dispatch(setLogJoinScreen(`${logOrjoin}Email`))}
-        variant="outline"
-        className="w-full border-2 border-primary capitalize flex gap-2 items-center justify-center font-semibold"
-      >
-        <MdOutlineEmail size={20} /> {` ${logOrjoin} with Email`}
-      </Button>
+          {/* Email and Phone Login Buttons */}
+          <Button
+            onClick={() => dispatch(setLogJoinScreen(`${currentScreen}Email`))}
+            variant="outline"
+            className="w-full border-2 border-primary capitalize flex gap-2 items-center justify-center font-semibold"
+          >
+            <MdOutlineEmail size={20} /> {` ${currentScreen} with Email`}
+          </Button>
 
-      <Button
-        onClick={() => dispatch(setLogJoinScreen(`${logOrjoin}Phone`))}
-        variant="outline"
-        className="w-full border-2 border-primary capitalize flex gap-2 items-center justify-center font-semibold"
-      >
-        <MdOutlinePhone size={20} />
-        {` ${logOrjoin} with Phone`}
-      </Button>
-    </>
-  );
+          <Button
+            onClick={() => dispatch(setLogJoinScreen(`${currentScreen}Phone`))}
+            variant="outline"
+            className="w-full border-2 border-primary capitalize flex gap-2 items-center justify-center font-semibold"
+          >
+            <MdOutlinePhone size={20} />
+            {` ${currentScreen} with Phone`}
+          </Button>
+        </>
+      )
+    );
+  };
 
-  const phoneInput = (): ReactNode => (
+  const PhoneInput = (): ReactNode => (
     <div className="flex flex-col gap-1">
       <h1
         onClick={() => phoneInputRef.current?.focus()}
@@ -323,7 +329,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
     </div>
   );
 
-  const nameInput = () => (
+  const NameInput = () => (
     <div className="flex flex-col gap-1">
       <h1
         onClick={() => nameInputRef.current?.focus()}
@@ -373,7 +379,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
     </div>
   );
 
-  const emailInput = (): ReactNode => (
+  const EmailInput = (): ReactNode => (
     <div className="flex flex-col gap-1">
       <h1
         onClick={() => emailInputRef.current?.focus()}
@@ -433,7 +439,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
     </div>
   );
 
-  const passwordInput = (isLoginForm?: boolean): ReactNode => (
+  const PasswordInput = (isLoginForm?: boolean): ReactNode => (
     <div className="flex flex-col gap-1">
       <h1
         onClick={() => passwordInputRef.current?.focus()}
@@ -500,7 +506,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
     </div>
   );
 
-  const confirmPasswordInput = (): ReactNode => (
+  const ConfirmPasswordInput = (): ReactNode => (
     <div className="flex flex-col gap-1">
       <h1
         onClick={() => confirmPassInputRef.current?.focus()}
@@ -562,49 +568,49 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
     </div>
   );
 
-  const loginEmailUi = (): ReactNode => (
+  const LoginEmailUi = (): ReactNode => (
     <>
       <div>
         <h1 className="text-sm mb-2">
           Enter your email address and password to log in and access your
           account.
         </h1>
-        {emailInput()}
+        {EmailInput()}
       </div>
       <div>
-        {passwordInput(true)}
-        {forgotPasswordButtonUi("forgotPassEmail")}
+        {PasswordInput(true)}
+        <ForgotPasswordButtonUi currentScreen="forgotPassEmail" />
       </div>
-      {submitButtonUi({
-        text: "Log in",
-        onClick: loginWithEmailHandle,
-        disabled: !passwordRules?.hasMinLength,
-      })}
+      <SubmitButtonUi
+        text="Log in"
+        onClick={loginWithEmailHandle}
+        disabled={!passwordRules?.hasMinLength}
+      />
     </>
   );
 
-  const loginPhoneUi = (): ReactNode => (
+  const LoginPhoneUi = (): ReactNode => (
     <>
       <div>
         <h1 className="text-sm mb-2">
           Enter your phone number and password to log in and access your
           account.
         </h1>
-        {phoneInput()}
+        {PhoneInput()}
       </div>
       <div>
-        {passwordInput(true)}
-        {forgotPasswordButtonUi("forgotPassPhone")}
+        {PasswordInput(true)}
+        <ForgotPasswordButtonUi currentScreen="forgotPassPhone" />
       </div>
-      {submitButtonUi({
-        text: "Log in",
-        onClick: loginWithPhoneHandle,
-        disabled: !passwordRules?.hasMinLength,
-      })}
+      <SubmitButtonUi
+        text="Log in"
+        onClick={loginWithPhoneHandle}
+        disabled={!passwordRules?.hasMinLength}
+      />
     </>
   );
 
-  const otpUi = (): ReactNode => {
+  const OtpUi = (): ReactNode => {
     return (
       <>
         <h1 className="text-center text-sm">
@@ -623,7 +629,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
         <OTP_input
           value={otp}
           onChange={(value: string) => {
-            value.length == 6 && OTPVerifyHandle(value);
+            value.length == 6 && otpVerifyHandle(value);
             setOtp(value);
           }}
         />
@@ -660,85 +666,87 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
     );
   };
 
-  const joinEmailUi = (): ReactNode => (
+  const JoinEmailUi = (): ReactNode => (
     <>
       <h1 className="text-sm">
         Enter your email address to create a new account and start your journey
         with us.
       </h1>
       <div className="flex flex-col gap-3 mb-2">
-        {nameInput()}
-        {emailInput()}
+        {NameInput()}
+        {EmailInput()}
       </div>
-      {submitButtonUi({
-        text: "Next",
-        onClick: navigatePasswordScreenHandle,
-        disabled:
+      <SubmitButtonUi
+        text="Next"
+        onClick={navigatePasswordScreenHandle}
+        disabled={
           isError({ name: data?.name, email: data?.email }) ||
-          isError({ name: error?.name, email: error?.email }, true),
-      })}
+          isError({ name: error?.name, email: error?.email }, true)
+        }
+      />
     </>
   );
 
-  const joinPhoneUi = (): ReactNode => (
+  const JoinPhoneUi = (): ReactNode => (
     <>
       <h1 className="text-sm">
         Enter your phone number to create a new account and start your journey
         with us.
       </h1>
       <div className="flex flex-col gap-3 mb-2">
-        {nameInput()}
-        {phoneInput()}
+        {NameInput()}
+        {PhoneInput()}
       </div>
-      {submitButtonUi({
-        text: "Next",
-        onClick: navigatePasswordScreenHandle,
-        disabled:
+      <SubmitButtonUi
+        text="Next"
+        onClick={navigatePasswordScreenHandle}
+        disabled={
           isError({ name: data?.name, phoneNumber: data?.phoneNumber }) ||
-          isError({ name: error?.name, phoneNumber: error?.phoneNumber }, true),
-      })}
+          isError({ name: error?.name, phoneNumber: error?.phoneNumber }, true)
+        }
+      />
     </>
   );
 
-  const forgotPassEmailUi = (): ReactNode => (
+  const ForgotPassEmailUi = (): ReactNode => (
     <>
       <h1 className="text-sm">
         We'll send a verification code to this email address if it matches an
         existing account
       </h1>
-      {emailInput()}
-
-      {submitButtonUi({
-        text: "Next",
-        onClick: () => dispatch(setLogJoinScreen("otpEmail")),
-        disabled:
+      {EmailInput()}
+      <SubmitButtonUi
+        text="Next"
+        onClick={() => dispatch(setLogJoinScreen("otpEmail"))}
+        disabled={
           isError({ email: data?.email }) ||
           isError({ email: error?.email }, true) ||
-          userDetails.email == data?.email,
-      })}
+          userDetails.email == data?.email
+        }
+      />
     </>
   );
 
-  const forgotPassPhoneUi = (): ReactNode => (
+  const ForgotPassPhoneUi = (): ReactNode => (
     <>
       <h1 className="text-sm">
         We’ll send a verification code to this phone number if it matches an
         existing account
       </h1>
-      {phoneInput()}
-
-      {submitButtonUi({
-        text: "Next",
-        onClick: () => dispatch(setLogJoinScreen("otpPhone")),
-        disabled:
+      {PhoneInput()}
+      <SubmitButtonUi
+        text="Next"
+        onClick={() => dispatch(setLogJoinScreen("otpPhone"))}
+        disabled={
           isError({ phoneNumber: data?.phoneNumber }) ||
           isError({ phoneNumber: error?.phoneNumber }, true) ||
-          userDetails.phoneNumber == data?.phoneNumber,
-      })}
+          userDetails.phoneNumber == data?.phoneNumber
+        }
+      />
     </>
   );
 
-  const createPassUi = (): ReactNode => (
+  const CreatePassUi = (): ReactNode => (
     <>
       <h1 className="text-sm m-0 p-0">
         To secure your account and log in faster, choose a strong password you
@@ -747,7 +755,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
 
       <div className="flex flex-col gap-3 my-2">
         <div>
-          {passwordInput()}
+          {PasswordInput()}
           {!error?.password && showPasswordValidation && (
             <>
               <Text
@@ -777,19 +785,19 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
           )}
         </div>
 
-        {confirmPasswordInput()}
+        {ConfirmPasswordInput()}
       </div>
-
-      {submitButtonUi({
-        text: "Create Account",
-        onClick: createAccountHandle,
-        disabled:
-          !data?.confirmPassword || data?.password !== data?.confirmPassword,
-      })}
+      <SubmitButtonUi
+        text="Create Account"
+        onClick={createAccountHandle}
+        disabled={
+          !data?.confirmPassword || data?.password !== data?.confirmPassword
+        }
+      />
     </>
   );
 
-  const footer = (): ReactNode => {
+  const Footer = (): ReactNode => {
     const isLoginScreen: boolean = currentScreen?.includes("login");
     return (
       <AlertDialogFooter className="sm:justify-center">
@@ -810,17 +818,19 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
     );
   };
 
-  const forgotPasswordButtonUi = (screenName: LogJoinScreenName): ReactNode => (
+  const ForgotPasswordButtonUi = ({
+    currentScreen,
+  }: LogJoinRoute): ReactNode => (
     <Button
       variant={"link"}
       className="text-blue-500 justify-start p-0 font-bold"
-      onClick={() => dispatch(setLogJoinScreen(screenName))}
+      onClick={() => dispatch(setLogJoinScreen(currentScreen))}
     >
       Forgot your Password?
     </Button>
   );
 
-  const backButtonUi = (): ReactNode =>
+  const BackButtonUi = (): ReactNode =>
     !(
       currentScreen == "join" ||
       currentScreen == "login" ||
@@ -835,7 +845,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
       </Button>
     );
 
-  const submitButtonUi = ({
+  const SubmitButtonUi = ({
     text,
     onClick,
     disabled,
@@ -920,7 +930,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
     console.log("joinWithGoogle");
   };
 
-  const OTPVerifyHandle = async (otp: string) => {
+  const otpVerifyHandle = async (otp: string) => {
     setLoading(true);
     try {
       const res = await axios.post(`/api/otpVerify`, {
@@ -990,23 +1000,24 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
 
         <div className="flex flex-col flex-1 gap-3 text-sm">
           {/* Scrollable Content */}
-          {(currentScreen === "login" || currentScreen === "join") &&
-            logJoinUi(currentScreen)}
-          {currentScreen === "loginEmail" && loginEmailUi()}
-          {currentScreen === "loginPhone" && loginPhoneUi()}
-          {currentScreen === "joinEmail" && joinEmailUi()}
-          {currentScreen === "joinPhone" && joinPhoneUi()}
-          {currentScreen?.includes("otp") && otpUi()}
-          {currentScreen === "createPass" && createPassUi()}
-          {currentScreen === "verifyEmail" && forgotPassEmailUi()}
-          {currentScreen === "verifyPhone" && forgotPassPhoneUi()}
-          {currentScreen === "forgotPassEmail" && forgotPassEmailUi()}
-          {currentScreen === "forgotPassPhone" && forgotPassPhoneUi()}
+          <LogJoinUi />
+          {currentScreen === "loginEmail" && LoginEmailUi()}
+          {currentScreen === "loginPhone" && LoginPhoneUi()}
+          {currentScreen === "joinEmail" && JoinEmailUi()}
+          {currentScreen === "joinPhone" && JoinPhoneUi()}
+          {currentScreen?.includes("otp") && OtpUi()}
+          {currentScreen === "createPass" && CreatePassUi()}
+          {(currentScreen === "verifyEmail" ||
+            currentScreen === "forgotPassEmail") &&
+            ForgotPassEmailUi()}
+          {(currentScreen === "verifyPhone" ||
+            currentScreen === "forgotPassPhone") &&
+            ForgotPassPhoneUi()}
         </div>
 
-        {!currentScreen?.includes("otp") && footer()}
+        {!currentScreen?.includes("otp") && <Footer />}
 
-        {backButtonUi()}
+        <BackButtonUi />
         {/* Close Button */}
         <AlertDialogCancel
           ref={closeButtonRef}

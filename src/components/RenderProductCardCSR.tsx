@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { MoreProductCardUI, ProductCardUI } from "@/components/ProductCardsUI";
+import { MoreProductCardUI, ProductCardUI } from "@/components/ProductCards";
 import { ProductCardProps, ViewStyle } from "@/interfaces";
 import { FiGrid } from "react-icons/fi";
 import { MdOutlineViewHeadline } from "react-icons/md";
@@ -22,6 +22,7 @@ import { GRID_VIEW_KEY, SORTED_KEY } from "@/utils/constant";
 export function RenderMoreProductCard(cardData: ProductCardProps[]) {
   const [gridView, setGridView] = useState<Boolean>(false);
   const [sortedValue, setsortedValue] = useState<string | null>(null);
+  const [numOfCard, setNumOfCard] = useState<number>(0);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -34,7 +35,11 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
       setGridView(parseValue);
       setsortedValue(sortStorageValue);
     }
-  }, []);
+
+    Object.values(cardData).map((data, i) =>
+      data?.id ? setNumOfCard(i + 1) : setNumOfCard(0)
+    );
+  }, [cardData]);
 
   const viewStyle: ViewStyle[] = [
     {
@@ -74,7 +79,7 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
     <div className="pl-2 w-full ">
       <div className="flex justify-between items-end mb-2">
         <h1 className="text-muted-foreground text-xs sm:text-sm">
-          Showing {Object.values(cardData).length} ads
+          Showing {numOfCard} ads
         </h1>
 
         <div className="flex sm:flex-row flex-col justify-end items-end sm:items-center gap-1 sm:gap-3 text-sm font-bold">
@@ -133,16 +138,12 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
       <div
         className={`${
           gridView &&
-          "grid grid-flow-dense grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2"
+          "grid grid-flow-dense grid-cols-1 sm:grid-cols-2 xmd:grid-cols-3 xl:grid-cols-4 gap-2"
         }`}
       >
         {Object.values(cardData).map((data, i) =>
           gridView ? (
-            <ProductCardUI
-              key={data?.id || i}
-              {...data}
-              className={"w-full xmd:w-full"}
-            />
+            <ProductCardUI key={data?.id || i} {...data} className={"w-full"} />
           ) : (
             <MoreProductCardUI key={data?.id || i} {...data} />
           )

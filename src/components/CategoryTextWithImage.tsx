@@ -16,7 +16,7 @@ export const CategoryTextWithImage = () => {
     <Link
       href={`/category/${href}`}
       key={i}
-      className="flex flex-col sm:hover:bg-success rounded-full items-center text-center gap-2 text-xs md:text-sm py-3"
+      className="flex flex-col sm:hover:bg-input rounded items-center text-center gap-2 text-xs md:text-sm py-3"
     >
       <Image
         src={`/assets/images/category/${src}`}

@@ -60,8 +60,8 @@ const customImageProps: CustomImageProps[] = [
 export const Footer = () => {
   return (
     <div className="bg-border border-t border-black space-y-5">
-      <div className="md:flex w-full justify-between items-start ">
-        <div className="md:flex w-full items-center gap-5 lg:gap-10 md:p-3 ">
+      <div className="xmd:flex w-full justify-between items-start ">
+        <div className="md:flex w-full items-center justify-between gap-5 lg:gap-10 md:p-3 ">
           {footerdata.map((data, i) => (
             <div key={i}>
               <div className="md:hidden">
@@ -74,7 +74,7 @@ export const Footer = () => {
           ))}
         </div>
         <div>
-          <div className="md:flex-col w-full flex justify-between items-center border-y md:border-0 border-border py-3 px-2 cursor-pointer">
+          <div className="xmd:flex-col w-full flex justify-between items-center border-b md:border-t xmd:border-0 border-black py-3 px-2 cursor-pointer">
             <h1 className="text-base font-bold uppercase">Follow us</h1>
             <div className="flex gap-2 items-center flex-wrap">
               {socialMediaLinks.map(({ Icon, href }, i) => (

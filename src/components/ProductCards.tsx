@@ -13,6 +13,10 @@ import { Button } from "@/components/ui/button";
 import { CardDetailImageSlider } from "@/components/CardDetailImageSlider";
 import { IoLocationOutline } from "react-icons/io5";
 import Link from "next/link";
+import {
+  ProductCardSkeletonUI,
+  MoreProductCardSkeletonUI,
+} from "@/components/ProductCardsSkeleton";
 
 export const ProductCardUI = ({
   location,
@@ -22,24 +26,27 @@ export const ProductCardUI = ({
   title,
   id,
   className,
-}: ProductCardProps) => {
-  return (
-    <Card
-      className={`w-56 xmd:w-1/4 hover:bg-border cursor-pointer relative ${className}`}
-      key={id}
-    >
-      <Link href={`/products/${id}`}>
+}: ProductCardProps) =>
+  !id ? (
+    <ProductCardSkeletonUI className={className} />
+  ) : (
+    <Link href={`/products/${id}`} className="w-full" key={id}>
+      <Card
+        className={`w-56 xmd:w-full relative hover:bg-border cursor-pointer ${className}`}
+      >
         <CardHeader className="p-0 h-40">
-          <Image
-            src={src?.[0]}
-            alt="led"
-            width={250}
-            height={250}
-            className="h-full w-full"
-            priority
-          />
-          {/* <Button className="w-max p-3 absolute top-1 left-1">Featured</Button> */}
+          {src && (
+            <Image
+              src={src[0]}
+              alt={title}
+              width={250}
+              height={250}
+              className="h-full w-full"
+              priority
+            />
+          )}
         </CardHeader>
+
         <CardContent className="p-3 border-2 border-border border-b-0 h-20">
           <div className="flex justify-between items-center mb-2">
             <CardTitle className="text-base">{price}</CardTitle>
@@ -51,14 +58,17 @@ export const ProductCardUI = ({
             </abbr>
           </CardDescription>
         </CardContent>
+
         <CardFooter className="flex-col text-muted-foreground py-2 items-start justify-end px-3 text-xs gap-1 border-2 border-border border-t-0">
-          <h1 className="line-clamp-1">{location}</h1>
-          <h1>{time}</h1>
+          {[location, time].map((str, i) => (
+            <h1 key={i} className="line-clamp-1">
+              {str}
+            </h1>
+          ))}
         </CardFooter>
-      </Link>
-    </Card>
+      </Card>
+    </Link>
   );
-};
 
 export const MoreProductCardUI = ({
   location,
@@ -67,17 +77,17 @@ export const MoreProductCardUI = ({
   time,
   title,
   id,
-}: ProductCardProps) => {
-  return (
-    <Link href={`/products/${id}`}>
-      <Card className="cursor-pointer hover:bg-border h-36 sm:h-52 flex my-2 sm:m-2 border-2 border-border">
-        <CardHeader
-          className={`p-0 w-28 sm:w-52 ${!src && "bg-gray-400 animate-pulse"}`}
-        >
+}: ProductCardProps) =>
+  !id ? (
+    <MoreProductCardSkeletonUI />
+  ) : (
+    <Link href={`/products/${id}`} key={id}>
+      <Card className="h-36 sm:h-52 flex my-2 sm:m-2 border-2 border-border hover:bg-border cursor-pointer">
+        <CardHeader className="p-0 w-28 sm:w-52">
           {src && (
             <Image
-              src={src?.[0]}
-              alt="led"
+              src={src[0]}
+              alt={title}
               width={250}
               height={250}
               className="h-full w-full"
@@ -91,7 +101,7 @@ export const MoreProductCardUI = ({
               <CardTitle className="sm:text-xl text-base font-bold">
                 {price}
               </CardTitle>
-              <Heart fill={"none"} />
+              <Heart />
             </div>
             <CardDescription className="text-xs sm:text-base text-accent-foreground hover:underline leading-4 line-clamp-2 sm:line-clamp-3">
               <abbr title={title} className="no-underline">
@@ -101,32 +111,33 @@ export const MoreProductCardUI = ({
           </CardContent>
           <CardFooter className="p-0 flex flex-col items-start justify-start gap-2 text-muted-foreground text-[10px] sm:text-xs">
             <div className="flex items-center gap-2">
-              <h1 className="line-clamp-1 ">{location}</h1>
-              <h1 className="min-w-max">{time}</h1>
+              {[location, time].map((str, i) => (
+                <h1 key={i} className="line-clamp-1">
+                  {str}
+                </h1>
+              ))}
             </div>
-
             <div className="flex items-center gap-2">
-              <Button
-                variant={"outline"}
-                className="w-full border-2 border-primary "
-              >
-                <Phone size={20} className="mr-1" />{" "}
-                <h1 className="max-sm:hidden">Call</h1>
-              </Button>
-              <Button
-                variant={"default"}
-                className="w-full border-2 border-primary "
-              >
-                <MessageCircleMore size={20} className="mr-1" />{" "}
-                <h1 className="max-sm:hidden">Chat</h1>
-              </Button>
+              {Array(2)
+                .fill(null)
+                .map((_, i) => (
+                  <Button
+                    key={i}
+                    variant={i ? "default" : "outline"}
+                    className="w-full border-2 border-primary flex items-center gap-1"
+                  >
+                    {i ? <MessageCircleMore size={20} /> : <Phone size={20} />}{" "}
+                    <h1 className="max-sm:hidden text-base">
+                      {i ? "Chat" : "Call"}
+                    </h1>
+                  </Button>
+                ))}
             </div>
           </CardFooter>
         </div>
       </Card>
     </Link>
   );
-};
 
 export const DetailProductCardUI = ({
   cardDetails,
@@ -208,11 +219,11 @@ export const DetailProductCardUI = ({
           >
             <Image
               // src={"/assets/images/load_avatar.png"}
-              alt="Avatar"
+              src={"/assets/images/sliderimage.jfif"}
+              alt={"Username"}
               width={75}
               height={75}
               priority={true}
-              src={"/assets/images/sliderimage.jfif"}
               className="rounded-full object-cover w-20 h-20"
             />
             <div className="flex flex-col gap-1 text-sm">
@@ -222,20 +233,22 @@ export const DetailProductCardUI = ({
             </div>
           </Link>
 
-          <Button
-            variant={"default"}
-            className="w-full border-2 border-primary my-2"
-          >
-            <Phone size={20} className="mr-1" /> Show Phone Number
-          </Button>
-
-          <Button
-            variant={"outline"}
-            className="w-full border-2 border-primary"
-          >
-            <MessageCircleMore size={20} className="mr-1" />
-            Chat
-          </Button>
+          {Array(2)
+            .fill(null)
+            .map((_, i) => (
+              <Button
+                key={i}
+                variant={i ? "outline" : "default"}
+                className={`w-full${
+                  !title
+                    ? "bg-border animate-pulse text-border cursor-default hover:bg-border hover:text-border"
+                    : "border-2 border-primary flex items-center gap-1 "
+                }`}
+              >
+                {i ? <MessageCircleMore size={20} /> : <Phone size={20} />}
+                <h1>{i ? "Chat" : "Show Phone Number"}</h1>
+              </Button>
+            ))}
         </div>
         <div className="border border-border rounded p-3 my-3">
           <h1 className="text-xl font-bold">Location</h1>

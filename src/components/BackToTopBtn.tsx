@@ -1,10 +1,10 @@
 "use client";
-import { BackToTopButtonProps } from "@/interfaces";
+import { OptionalClassName } from "@/interfaces";
 import { scrollToTop } from "@/utils";
 import { useState, useEffect } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 
-export const BackToTopBtn = ({ className }: BackToTopButtonProps) => {
+export const BackToTopBtn = ({ className }: OptionalClassName) => {
   const [showBtn, setShowBtn] = useState<Boolean>(false);
 
   useEffect(() => {

@@ -6,6 +6,18 @@ import { IconType } from "react-icons";
 
 type IconComponent = IconType | LucideIcon;
 
+export interface OptionalClassName {
+  className?: string;
+}
+
+export interface ChildrenType {
+  children: ReactNode;
+}
+
+export interface PageProps {
+  params: Params;
+}
+
 export interface LocationDataProps {
   province:
     | "Over All, Pakistan"
@@ -34,26 +46,16 @@ export interface Params {
 
 export interface LayoutProps extends PageProps, ChildrenType {}
 
-export interface ChildrenType {
-  children: ReactNode;
-}
-
-export interface PageProps {
-  params: Params;
-}
-
-export interface RouteDataProps {
+export interface RouteDataProps extends OptionalClassName {
   title: string;
   Icon: IconComponent;
   href: string;
-  className?: string;
 }
 
-export interface NavScreenBtnProps {
+export interface NavScreenBtnProps extends OptionalClassName {
   text: string;
   href: string;
   icon: ReactNode;
-  className?: string;
   SheetClose?: React.ForwardRefExoticComponent<
     DialogCloseProps & React.RefAttributes<HTMLButtonElement>
   >;
@@ -98,7 +100,7 @@ export interface ProductOtherDetails {
   condition: string;
 }
 
-export interface ProductCardProps {
+export interface ProductCardProps extends OptionalClassName {
   price: string;
   src: string[];
   title: string;
@@ -107,7 +109,6 @@ export interface ProductCardProps {
   time: string;
   id: string;
   productOtherDetails: ProductOtherDetails;
-  className?: string;
 }
 
 export interface MainCtgProductCardProps {
@@ -123,11 +124,14 @@ export interface SubCtgProductCardProps {
   href: string;
 }
 
-export interface ViewStyle {
+export interface SkeletonLineProps extends OptionalClassName {
+  count: number;
+}
+
+export interface ViewStyle extends OptionalClassName {
   Tag: IconComponent;
   size: number;
   onClick: () => void;
-  className?: string;
   tooltipText: string;
 }
 
@@ -168,16 +172,14 @@ export interface UserDetails {
   avatarUrl?: string;
 }
 
-export interface TextInputProps {
+export interface TextInputProps extends OptionalClassName {
   inputProps: InputProps;
   cut_handle?: () => void;
   error?: boolean;
-  className?: string;
 }
 
-export interface TextProps {
+export interface TextProps extends OptionalClassName {
   text: string;
-  className?: string;
   error?: boolean;
 }
 
@@ -377,14 +379,6 @@ export interface OTP_input_props {
   onChange: (value: string) => void;
   value: string;
   errorText?: string;
-}
-
-export interface SellButtonProps {
-  className?: string;
-}
-
-export interface BackToTopButtonProps {
-  className?: string;
 }
 
 export interface PasswordRules {

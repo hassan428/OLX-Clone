@@ -11,10 +11,7 @@ export const MoreProductCardData = ({
   subCtg,
   mainCtg,
 }: MoreProductCardDataProps) => {
-  const [data, setdata] = useState<ProductCardProps[]>(
-    Array(10).fill(null)
-    // []
-  );
+  const [data, setdata] = useState<ProductCardProps[]>(Array(9).fill(null));
   const [isNotFound, setIsNotFound] = useState<boolean>(false);
   const [isDataEnd, setIsDataEnd] = useState<boolean>(false);
   console.log("data", data);
@@ -31,7 +28,8 @@ export const MoreProductCardData = ({
           location,
         });
         setIsNotFound(!data.length && !res.data.data.length);
-        setdata(res.data.data);
+        // setdata(res.data.data);
+        setdata([null, ...res.data.data]);
       } catch (err) {
         console.log("err", err);
       }

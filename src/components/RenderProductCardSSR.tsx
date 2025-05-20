@@ -1,8 +1,5 @@
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import {
-  DetailProductCardUI,
-  ProductCardUI,
-} from "@/components/ProductCardsUI";
+import { DetailProductCardUI, ProductCardUI } from "@/components/ProductCards";
 import { DetailProductCardProps, MainCtgProductCardProps } from "@/interfaces";
 import Link from "next/link";
 
@@ -14,8 +11,13 @@ export function RenderProductCard({
   return (
     <div className="m-2 my-3">
       <div className="flex justify-between items-center my-2">
-        <h1 className="text-2xl font-bold">{heading}</h1>
-        <Link href={`category/${href}`} className="hover:underline">
+        <h1 className="text-lg sm:text-2xl font-bold line-clamp-1">
+          {heading}
+        </h1>
+        <Link
+          href={`category/${href}`}
+          className="hover:underline text-sm sm:text-base min-w-max"
+        >
           View more
         </Link>
       </div>
