@@ -11,10 +11,10 @@ export async function POST(req: Request) {
       const hash = await bcrypt.hash(body.password, salt);
       body.password = hash;
 
-      const findUser = body._id; // await userModel.findById(body._id);
+      const findUser = await userModel.findById(body._id);
       if (!findUser)
         return Response.json({ status: 404, message: "User not Found!" });
-      const updateUser = { ...body, ...findUser }; // await findUser.updateOne(body);
+      const updateUser = await findUser.updateOne(body);
       console.log("updateUser", updateUser);
       return Response.json({
         data: updateUser,
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     }
 
     // body save on database
-    const createUser = { ...body, _id: 1 }; // await userModel.create(body);
+    const createUser = await userModel.create(body);
     console.log("createUser", createUser);
 
     // send OTP on email or SMS
@@ -33,6 +33,10 @@ export async function POST(req: Request) {
       message: "Request is Successfull",
     });
   } catch (error) {
+  return Response.json({
+     success: false,
+      message: error.message,
+    });
     console.log("error", error);
   }
 }

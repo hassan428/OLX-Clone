@@ -16,7 +16,7 @@ import StoreProvider from "@/app/StoreProvider";
 import axios from "axios";
 import { cookies } from "next/headers";
 
-// await connect_to_database();
+await connect_to_database();
 
 const fontSans = FontSans({
   subsets: ["cyrillic-ext"],

@@ -1,11 +1,13 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import { userModel } from "@/lib/schema/profileSchema";
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { JWT_SECRET } = process.env;
 
-    const findUser = body.data; // await userModel.findById(body._id);
+    const findUser = await userModel.findById(body._id);
 
     if (!findUser) {
       return Response.json({

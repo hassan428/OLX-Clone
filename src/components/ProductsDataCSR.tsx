@@ -28,8 +28,7 @@ export const MoreProductCardData = ({
           location,
         });
         setIsNotFound(!data.length && !res.data.data.length);
-        // setdata(res.data.data);
-        setdata([null, ...res.data.data]);
+        setdata(res.data.data);
       } catch (err) {
         console.log("err", err);
       }

@@ -10,15 +10,15 @@ export async function POST(req: Request) {
 
     const { JWT_SECRET } = process.env;
 
-    const findUser = body; // await userModel.findById(body._id);
-    // if (!findUser)
-    //   return Response.json({ status: 404, message: "User not Found!" });
+    const findUser = await userModel.findById(body._id);
+    if (!findUser)
+      return Response.json({
+        status: 404,
+        message: "User not found!",
+        success: false,
+      });
 
-    const comparePassword = await bcrypt.compare(
-      body.password,
-      "$2b$10$Tix3wJG.3sVHvjMjKks/MeQjsGd4zbrEx1tsfEv3YB8PWceGfVh8i"
-    );
-    // const comparePassword = bcrypt.compare(body.password, findUser.password);
+    const comparePassword = bcrypt.compare(body.password, findUser?.password);
     console.log("comparePassword", comparePassword);
 
     if (!comparePassword)

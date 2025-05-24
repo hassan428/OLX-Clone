@@ -10,6 +10,26 @@ export interface OptionalClassName {
   className?: string;
 }
 
+export interface HasOptionalError {
+  error?: boolean;
+}
+
+export interface HasHref {
+  href: string;
+}
+
+export interface HasText {
+  text: string;
+}
+
+export interface HasTitle {
+  title: string;
+}
+
+export interface HasOnClick {
+  onClick: () => void;
+}
+
 export interface ChildrenType {
   children: ReactNode;
 }
@@ -28,14 +48,13 @@ export interface LocationDataProps {
   cities?: string[];
 }
 
-export interface LocationSelectProps {
+export interface LocationSelectProps extends HasOptionalError {
   options: LocationDataProps[];
   placeholder: string;
   onSelect: (value: string) => void;
   onBlurOrClose?: () => void;
   onOpen?: () => void;
   isDefaultSelect?: boolean;
-  error?: boolean;
 }
 
 export interface Params {
@@ -46,43 +65,32 @@ export interface Params {
 
 export interface LayoutProps extends PageProps, ChildrenType {}
 
-export interface RouteDataProps extends OptionalClassName {
-  title: string;
+export interface RouteDataProps extends OptionalClassName, HasHref, HasTitle {
   Icon: IconComponent;
-  href: string;
 }
 
-export interface NavScreenBtnProps extends OptionalClassName {
-  text: string;
-  href: string;
+export interface NavScreenBtnProps extends OptionalClassName, HasHref, HasText {
   icon: ReactNode;
   SheetClose?: React.ForwardRefExoticComponent<
     DialogCloseProps & React.RefAttributes<HTMLButtonElement>
   >;
 }
 
-export interface FooterLink {
-  text: string;
-  href: string;
-}
+export interface FooterLink extends HasHref, HasText {}
 
-export interface FooterLinkSection {
-  title: string;
+export interface FooterLinkSection extends HasTitle {
   data: FooterLink[];
 }
 
-export interface SocialMediaLinks {
-  href: string;
+export interface SocialMediaLinks extends HasHref {
   Icon: IconComponent;
 }
 
-export interface CustomImageProps {
-  href: string;
+export interface CustomImageProps extends HasHref {
   src: string;
 }
 
-export interface CategoryImage {
-  href: string;
+export interface CategoryImage extends HasHref {
   src?: string;
 }
 
@@ -100,10 +108,9 @@ export interface ProductOtherDetails {
   condition: string;
 }
 
-export interface ProductCardProps extends OptionalClassName {
+export interface ProductCardProps extends OptionalClassName, HasTitle {
   price: string;
   src: string[];
-  title: string;
   description: string;
   location: string;
   time: string;
@@ -111,27 +118,24 @@ export interface ProductCardProps extends OptionalClassName {
   productOtherDetails: ProductOtherDetails;
 }
 
-export interface MainCtgProductCardProps {
+export interface MainCtgProductCardProps extends HasHref {
   cardData: ProductCardProps[];
   heading: MainCtgType;
-  href: string;
   subCtgCard?: SubCtgProductCardProps[];
 }
 
-export interface SubCtgProductCardProps {
+export interface SubCtgProductCardProps extends HasHref {
   cardData: ProductCardProps[];
   heading: SubCtgType;
-  href: string;
 }
 
 export interface SkeletonLineProps extends OptionalClassName {
   count: number;
 }
 
-export interface ViewStyle extends OptionalClassName {
+export interface ViewStyle extends OptionalClassName, HasOnClick {
   Tag: IconComponent;
   size: number;
-  onClick: () => void;
   tooltipText: string;
 }
 
@@ -172,16 +176,15 @@ export interface UserDetails {
   avatarUrl?: string;
 }
 
-export interface TextInputProps extends OptionalClassName {
+export interface TextInputProps extends OptionalClassName, HasOptionalError {
   inputProps: InputProps;
   cut_handle?: () => void;
-  error?: boolean;
 }
 
-export interface TextProps extends OptionalClassName {
-  text: string;
-  error?: boolean;
-}
+export interface TextProps
+  extends OptionalClassName,
+    HasText,
+    HasOptionalError {}
 
 export interface ImageItem {
   id: number;
@@ -189,21 +192,19 @@ export interface ImageItem {
   preview: string | null;
 }
 
-export interface ImageComponentProps {
+export interface ImageComponentProps extends HasOnClick {
   image: ImageItem;
   index: number;
   moveImage: (dragIndex: number, hoverIndex: number) => void;
   isFirst: boolean;
-  onClick: () => void;
 }
 
 export interface ImageUploaderProps {
   onSortedImages: (sortedImages: ImageItem[]) => void;
 }
 
-export interface AlertProps {
+export interface AlertProps extends HasTitle {
   trigger: ReactNode;
-  title: string;
   description: string;
   doneText: string;
   doneClickHandle: () => void;
@@ -237,13 +238,12 @@ export interface AdDetails {
   showMyPhNum?: boolean;
 }
 
-export interface DropDownConfigProps {
+export interface DropDownConfigProps extends HasOptionalError {
   placeholder: string;
   defaultSelect?: string;
   selectValue?: string;
   selectHandle: (value: string) => void;
   dropdownData?: string[];
-  error?: boolean;
   id?: string;
   maxLength?: number;
   cut_handle?: () => void;
@@ -275,8 +275,7 @@ interface ConditionalOption {
   label?: string;
 }
 
-export interface NestedOptionGroup {
-  title: string;
+export interface NestedOptionGroup extends HasTitle {
   conditionalOptions?: ConditionalOption[];
 }
 
@@ -351,9 +350,8 @@ export type LogJoinScreenName =
   | "forgotPassPhone"
   | "forgotPassEmail";
 
-export interface LogJoinAlertProps {
+export interface LogJoinAlertProps extends HasOnClick {
   trigger: ReactNode;
-  onClick: () => void;
 }
 
 export interface LogJoinRoute {
@@ -369,10 +367,8 @@ export interface LogJoinData {
   confirmPassword?: string;
 }
 
-export interface SubmitButton {
-  text: string;
+export interface SubmitButton extends HasText, HasOnClick {
   disabled?: boolean;
-  onClick: () => void;
 }
 
 export interface OTP_input_props {
@@ -388,13 +384,9 @@ export interface PasswordRules {
   hasLetter?: boolean;
 }
 
-export interface PasswordStrength {
-  text: string;
-  value: number;
-}
+export interface PasswordStrength extends HasText {}
 
-export interface PasswordValidationData {
-  text: string;
+export interface PasswordValidationData extends HasText {
   condition?: boolean;
 }
 

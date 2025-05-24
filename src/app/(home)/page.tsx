@@ -5,9 +5,9 @@ import { ProductCardData } from "@/components/ProductsDataSSR";
 const HomePage = () => {
   return (
     <>
-      <Slider />
+      {/* <Slider /> */}
       <CategoryTextWithImage />
-      <ProductCardData />
+      {/* <ProductCardData /> */}
     </>
   );
 };

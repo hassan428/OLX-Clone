@@ -912,10 +912,12 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
       delete data?.confirmPassword;
       const res = await axios.post(`/api/join`, data);
       console.log("res.data", res.data);
+if(res.data.success){
       set_api_res(res.data.data);
-      setLoading(false);
       dispatch(setLogJoinScreen("createPass"));
-      return;
+}     
+setLoading(false);  
+return;
     } catch (err) {
       setLoading(false);
       console.log("err", err);

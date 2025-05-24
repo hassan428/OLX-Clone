@@ -23,17 +23,13 @@ export async function POST(req: Request) {
     if (!verifyToken) return commonResponse;
 
     // Simulate user fetch from DB
-    const findUser = {
-      name: "hassan",
-      gender: "Male",
-      aboutMe: "AbouteMehainyaar.",
-      phoneNumber: "3214569870",
-      email: "abc@gmail.com",
-    }; // Replace this with actual DB query if needed
+    const findUser = await userModel.findById(verifyToken);
+    // const findUser = await userModel.findById(verifyToken?._id);
+
     if (!findUser) return commonResponse;
 
     // Generate new token
-    const jwt_payload = { _id: "findUser._id" }; // Ensure _id exists in token
+    const jwt_payload = { _id: findUser._id }; // Ensure _id exists in token
     const generateToken = jwt.sign(jwt_payload, JWT_SECRET || "", {
       expiresIn: "7d",
     });

@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 const userSchema = new Schema(
   {
@@ -11,7 +11,6 @@ const userSchema = new Schema(
       required: [true, "name is required!"],
       unique: [true, "name already exist!"],
       lowercase: true,
-      trim: true,
     },
     phoneNumber: {
       type: String,
@@ -39,4 +38,5 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-export const userModel = model("userProfiles", userSchema);
+export const userModel =
+  models.userProfiles || model("userProfiles", userSchema);
