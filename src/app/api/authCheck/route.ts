@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     // Set new token in cookies
     (await cookies()).set(
       process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || "",
-      generateToken
+      generateToken,
     );
 
     return Response.json({

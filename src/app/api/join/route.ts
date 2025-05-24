@@ -33,10 +33,10 @@ export async function POST(req: Request) {
       message: "Request is Successfull",
     });
   } catch (error) {
-  return Response.json({
-     success: false,
+    console.log("error", error);
+    return Response.json({
+      success: false,
       message: error.message,
     });
-    console.log("error", error);
   }
 }
