@@ -191,28 +191,28 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
       !value && !data?.name
         ? "Name is required!"
         : !validatePassword(value || data?.name).hasLetter
-        ? "Name must contain at least one alphabet"
-        : undefined,
+          ? "Name must contain at least one alphabet"
+          : undefined,
     email:
       !value && !data?.email
         ? "Email is required!"
         : !validateEmail(value || data?.email)
-        ? "Please enter a valid email address"
-        : undefined,
+          ? "Please enter a valid email address"
+          : undefined,
     phoneNumber:
       !value && !data?.phoneNumber
         ? "Phone Number is required!"
         : !validatePhone(value || data?.phoneNumber)
-        ? "Please enter a valid phone number"
-        : undefined,
+          ? "Please enter a valid phone number"
+          : undefined,
     password:
       !value && !data?.password ? "Password is required!" : checkPassword(),
     confirmPassword:
       !value && !data?.confirmPassword
         ? "Confirm Password is required!"
         : data?.confirmPassword !== (value || data?.password)
-        ? "Confirm Password does not match"
-        : undefined,
+          ? "Confirm Password does not match"
+          : undefined,
   });
 
   const LogJoinUi = (): ReactNode => {
@@ -264,11 +264,10 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
       <div>
         <div className="flex">
           <div
-            className={`border rounded-l-md ${
-              error?.phoneNumber
-                ? "border-error text-error"
-                : "border-foreground"
-            } text-base px-2 flex items-center`}
+            className={`border rounded-l-md ${error?.phoneNumber
+              ? "border-error text-error"
+              : "border-foreground"
+              } text-base px-2 flex items-center`}
           >
             <h1>+92</h1>
           </div>
@@ -307,8 +306,8 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
                     phoneNumber: !value
                       ? "Phone Number is required!"
                       : value.length == 10
-                      ? errorCheck(value).phoneNumber
-                      : undefined,
+                        ? errorCheck(value).phoneNumber
+                        : undefined,
                   });
                   setDataHandle({
                     phoneNumber: value,
@@ -362,8 +361,8 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
                 name: !value
                   ? "Name is required!"
                   : value.length >= 2
-                  ? errorCheck(value).name
-                  : undefined,
+                    ? errorCheck(value).name
+                    : undefined,
               });
             },
           }}
@@ -422,8 +421,8 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
                 email: !value
                   ? "Email is required!"
                   : value.length >= 25
-                  ? errorCheck(value).email
-                  : undefined,
+                    ? errorCheck(value).email
+                    : undefined,
               });
             },
           }}
@@ -876,7 +875,10 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
     setLoading(true);
     try {
       const res = await axios.post(`/api/login`, data);
-      console.log("res.data", res.data);
+      if (res.data) {
+        const { data, success, message } = res.data
+        console.log("data", data);
+      }
       setLoading(false);
       return;
     } catch (err) {
@@ -884,7 +886,8 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
       console.log("err", err);
     }
   };
-  const loginWithPhoneHandle = async () => {};
+
+  const loginWithPhoneHandle = async () => { };
 
   const createAccountHandle = async () => {
     setLoading(true);
@@ -909,15 +912,26 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
   const navigatePasswordScreenHandle = async () => {
     setLoading(true);
     try {
-      delete data?.confirmPassword;
+      console.log("data", data);
       const res = await axios.post(`/api/join`, data);
       console.log("res.data", res.data);
-if(res.data.success){
-      set_api_res(res.data.data);
-      dispatch(setLogJoinScreen("createPass"));
-}     
-setLoading(false);  
-return;
+      if (res.data) {
+        const { data, success, message } = res.data
+        if (success) {
+          set_api_res(data);
+          dispatch(setLogJoinScreen("createPass"));
+        } else {
+          if (message.toLowerCase().includes('name'))
+            setErrorHandle({ name: message })
+          if (message.toLowerCase().includes('email'))
+            setErrorHandle({ email: message })
+          if (message.toLowerCase().includes('phone number'))
+            setErrorHandle({ phoneNumber: message })
+        }
+
+      }
+      setLoading(false);
+      return;
     } catch (err) {
       setLoading(false);
       console.log("err", err);
@@ -983,20 +997,20 @@ return;
             {currentScreen == "login"
               ? "Login into your LOX account"
               : currentScreen == "join"
-              ? "Create a new LOX account"
-              : currentScreen == "joinEmail" || currentScreen == "joinPhone"
-              ? `Create account with ${phoneOrEmailString}`
-              : currentScreen?.includes("verify")
-              ? `Verify ${phoneOrEmailString}`
-              : currentScreen == "loginEmail" || currentScreen == "loginPhone"
-              ? `Log in with ${phoneOrEmailString}`
-              : currentScreen?.includes("forgotPass")
-              ? "Forgot Password"
-              : currentScreen == "createPass"
-              ? "Create a password"
-              : currentScreen?.includes("otp")
-              ? "Enter confirmation code"
-              : ""}
+                ? "Create a new LOX account"
+                : currentScreen == "joinEmail" || currentScreen == "joinPhone"
+                  ? `Create account with ${phoneOrEmailString}`
+                  : currentScreen?.includes("verify")
+                    ? `Verify ${phoneOrEmailString}`
+                    : currentScreen == "loginEmail" || currentScreen == "loginPhone"
+                      ? `Log in with ${phoneOrEmailString}`
+                      : currentScreen?.includes("forgotPass")
+                        ? "Forgot Password"
+                        : currentScreen == "createPass"
+                          ? "Create a password"
+                          : currentScreen?.includes("otp")
+                            ? "Enter confirmation code"
+                            : ""}
           </AlertDialogTitle>
         </AlertDialogHeader>
 

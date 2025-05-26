@@ -384,7 +384,9 @@ export interface PasswordRules {
   hasLetter?: boolean;
 }
 
-export interface PasswordStrength extends HasText {}
+export interface PasswordStrength extends HasText {
+  value: number
+}
 
 export interface PasswordValidationData extends HasText {
   condition?: boolean;

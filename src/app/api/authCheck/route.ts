@@ -13,6 +13,7 @@ export async function POST(req: Request) {
   try {
     const { JWT_SECRET } = process.env;
     const token = await req.text();
+    console.log("token nahi hain", token);
 
     if (!token) return commonResponse;
 

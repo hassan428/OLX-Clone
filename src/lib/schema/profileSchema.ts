@@ -6,22 +6,24 @@ const userSchema = new Schema(
     avatarUrl: String,
     aboutMe: String,
     birthDate: Date,
-    name: {
-      type: String,
-      required: [true, "name is required!"],
-      unique: [true, "name already exist!"],
-      lowercase: true,
-    },
     phoneNumber: {
       type: String,
       unique: [true, "phone number already exist!"],
+      sparse: true,
       trim: true,
     },
     email: {
       type: String,
       unique: [true, "email already exist!"],
+      sparse: true,
       trim: true,
       lowercase: true,
+    },
+    name: {
+      type: String,
+      required: [true, "name is required!"],
+      unique: [true, "name already exist!"],
+      sparse: true, 
     },
     password: String,
     isVerified: {
