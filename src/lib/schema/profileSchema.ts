@@ -11,6 +11,7 @@ const userSchema = new Schema(
       unique: [true, "phone number already exist!"],
       sparse: true,
       trim: true,
+      default: undefined, 
     },
     email: {
       type: String,
@@ -18,6 +19,7 @@ const userSchema = new Schema(
       sparse: true,
       trim: true,
       lowercase: true,
+      default: undefined, 
     },
     name: {
       type: String,

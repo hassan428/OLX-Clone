@@ -17,7 +17,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CheckCircle } from "lucide-react";
-import { GRID_VIEW_KEY, SORTED_KEY } from "@/utils/constant";
 
 export function RenderMoreProductCard(cardData: ProductCardProps[]) {
   const [gridView, setGridView] = useState<Boolean>(false);
@@ -26,8 +25,12 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const sortStorageValue = localStorage.getItem(SORTED_KEY);
-      const gridStorageValue = localStorage.getItem(GRID_VIEW_KEY);
+      const sortStorageValue = localStorage.getItem(
+        process.env.NEXT_PUBLIC_SORTED_KEY || ""
+      );
+      const gridStorageValue = localStorage.getItem(
+        process.env.NEXT_PUBLIC_GRID_VIEW_KEY || ""
+      );
       const parseValue = gridStorageValue
         ? JSON.parse(gridStorageValue)
         : false;
@@ -46,7 +49,10 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
       Tag: MdOutlineViewHeadline,
       onClick: () => {
         setGridView(false);
-        localStorage.setItem(GRID_VIEW_KEY, "false");
+        localStorage.setItem(
+          process.env.NEXT_PUBLIC_GRID_VIEW_KEY || "",
+          "false"
+        );
       },
       size: 30,
       tooltipText: "List",
@@ -58,7 +64,10 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
       Tag: FiGrid,
       onClick: () => {
         setGridView(true);
-        localStorage.setItem(GRID_VIEW_KEY, "true");
+        localStorage.setItem(
+          process.env.NEXT_PUBLIC_GRID_VIEW_KEY || "",
+          "true"
+        );
       },
       size: 30,
       tooltipText: "Grid",
@@ -119,7 +128,10 @@ export function RenderMoreProductCard(cardData: ProductCardProps[]) {
                 <DropdownMenuItem
                   key={i}
                   onClick={() => {
-                    localStorage.setItem(SORTED_KEY, val);
+                    localStorage.setItem(
+                      process.env.NEXT_PUBLIC_SORTED_KEY || "",
+                      val
+                    );
                     setsortedValue(val);
                   }}
                   className="justify-between gap-2"

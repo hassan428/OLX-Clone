@@ -367,14 +367,27 @@ export interface LogJoinData {
   confirmPassword?: string;
 }
 
+export interface HasOther {
+  other?: string;
+}
+
 export interface SubmitButton extends HasText, HasOnClick {
   disabled?: boolean;
 }
 
-export interface OTP_input_props {
+export interface OtpEmailSent {
+  email: string;
+  name: string;
+  otp: number;
+}
+
+export interface HasErrorText {
+  errorText?: string;
+}
+
+export interface OtpInputProps extends HasErrorText {
   onChange: (value: string) => void;
   value: string;
-  errorText?: string;
 }
 
 export interface PasswordRules {
@@ -385,7 +398,7 @@ export interface PasswordRules {
 }
 
 export interface PasswordStrength extends HasText {
-  value: number
+  value: number;
 }
 
 export interface PasswordValidationData extends HasText {
@@ -394,4 +407,15 @@ export interface PasswordValidationData extends HasText {
 
 export interface TimerProps {
   onComplete?: () => void; // Function to call when timer completes
+}
+
+export interface CloudinaryUploadOptions {
+  file: File; // Required
+  folder?: string; // Optional (e.g., "user_avatars", "ads/2025")
+  public_id?: string; // Optional (Custom file name)
+  tags?: string | string[]; // Optional tags
+  context?: string; // Optional image context info (e.g., "alt=My Image")
+  transformation?: string; // Optional transformation string
+  resource_type?: "image" | "video" | "raw"; // Default is "image"
+  [key: string]: any; // For any extra options you may want later
 }

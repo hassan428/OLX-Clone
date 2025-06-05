@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { userModel } from "@/lib/schema/profileSchema";
+import { otpModel } from "@/lib/schema/otpSchema";
 
 export async function POST(req: Request) {
   try {
@@ -8,6 +9,8 @@ export async function POST(req: Request) {
     const { JWT_SECRET } = process.env;
 
     const findUser = await userModel.findById(body._id);
+
+    console.log("findUser", findUser);
 
     if (!findUser) {
       return Response.json({
@@ -17,9 +20,11 @@ export async function POST(req: Request) {
       });
     }
 
-    const findOTP = 789456; // find otp from find_user
+    const findOTP = await otpModel.findOne({ user_id: findUser._id });
 
-    if (findOTP != body.otp) {
+    console.log("findOTP", findOTP);
+
+    if (findOTP.otp != body.otp) {
       return Response.json({
         message: "Otp is incorrect",
         status: 404,

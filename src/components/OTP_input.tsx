@@ -6,9 +6,9 @@ import {
 } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { Text } from "@/components//Text";
-import { OTP_input_props } from "@/interfaces";
+import { OtpInputProps } from "@/interfaces";
 
-export const OTP_input = ({ onChange, value, errorText }: OTP_input_props) => {
+export const OTP_input = ({ onChange, value, errorText }: OtpInputProps) => {
   return (
     <div className="flex flex-col gap-2 items-center">
       <InputOTP
