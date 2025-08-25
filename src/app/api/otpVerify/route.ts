@@ -10,11 +10,9 @@ export async function POST(req: Request) {
 
     const findUser = await userModel.findById(body._id);
 
-    console.log("findUser", findUser);
-
     if (!findUser) {
       return Response.json({
-        message: "Users not found!",
+        message: "User not found!",
         status: 404,
         success: false,
       });
@@ -22,16 +20,22 @@ export async function POST(req: Request) {
 
     const findOTP = await otpModel.findOne({ user_id: findUser._id });
 
-    console.log("findOTP", findOTP);
-
-    if (findOTP.otp != body.otp) {
+    if (!findOTP || findOTP.otp !== body.otp) {
       return Response.json({
         message: "Otp is incorrect",
-        status: 404,
+        status: 400,
         success: false,
       });
     }
 
+    // ✅ User ko verified mark karo
+    findUser.isVerified = true;
+    await findUser.save();
+
+    // ✅ OTP delete kar do
+    await otpModel.deleteOne({ _id: findOTP._id });
+
+    // ✅ JWT token generate
     const jwt_payload = { _id: findUser._id };
     const generateToken =
       JWT_SECRET && jwt.sign(jwt_payload, JWT_SECRET, { expiresIn: "7d" });
@@ -41,16 +45,17 @@ export async function POST(req: Request) {
       generateToken || ""
     );
 
-    // body save on database
-
-    // send OTP on email or SMS
-
     return Response.json({
       data: findUser,
-      message: "User is Successfully Logged",
+      message: "User verified and logged in successfully",
       success: true,
     });
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
+    return Response.json({
+      message: "Internal Server Error",
+      status: 500,
+      success: false,
+    });
   }
 }

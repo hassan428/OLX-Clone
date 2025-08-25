@@ -242,26 +242,6 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
           <BsGoogle size={20} /> {` ${currentScreen} with Google`}
         </Button>
 
-        <input
-          type="file"
-          onChange={(e) => {
-            const checkImageUpload = async () => {
-              try {
-
-                const file = e.target.files?.[0];
-                const url =
-                file && (await uploadToCloudinary({ file, public_id: "logo" }));
-                console.log("Uploaded Image URL:", url);
-              }
-              catch (err:any) {
-                console.log("err", err);
-                console.log("err.message", err.message);
-              }
-              };
-            checkImageUpload();
-          }}
-        />
-
         <h1 className="text-center text-muted-foreground">OR</h1>
 
         {/* Email and Phone Login Buttons */}
@@ -909,7 +889,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
       if (res.data) {
         const { data, success, message } = res.data;
         if (success) {
-          set_api_res(undefined);
+          set_api_res(res.data);
           setLoading(false);
           dispatch(setLogJoinScreen(data?.email ? "otpEmail" : "otpPhone"));
           dispatch(startTimer(150));
@@ -963,9 +943,10 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
   const otpVerifyHandle = async (otp: string) => {
     setLoading(true);
     try {
+      console.log('otpverify.data',data)
       const res = await axios.post(`/api/otpVerify`, {
         otp,
-        data,
+        _id :api_res.data._id,
       });
       console.log("res.data", res.data);
 

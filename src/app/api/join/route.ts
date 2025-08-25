@@ -8,6 +8,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { GEN_SALT } = process.env;
+    console.log('join body',body)
     const { email, phoneNumber, name, password } = body;
 
     // Step 1: Prepare dynamic query
