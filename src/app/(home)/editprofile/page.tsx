@@ -7,14 +7,8 @@ import { Text } from "@/components/Text";
 import { TextInput } from "@/components/Text_input";
 import { Button } from "@/components/ui/button";
 import { UserDetails } from "@/interfaces";
-import {
-  genderData,
-  isError,
-  isNumber,
-  validateEmail,
-  validatePassword,
-  validatePhone,
-} from "@/utils";
+import { useRouter } from "next/navigation";
+import { genderData, isError, validatePassword } from "@/utils";
 import Image from "next/image";
 import { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import { HiLightBulb } from "react-icons/hi";
@@ -25,20 +19,16 @@ import { setLogJoinScreen } from "@/lib/features/slices/logJoinScreenSlice";
 const EditProfilePage = () => {
   const userOldDetails = useAppSelector(({ auth }) => auth);
   const dispatch = useAppDispatch();
+  const navigate = useRouter();
   const defaultAvatarUrl = "/assets/images/load_avatar.png";
   const [data, setData] = useState<UserDetails | null>(null);
   const [error, setError] = useState<UserDetails | null>(null);
   const [btnDisabled, setBtnDisabled] = useState<boolean>(true);
 
-  const hasChanges = (oldData: any, newData: any) => {
+  const hasChanges = (oldData: any, newData: any): boolean => {
     if (!oldData || !newData) return false;
-    const { name, email, phoneNumber } = newData;
-    return Object.keys(newData).some(
-      (key) =>
-        oldData[key] != newData[key] &&
-        !isError({ name, email, phoneNumber }) &&
-        !isError({ ...error }, true)
-    );
+
+    return Object.keys(newData).some((key) => oldData[key] !== newData[key]);
   };
 
   useEffect(() => {
@@ -46,8 +36,12 @@ const EditProfilePage = () => {
   }, []);
 
   useEffect(() => {
-    setBtnDisabled(!hasChanges(userOldDetails, data));
-  }, [data, error]);
+    const changed = hasChanges(userOldDetails, data);
+    const hasErr = isError({ ...error }, true) || isError({ ...data });
+
+    // agar changes hain aur error nahi hai → enable
+    setBtnDisabled(!(changed && !hasErr));
+  }, [data, error, userOldDetails]);
 
   const setDataHandle = (newData: UserDetails) => {
     setData((pre) => {
@@ -77,35 +71,20 @@ const EditProfilePage = () => {
     console.log("connectGoogle");
   };
 
-  const discardHandle = () => {
-    console.log("discardHandle");
-  };
+  const discardHandle = () => navigate.push("/");
 
   const errorCheck = (value?: string): UserDetails => {
+    const val = value || data?.name;
     return {
-      name:
-        !value && !data?.name
-          ? "Name is required!"
-          : !validatePassword(value || data?.name).hasLetter
-          ? "Name must contain at least one alphabet"
-          : undefined,
-      email:
-        !value && !data?.email
-          ? "Email is required!"
-          : !validateEmail(value || data?.email)
-          ? "Please enter a valid email address"
-          : undefined,
-      phoneNumber:
-        !value && !data?.phoneNumber
-          ? "Phone Number is required!"
-          : !validatePhone(value || data?.phoneNumber)
-          ? "Please enter a valid phone number"
-          : undefined,
+      name: !val
+        ? "Name is required!"
+        : !validatePassword(val).hasLetter
+        ? "Name must contain at least one alphabet"
+        : undefined,
     };
   };
 
   const saveChangesHandle = () => {
-    console.log("error nahi hain");
     console.log("send data to bakend");
   };
 
@@ -157,52 +136,19 @@ const EditProfilePage = () => {
     <div className="sm:flex items-center gap-2">
       <div className="w-full">
         <div className="flex">
-          <div
-            className={`border rounded-l-md ${
-              error?.phoneNumber
-                ? "border-error text-error"
-                : "border-foreground"
-            } text-base px-2 flex items-center`}
-          >
-            <h1 className="">+92</h1>
+          <div className="border border-foreground rounded-l-md text-base px-2 flex items-center">
+            <h1>+92</h1>
           </div>
           <TextInput
-            error={!!error?.phoneNumber}
             className="rounded-l-none"
             inputProps={{
+              readOnly: true,
               id: "phoneNumber",
               value: data?.phoneNumber || "",
               placeholder: "Enter Phone Number",
-              maxLength: 10,
-              onBlur: () =>
-                setErrorHandle({
-                  phoneNumber: errorCheck().phoneNumber,
-                }),
-              onChange: (e) => {
-                const { value } = e.target;
-                if (isNumber(value)) {
-                  setErrorHandle({
-                    phoneNumber: !value
-                      ? "Phone Number is required!"
-                      : value.length == 10
-                      ? errorCheck(value).phoneNumber
-                      : undefined,
-                  });
-                  setDataHandle({
-                    phoneNumber: value,
-                  });
-                }
-              },
             }}
           />
         </div>
-        {error?.phoneNumber && (
-          <Text
-            className="mt-1"
-            error={!!error.phoneNumber}
-            text={error.phoneNumber}
-          />
-        )}
       </div>
       <h1 className="hidden sm:inline w-full text-xs text-muted-foreground">
         This is the number for buyers contacts, reminders, and other
@@ -215,34 +161,14 @@ const EditProfilePage = () => {
     <div className="flex items-center gap-2">
       <div className="w-full">
         <TextInput
-          error={!!error?.email}
           inputProps={{
+            readOnly: true,
             autoComplete: "email",
             id: "email_address",
             value: data?.email || "",
             placeholder: "Email",
-            onBlur: () =>
-              setErrorHandle({
-                email: errorCheck().email,
-              }),
-            onChange: (e) => {
-              const { value } = e.target;
-              setDataHandle({
-                email: value.split(" ").join(""),
-              });
-              setErrorHandle({
-                email: !value
-                  ? "Email is required!"
-                  : value.length >= 25
-                  ? errorCheck(value).email
-                  : undefined,
-              });
-            },
           }}
         />
-        {error?.email && (
-          <Text className="mt-1" error={!!error?.email} text={error.email} />
-        )}
       </div>
       <h1 className="hidden sm:inline w-full text-xs text-muted-foreground">
         {

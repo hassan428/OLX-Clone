@@ -1,6 +1,6 @@
 import { userModel } from "@/lib/schema/profileSchema";
+import { createAuthToken, setAuthCookie } from "@/utils/auth";
 import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
   // Default response if user not found
@@ -16,30 +16,22 @@ export async function POST(req: Request) {
 
     if (!token) return commonResponse;
 
-    // Verify the token
-    const verifyToken = jwt.verify(token, JWT_SECRET || "");
-    console.log("Verified Token:", verifyToken);
+    // Token Verify
+    const decoded: any = jwt.verify(token, JWT_SECRET || "");
+    console.log("Verified Token:", decoded);
 
-    if (!verifyToken) return commonResponse;
+    if (!decoded || !decoded._id) return commonResponse;
 
-    // Simulate user fetch from DB
-    const findUser = await userModel.findById(verifyToken);
-    // const findUser = await userModel.findById(verifyToken?._id);
+    // ✅ User fetch without password
+    const findUser = await userModel.findById(decoded._id).select("-password");
 
     if (!findUser) return commonResponse;
 
-    // Generate new token
-    const jwt_payload = { _id: findUser._id }; // Ensure _id exists in token
-    const generateToken = jwt.sign(jwt_payload, JWT_SECRET || "", {
-      expiresIn: "7d",
-    });
-    console.log("Generated Token:", generateToken);
+    // ✅ Generate JWT (Token)
+    const generateToken = await createAuthToken(findUser._id.toString());
 
-    // Set new token in cookies
-    (await cookies()).set(
-      process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || "",
-      generateToken,
-    );
+    // ✅ Set Cookies
+    await setAuthCookie(generateToken);
 
     return Response.json({
       data: findUser,

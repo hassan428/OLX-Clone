@@ -1,15 +1,11 @@
-import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
 import { userModel } from "@/lib/schema/profileSchema";
 import { otpModel } from "@/lib/schema/otpSchema";
+import { createAuthToken, setAuthCookie } from "@/utils/auth";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { JWT_SECRET } = process.env;
-
     const findUser = await userModel.findById(body._id);
-
     if (!findUser) {
       return Response.json({
         message: "User not found!",
@@ -28,22 +24,18 @@ export async function POST(req: Request) {
       });
     }
 
-    // ✅ User ko verified mark karo
+    // ✅ User verified
     findUser.isVerified = true;
     await findUser.save();
 
-    // ✅ OTP delete kar do
+    // ✅ OTP delete
     await otpModel.deleteOne({ _id: findOTP._id });
 
-    // ✅ JWT token generate
-    const jwt_payload = { _id: findUser._id };
-    const generateToken =
-      JWT_SECRET && jwt.sign(jwt_payload, JWT_SECRET, { expiresIn: "7d" });
+    // ✅ Generate JWT (Token)
+    const generateToken = await createAuthToken(findUser._id.toString());
 
-    (await cookies()).set(
-      process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || "",
-      generateToken || ""
-    );
+    // ✅ Set Cookies
+    await setAuthCookie(generateToken);
 
     return Response.json({
       data: findUser,

@@ -17,7 +17,7 @@ import { Timer } from "@/components/Timer";
 import { setLogJoinScreen } from "@/lib/features/slices/logJoinScreenSlice";
 
 export const Navbar = () => {
-  const { isLogged } = useAppSelector(({ auth }) => auth);
+  const { isLogged, name } = useAppSelector(({ auth }) => auth);
   const dispatch = useAppDispatch();
   const [isVisible, setIsVisible] = useState(true); // Navbar visibility state
   const [lastScrollY, setLastScrollY] = useState(0); // To track previous scroll position
@@ -82,7 +82,7 @@ export const Navbar = () => {
 
         <div className="max-xmd:hidden min-w-max">
           {isLogged ? (
-            <ProfileRoutes />
+            <ProfileRoutes name={name!} />
           ) : (
             <LogJoinAlert
               onClick={() => dispatch(setLogJoinScreen("login"))}

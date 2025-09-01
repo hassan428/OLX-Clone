@@ -1,7 +1,7 @@
 "use client";
 import { PiListDuotone } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
-import { NavScreenBtn } from "@/components/NavScreenBtn";
+import { NavScreenBtn, LogOutBtn } from "@/components/NavScreenBtn";
 import { DarkLightModeSwitch } from "@/components/DarkLightMode";
 import {
   Sheet,
@@ -102,6 +102,10 @@ export function NavDrawer() {
             </SheetTitle>
           )
         )}
+
+        <SheetTitle className="p-3 w-full flex justify-between items-center border-border">
+          <LogOutBtn className="text-[16px] font-normal ml-2" />
+        </SheetTitle>
 
         <SheetFooter>
           <div className={`w-full ${isLogged && "hidden"}`}>

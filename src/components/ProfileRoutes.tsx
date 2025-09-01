@@ -5,9 +5,10 @@ import { useState } from "react";
 import { RiArrowDownWideLine } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { profileRouteData } from "@/utils";
-import { NavScreenBtn } from "@/components/NavScreenBtn";
+import { LogOutBtn, NavScreenBtn } from "@/components/NavScreenBtn";
+import { ProfileRoutesProps } from "@/interfaces";
 
-export const ProfileRoutes = () => {
+export const ProfileRoutes = ({ name }: ProfileRoutesProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -15,10 +16,7 @@ export const ProfileRoutes = () => {
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
-      <div
-        className="flex items-center cursor-pointer"
-        // onClick={() => setIsOpen(!isOpen)}
-      >
+      <div className="flex items-center cursor-pointer">
         <Image
           src={"/assets/images/load_avatar.png"}
           alt="Avatar"
@@ -50,7 +48,7 @@ export const ProfileRoutes = () => {
                 />
                 <div>
                   <h1 className="text-base">Hello,</h1>
-                  <h1 className="font-bold text-lg">Hassan Hanif,</h1>
+                  <h1 className="font-bold text-lg">{name}</h1>
                 </div>
               </div>
 
@@ -75,12 +73,15 @@ export const ProfileRoutes = () => {
                     <NavScreenBtn
                       text={title}
                       icon={<Icon size={25} />}
-                      className={`text-[16px] w-full flex justify-between items-center}`}
+                      className="text-[16px] w-full flex justify-between items-center"
                       href={href}
                     />
                   </div>
                 )
             )}
+            <div className="border-border hover:bg-border rounded-md hover:font-bold p-2 mt-1">
+              <LogOutBtn className="text-[16px] w-full flex justify-between items-center" />
+            </div>
           </div>
         </div>
       )}

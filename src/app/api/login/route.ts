@@ -1,44 +1,64 @@
 import { userModel } from "@/lib/schema/profileSchema";
+import { createAuthToken, setAuthCookie } from "@/utils/auth";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
     console.log("body", body);
 
-    const { JWT_SECRET } = process.env;
+    // ✅ User find by email or phoneNumber
+    let query: any = { isVerified: true };
 
-    const findUser = await userModel.findById(body._id);
-    if (!findUser)
+    if (body.email) {
+      query.email = body.email;
+    } else if (body.phoneNumber) {
+      query.phoneNumber = body.phoneNumber;
+    }
+
+    const findUser = await userModel.findOne(query);
+    console.log("findUser", findUser);
+
+    if (!findUser) {
       return Response.json({
-        status: 404,
-        message: "User not found!",
         success: false,
+        message: body.email ? "Email not found" : "Phone number not found",
+        status: 404,
       });
+    }
 
-    const comparePassword = bcrypt.compare(body.password, findUser?.password);
+    // ✅ Password compare
+    const comparePassword = await bcrypt.compare(
+      body.password,
+      findUser.password
+    );
     console.log("comparePassword", comparePassword);
 
-    if (!comparePassword)
-      return Response.json({ status: 404, message: "Password is incorrect!" });
+    if (!comparePassword) {
+      return Response.json({
+        status: 401,
+        message: "Password is incorrect!",
+        success: false,
+      });
+    }
 
-    const jwt_payload = { _id: findUser._id };
+    // ✅ Generate JWT (Token)
+    const generateToken = await createAuthToken(findUser._id.toString());
 
-    const generateToken =
-      JWT_SECRET && jwt.sign(jwt_payload, JWT_SECRET, { expiresIn: "7d" });
-
-    (await cookies()).set(
-      process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || "",
-      generateToken || ""
-    );
+    // ✅ Set Cookies
+    await setAuthCookie(generateToken);
 
     return Response.json({
       data: findUser,
-      message: "Request is Successfull",
+      message: "Login successful",
+      success: true,
     });
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
+    return Response.json({
+      status: 500,
+      message: "Internal Server Error",
+      success: false,
+    });
   }
 }

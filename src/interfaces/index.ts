@@ -69,6 +69,8 @@ export interface RouteDataProps extends OptionalClassName, HasHref, HasTitle {
   Icon: IconComponent;
 }
 
+export interface LogOutBtnProps extends OptionalClassName {}
+
 export interface NavScreenBtnProps extends OptionalClassName, HasHref, HasText {
   icon: ReactNode;
   SheetClose?: React.ForwardRefExoticComponent<
@@ -161,8 +163,16 @@ export interface DetailProductCardProps {
   cardDetails: ProductCardProps;
 }
 
+export interface ProfileRoutesProps {
+  name: string;
+}
+
+export interface LoaderSlice {
+  loading: boolean;
+}
+
 export interface StoreProviderProps extends ChildrenType {
-  authApiResponse: UserDetails;
+  authApiResponse: any;
 }
 
 export interface UserDetails {

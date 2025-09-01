@@ -15,6 +15,7 @@ import connect_to_database from "@/lib/mongoose";
 import StoreProvider from "@/app/StoreProvider";
 import axios from "axios";
 import { cookies } from "next/headers";
+import { Loader } from "@/components/Loader";
 
 await connect_to_database();
 
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
 const RootLayout: FC<LayoutProps> = async ({ children }) => {
   const getToken = await (
     await cookies()
-  ).get(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || "");
+  ).get(process.env.AUTH_TOKEN_KEY || "");
 
   const authApiHandle = async () => {
     try {
@@ -41,7 +42,7 @@ const RootLayout: FC<LayoutProps> = async ({ children }) => {
         getToken?.value
       );
       console.log("res.data", res.data);
-      return res.data.success ? { ...res.data.data, isLogged: true } : null;
+      return res.data;
     } catch (err) {
       console.log("err", err);
     }
@@ -72,6 +73,7 @@ const RootLayout: FC<LayoutProps> = async ({ children }) => {
             <div>
               <Footer />
             </div>
+            <Loader />
           </StoreProvider>
         </ThemeProvider>
         <Toaster />

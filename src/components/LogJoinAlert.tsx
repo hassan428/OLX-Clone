@@ -48,10 +48,10 @@ import {
 
 import axios from "axios";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
-import { setUserDetails } from "@/lib/features/slices/authSlice";
+import { userLoggedIn } from "@/lib/features/slices/authSlice";
 import { startTimer, resetTimer } from "@/lib/features/slices/timerSlice";
 import { setLogJoinScreen } from "@/lib/features/slices/logJoinScreenSlice";
-import { uploadToCloudinary } from "@/services/cloudinary/uploadImage";
+import { setLoading } from "@/lib/features/slices/loaderSlice";
 
 export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
   const dispatch = useAppDispatch();
@@ -114,7 +114,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
   const [passwordStrength, setPasswordStrength] =
     useState<PasswordStrength | null>(null);
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading2] = useState<boolean>(false);
 
   const phoneOrEmailString: string = currentScreen?.slice(
     currentScreen.length - 5
@@ -157,7 +157,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
       setTimeUp(false);
     }
     setError(null);
-    setLoading(false);
+    setLoading2(false);
     setShowPasswordValidation(true);
     setOtp("");
   }, [currentScreen]);
@@ -299,9 +299,8 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
               placeholder: "Enter Phone Number",
               maxLength: 10,
               onBlur: () =>
-                !errorCheck().name &&
                 setErrorHandle({
-                  phoneNumber: errorCheck().phoneNumber,
+                  phoneNumber: error?.phoneNumber || errorCheck().phoneNumber,
                 }),
               onFocus: () => {
                 if (errorCheck().name) {
@@ -358,7 +357,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
             maxLength: 20,
             onBlur: () =>
               setErrorHandle({
-                name: errorCheck().name,
+                name: error?.name || errorCheck().name,
               }),
             onChange: (e) => {
               const { value } = e.target;
@@ -400,9 +399,8 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
             value: data?.email || "",
             placeholder: "Enter Email",
             onBlur: () =>
-              !errorCheck().name &&
               setErrorHandle({
-                email: errorCheck().email,
+                email: error?.email || errorCheck().email,
               }),
             onFocus: () => {
               if (errorCheck().name) {
@@ -566,7 +564,10 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
       <SubmitButtonUi
         text="Log in"
         onClick={loginWithEmailHandle}
-        disabled={!passwordRules?.hasMinLength}
+        disabled={
+          !passwordRules?.hasMinLength ||
+          isError({ password: error?.password, email: error?.email }, true)
+        }
       />
     </>
   );
@@ -664,7 +665,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
         text="Next"
         onClick={navigatePasswordScreenHandle}
         disabled={
-          isError({ name: data?.name, email: data?.email }) ||
+          isError({ email: data?.email }) ||
           isError({ name: error?.name, email: error?.email }, true)
         }
       />
@@ -686,7 +687,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
         text="Next"
         onClick={navigatePasswordScreenHandle}
         disabled={
-          isError({ name: data?.name, phoneNumber: data?.phoneNumber }) ||
+          isError({ phoneNumber: data?.phoneNumber }) ||
           isError({ name: error?.name, phoneNumber: error?.phoneNumber }, true)
         }
       />
@@ -837,7 +838,14 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
     onClick,
     disabled,
   }: SubmitButton): ReactNode => (
-    <Button className="font-bold" disabled={disabled} onClick={onClick}>
+    <Button
+      className="font-bold"
+      disabled={disabled}
+      onClick={() => {
+        setError(null);
+        onClick();
+      }}
+    >
       {text}
     </Button>
   );
@@ -860,25 +868,61 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
   );
 
   const loginWithEmailHandle = async () => {
-    setLoading(true);
+    setLoading2(true);
+    dispatch(setLoading(true));
+
+    try {
+      const res = await axios.post(`/api/login`, data);
+      if (res.data) {
+        console.log("res.data", res.data);
+        const { data, success, message } = res.data;
+        if (success) {
+          dispatch(userLoggedIn({ ...data }));
+          closeButtonRef.current?.click();
+        } else {
+          const key = ["email", "phone number", "password"].find((k) =>
+            message.toLowerCase().includes(k)
+          );
+          setErrorHandle({ [key || "other"]: message });
+        }
+      }
+      dispatch(setLoading(false));
+      setLoading2(false);
+      return;
+    } catch (err) {
+      dispatch(setLoading(false));
+      setLoading2(false);
+      console.log("err", err);
+    }
+  };
+
+  const loginWithPhoneHandle = async () => {
+    setLoading2(true);
     try {
       const res = await axios.post(`/api/login`, data);
       if (res.data) {
         const { data, success, message } = res.data;
         console.log("data", data);
+        if (success) {
+          dispatch(userLoggedIn({ ...res.data.data }));
+          closeButtonRef.current?.click();
+        } else {
+          const key = ["name", "email", "phone number"].find((k) =>
+            message.toLowerCase().includes(k)
+          );
+          setErrorHandle({ [key || "other"]: message });
+        }
       }
-      setLoading(false);
+      setLoading2(false);
       return;
     } catch (err) {
-      setLoading(false);
+      setLoading2(false);
       console.log("err", err);
     }
   };
 
-  const loginWithPhoneHandle = async () => {};
-
   const createAccountHandle = async () => {
-    setLoading(true);
+    setLoading2(true);
     try {
       delete data?.confirmPassword;
       const res = await axios.post(`/api/join`, {
@@ -890,7 +934,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
         const { data, success, message } = res.data;
         if (success) {
           set_api_res(res.data);
-          setLoading(false);
+          setLoading2(false);
           dispatch(setLogJoinScreen(data?.email ? "otpEmail" : "otpPhone"));
           dispatch(startTimer(150));
         } else {
@@ -902,13 +946,13 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
       }
       return;
     } catch (err) {
-      setLoading(false);
+      setLoading2(false);
       console.log("err", err);
     }
   };
 
   const navigatePasswordScreenHandle = async () => {
-    setLoading(true);
+    setLoading2(true);
     try {
       const res = await axios.post(`/api/join`, data);
       console.log("res.data", res.data);
@@ -924,10 +968,10 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
           setErrorHandle({ [key || "other"]: message });
         }
       }
-      setLoading(false);
+      setLoading2(false);
       return;
     } catch (err) {
-      setLoading(false);
+      setLoading2(false);
       console.log("err", err);
     }
   };
@@ -941,24 +985,24 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
   };
 
   const otpVerifyHandle = async (otp: string) => {
-    setLoading(true);
+    setLoading2(true);
     try {
-      console.log('otpverify.data',data)
+      console.log("otpverify.data", data);
       const res = await axios.post(`/api/otpVerify`, {
         otp,
-        _id :api_res.data._id,
+        _id: api_res.data._id,
       });
       console.log("res.data", res.data);
 
       if (res.data.success) {
-        dispatch(setUserDetails({ ...res.data.data, isLogged: true }));
+        dispatch(userLoggedIn({ ...res.data.data }));
         dispatch(resetTimer());
         closeButtonRef.current?.click();
       }
-      setLoading(false);
+      setLoading2(false);
       return;
     } catch (err) {
-      setLoading(false);
+      setLoading2(false);
       console.log("err", err);
     }
   };

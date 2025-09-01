@@ -387,6 +387,7 @@ export const navbarRoute: RouteDataProps[] = [
     href: "mobiles-tablets",
   },
 ];
+
 export const common_route_data: RouteDataProps[] = [
   {
     title: "Start selling",
@@ -444,7 +445,6 @@ export const profileRouteData: RouteDataProps[] = [
     Icon: IoSettingsOutline,
     className: "border-b",
   },
-  { href: "/logout", title: "Logout", Icon: IoLogOutOutline },
 ];
 
 export const publicRouteData: RouteDataProps[] = [
