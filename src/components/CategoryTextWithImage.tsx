@@ -1,7 +1,6 @@
 import { CategoryLink } from "@/interfaces";
 import Image from "next/image";
 import Link from "next/link";
-
 import {
   Carousel,
   CarouselContent,

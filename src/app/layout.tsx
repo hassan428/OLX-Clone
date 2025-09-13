@@ -70,11 +70,9 @@ const RootLayout: FC<LayoutProps> = async ({ children }) => {
               <CategoryText />
               {children}
             </div>
-            <div>
-              <Footer />
-            </div>
             <Loader />
           </StoreProvider>
+          <Footer />
         </ThemeProvider>
         <Toaster />
       </body>

@@ -5,7 +5,8 @@ import { useState } from "react";
 import { RiArrowDownWideLine } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { profileRouteData } from "@/utils";
-import { LogOutBtn, NavScreenBtn } from "@/components/NavScreenBtn";
+import { NavScreenBtn } from "@/components/NavScreenBtn";
+import { LogOutBtn } from "@/components/LogJoinAlert";
 import { ProfileRoutesProps } from "@/interfaces";
 
 export const ProfileRoutes = ({ name }: ProfileRoutesProps) => {

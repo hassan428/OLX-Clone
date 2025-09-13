@@ -13,7 +13,6 @@ const authSlice = createSlice({
       return { ...state, ...payload, isLogged: true };
     },
     userLoggedOut: () => {
-      console.log("isLogged: false ");
       return { isLogged: false };
     },
   },

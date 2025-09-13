@@ -1,7 +1,8 @@
 "use client";
 import { PiListDuotone } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
-import { NavScreenBtn, LogOutBtn } from "@/components/NavScreenBtn";
+import { NavScreenBtn } from "@/components/NavScreenBtn";
+import { LogOutBtn } from "@/components/LogJoinAlert";
 import { DarkLightModeSwitch } from "@/components/DarkLightMode";
 import {
   Sheet,
@@ -21,9 +22,11 @@ import { publicRouteData, profileRouteData } from "@/utils";
 import { LogJoinAlert } from "@/components/LogJoinAlert";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { setLogJoinScreen } from "@/lib/features/slices/logJoinScreenSlice";
+import { Loader } from "@/components/Loader";
 
 export function NavDrawer() {
   const { isLogged, name } = useAppSelector(({ auth }) => auth);
+  const { loading } = useAppSelector(({ loader }) => loader);
   const dispatch = useAppDispatch();
 
   return (
@@ -37,6 +40,7 @@ export function NavDrawer() {
         side={"left"}
         className="overflow-auto w-full min-h-screen xmd:hidden items-start p-3"
       >
+        {loading && <Loader />}
         <SheetHeader className="cursor-pointer text-left text-sm py-5 w-full border-b-2 border-border">
           <div className="flex justify-start gap-3 items-center">
             <Image
@@ -102,10 +106,11 @@ export function NavDrawer() {
             </SheetTitle>
           )
         )}
-
-        <SheetTitle className="p-3 w-full flex justify-between items-center border-border">
-          <LogOutBtn className="text-[16px] font-normal ml-2" />
-        </SheetTitle>
+        {isLogged ? (
+          <SheetTitle className="p-3 w-full flex justify-between items-center border-border">
+            <LogOutBtn className="text-[16px] font-normal ml-2" />
+          </SheetTitle>
+        ) : null}
 
         <SheetFooter>
           <div className={`w-full ${isLogged && "hidden"}`}>

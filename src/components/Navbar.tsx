@@ -15,12 +15,17 @@ import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { navbarRoute } from "@/utils";
 import { Timer } from "@/components/Timer";
 import { setLogJoinScreen } from "@/lib/features/slices/logJoinScreenSlice";
+import { setLoading } from "@/lib/features/slices/loaderSlice";
 
 export const Navbar = () => {
   const { isLogged, name } = useAppSelector(({ auth }) => auth);
   const dispatch = useAppDispatch();
   const [isVisible, setIsVisible] = useState(true); // Navbar visibility state
   const [lastScrollY, setLastScrollY] = useState(0); // To track previous scroll position
+
+  useEffect(() => {
+    dispatch(setLoading(false));
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {

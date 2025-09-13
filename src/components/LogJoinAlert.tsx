@@ -52,11 +52,53 @@ import { userLoggedIn } from "@/lib/features/slices/authSlice";
 import { startTimer, resetTimer } from "@/lib/features/slices/timerSlice";
 import { setLogJoinScreen } from "@/lib/features/slices/logJoinScreenSlice";
 import { setLoading } from "@/lib/features/slices/loaderSlice";
+import { LogOutBtnProps } from "@/interfaces";
+import { Alert } from "@/components/Alert";
+import { IoLogOutOutline } from "react-icons/io5";
+import { userLoggedOut } from "@/lib/features/slices/authSlice";
+import { commonClass } from "@/components/NavScreenBtn";
+
+export const LogOutBtn = ({ className }: LogOutBtnProps) => {
+  const dispatch = useAppDispatch();
+
+  const logOutHandle = async () => {
+    dispatch(setLoading(true));
+    try {
+      const res = await axios.post(`/api/logout`);
+      console.log("res.data", res.data);
+      if (res.data.success) {
+        dispatch(userLoggedOut());
+      }
+      dispatch(setLoading(false));
+      return;
+    } catch (err) {
+      dispatch(setLoading(false));
+      console.log("err", err);
+    }
+  };
+  return (
+    <Alert
+      trigger={
+        <div className={commonClass}>
+          <IoLogOutOutline size={25} />
+          <p className={`font-bold text-sm ${className}`}>Logout</p>
+        </div>
+      }
+      title="Logout?"
+      description="Are you sure you want to logout from your account?"
+      doneText="Logout"
+      doneClickHandle={logOutHandle}
+      cancelText="Cancel"
+    />
+  );
+};
 
 export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
   const dispatch = useAppDispatch();
   const userDetails = useAppSelector(({ auth }) => auth);
   const { currentScreen } = useAppSelector(({ logJoin }) => logJoin);
+  const { loading } = useAppSelector(({ loader }) => loader);
+
   const { isLogged } = userDetails;
 
   const logJoinRoute: LogJoinRoute[] = [
@@ -114,8 +156,6 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
   const [passwordStrength, setPasswordStrength] =
     useState<PasswordStrength | null>(null);
 
-  const [loading, setLoading2] = useState<boolean>(false);
-
   const phoneOrEmailString: string = currentScreen?.slice(
     currentScreen.length - 5
   );
@@ -157,7 +197,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
       setTimeUp(false);
     }
     setError(null);
-    setLoading2(false);
+    dispatch(setLoading(false));
     setShowPasswordValidation(true);
     setOtp("");
   }, [currentScreen]);
@@ -868,9 +908,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
   );
 
   const loginWithEmailHandle = async () => {
-    setLoading2(true);
     dispatch(setLoading(true));
-
     try {
       const res = await axios.post(`/api/login`, data);
       if (res.data) {
@@ -887,17 +925,17 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
         }
       }
       dispatch(setLoading(false));
-      setLoading2(false);
+
       return;
     } catch (err) {
       dispatch(setLoading(false));
-      setLoading2(false);
+
       console.log("err", err);
     }
   };
 
   const loginWithPhoneHandle = async () => {
-    setLoading2(true);
+    dispatch(setLoading(true));
     try {
       const res = await axios.post(`/api/login`, data);
       if (res.data) {
@@ -913,16 +951,17 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
           setErrorHandle({ [key || "other"]: message });
         }
       }
-      setLoading2(false);
+
+      dispatch(setLoading(false));
       return;
     } catch (err) {
-      setLoading2(false);
+      dispatch(setLoading(false));
       console.log("err", err);
     }
   };
 
   const createAccountHandle = async () => {
-    setLoading2(true);
+    dispatch(setLoading(true));
     try {
       delete data?.confirmPassword;
       const res = await axios.post(`/api/join`, {
@@ -934,7 +973,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
         const { data, success, message } = res.data;
         if (success) {
           set_api_res(res.data);
-          setLoading2(false);
+          dispatch(setLoading(false));
           dispatch(setLogJoinScreen(data?.email ? "otpEmail" : "otpPhone"));
           dispatch(startTimer(150));
         } else {
@@ -946,13 +985,13 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
       }
       return;
     } catch (err) {
-      setLoading2(false);
+      dispatch(setLoading(false));
       console.log("err", err);
     }
   };
 
   const navigatePasswordScreenHandle = async () => {
-    setLoading2(true);
+    dispatch(setLoading(true));
     try {
       const res = await axios.post(`/api/join`, data);
       console.log("res.data", res.data);
@@ -968,10 +1007,10 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
           setErrorHandle({ [key || "other"]: message });
         }
       }
-      setLoading2(false);
+      dispatch(setLoading(false));
       return;
     } catch (err) {
-      setLoading2(false);
+      dispatch(setLoading(false));
       console.log("err", err);
     }
   };
@@ -985,7 +1024,7 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
   };
 
   const otpVerifyHandle = async (otp: string) => {
-    setLoading2(true);
+    dispatch(setLoading(true));
     try {
       console.log("otpverify.data", data);
       const res = await axios.post(`/api/otpVerify`, {
@@ -999,10 +1038,10 @@ export const LogJoinAlert = ({ trigger, onClick }: LogJoinAlertProps) => {
         dispatch(resetTimer());
         closeButtonRef.current?.click();
       }
-      setLoading2(false);
+      dispatch(setLoading(false));
       return;
     } catch (err) {
-      setLoading2(false);
+      dispatch(setLoading(false));
       console.log("err", err);
     }
   };
